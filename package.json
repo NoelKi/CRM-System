@@ -1,12 +1,10 @@
 {
   "name": "crm-system",
-  "version": "0.0.0",
+  "version": "2024.42.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "local": "ng serve --port=4203 --proxy-config proxy.conf.json",
+    "prod": "ng lint && ng build -c=production",
+    "deploy": "rsync -av --delete dist/browser/ -e ssh ???"
   },
   "private": true,
   "dependencies": {

@@ -1,0 +1,76 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json", "e2e/tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": ["plugin:@angular-eslint/recommended", "prettier", "plugin:prettier/recommended"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": [
+          "warn",
+          {
+            "allowExpressions": true
+          }
+        ],
+        "prettier/prettier": [
+          "error",
+          {
+            "parser": "typescript",
+            "trailingComma": "none"
+          }
+        ],
+        "prefer-const": "warn",
+        "no-var": "warn",
+        "@typescript-eslint/naming-convention": [
+          "warn",
+          {
+            "selector": ["objectLiteralProperty", "typeProperty"],
+            "format": null,
+            "modifiers": ["requiresQuotes"]
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["public"],
+            "format": ["camelCase", "UPPER_CASE", "snake_case"],
+            "leadingUnderscore": "forbid"
+          },
+          {
+            "selector": "method",
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "forbid"
+          }
+        ],
+        "@angular-eslint/no-host-metadata-property": ["off"]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "parser": "angular"
+          }
+        ]
+      }
+    }
+  ]
+}
