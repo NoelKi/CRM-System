@@ -1,0 +1,23 @@
+.mat-drawer-container {
+  height: 100vh;
+}
+
+.mat-toolbar {
+  background-color: var(--mat-primary);
+  color: var(--mat-on-primary);
+}
+
+.sidenav {
+  width: 300px;
+}
+
+.logo-container {
+  border-bottom: 1px solid rgb(0, 0, 0, 0.25);
+  height: 90px;
+  width: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto;
+}
