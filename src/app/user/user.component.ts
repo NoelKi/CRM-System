@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
@@ -15,7 +15,10 @@ import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.compo
 export class UserComponent {
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 
-  constructor(public dialog: MatDialog) {}
+  dialog = inject(MatDialog);
+
+  constructor() {}
+
   openDialog() {
     this.dialog.open(DialogAddUserComponent);
   }
