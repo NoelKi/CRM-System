@@ -12,9 +12,9 @@ export const menuItems: MenuItem[] = [
     route: '/dashboard'
   },
   {
-    icon: 'shopping_cart',
-    label: 'Orders',
-    route: '/orders'
+    icon: 'perm_identity',
+    label: 'User',
+    route: '/users'
   },
   {
     icon: 'settings',
