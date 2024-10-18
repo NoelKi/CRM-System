@@ -1,0 +1,26 @@
+.dFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+ol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0;
+}
+
+h2  {
+  width: 300px;
+  text-align: left;
+}
+
+.head-container {
+  width: calc(100% - 20px);
+  display: flex;
+  align-items: flex-start;
+  padding-left: 20px;
+}

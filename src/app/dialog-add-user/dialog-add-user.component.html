@@ -1,14 +1,24 @@
 <ol>
-  <li>
-    <mat-form-field>
-      <mat-label>What's your name?</mat-label>
-      <input matInput />
-    </mat-form-field>
-  </li>
-  <li>
-    <button mat-raised-button>Pick one</button>
-  </li>
-  @if (true) {
-  <li>You chose: <em></em></li>
-  }
+  <div class="head-container">
+    <h2>Add User</h2>
+  </div>
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Lastname</mat-label>
+    <input matInput />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Position</mat-label>
+    <input matInput />
+  </mat-form-field>
+  <div class="dFlex">
+    <button mat-button>Cancel</button>
+    <button mat-button>Save</button>
+  </div>
 </ol>
