@@ -11,18 +11,27 @@
         [activated]="rla.isActive"
       >
         <mat-icon matListItemIcon> {{ item.icon }}</mat-icon>
-        @if (!collapsed()) {
         <span matListItemTitle>{{ item.label }}</span>
-        }
       </a>
-      }
+      @if (item.subItems) { @for (subItem of item.subItems; track subItem.label) {
+      <a
+        mat-list-item
+        [routerLink]="subItem.route"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+      >
+        <mat-icon matListItemIcon> {{ subItem.icon }}</mat-icon>
+        <span matListItemTitle>{{ subItem.label }}</span>
+      </a>
+      } } }
     </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-toolbar>
+    <mat-toolbar class="mat-elevation-z3">
       <mat-toolbar-row>
         <mat-icon (click)="drawer.toggle()" style="padding-right: 10px">menu</mat-icon>
-        <span>Simple CRM</span>
+        <span>{{ title }}</span>
       </mat-toolbar-row>
       <router-outlet />
     </mat-toolbar>

@@ -9,7 +9,15 @@ import { menuItems } from './menuItem';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, RouterModule],
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    RouterModule
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -17,6 +25,4 @@ export class AppComponent {
   title = 'CRM-System';
 
   menuItems = signal(menuItems);
-
-  collapsed = signal(false);
 }
