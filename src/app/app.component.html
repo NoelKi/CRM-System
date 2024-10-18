@@ -1,13 +1,20 @@
 <mat-drawer-container class="example-container">
   <mat-drawer #drawer class="sidenav" mode="side">
+    <div class="logo-container">Platz für Logo</div>
     <mat-nav-list>
       @for (item of menuItems(); track item.label) {
-        <a mat-list-item [routerLink]="item.route" routerLinkActive #rla="routerLinkActive" [activated]="rla.isActive">
-          <mat-icon matListItemIcon> {{ item.icon }}</mat-icon>
-          @if (!collapsed()) {
-            <span matListItemTitle>{{ item.label }}</span>
-          }
-        </a>
+      <a
+        mat-list-item
+        [routerLink]="item.route"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+      >
+        <mat-icon matListItemIcon> {{ item.icon }}</mat-icon>
+        @if (!collapsed()) {
+        <span matListItemTitle>{{ item.label }}</span>
+        }
+      </a>
       }
     </mat-nav-list>
   </mat-drawer>
