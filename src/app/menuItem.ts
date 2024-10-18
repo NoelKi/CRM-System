@@ -14,16 +14,17 @@ export const menuItems: MenuItem[] = [
   {
     icon: 'perm_identity',
     label: 'User',
-    route: '/users'
+    route: '/user'
   },
   {
     icon: 'settings',
     label: 'Settings',
+    route: 'settings/',
     subItems: [
       {
         icon: 'person',
         label: 'Profile',
-        route: '/profile'
+        route: 'settings/'
       },
       {
         icon: 'lock',
