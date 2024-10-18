@@ -1,8 +1,5 @@
-<ol>
-  <div class="head-container">
-    <h2>Add User</h2>
-  </div>
-
+<h2 mat-dialog-title>Add User</h2>
+<mat-dialog-content>
   <div class="form-container">
     <div class="form-upper-container">
       <mat-form-field>
@@ -45,7 +42,6 @@
           #postalCode
           maxlength="5"
           placeholder="Ex. 94105"
-          value="94043"
         />
       </mat-form-field>
 
@@ -55,8 +51,8 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="dFlex">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button [mat-dialog-close]="true" disabled>Save</button>
-  </div>
-</ol>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="userModel()">Add</button>
+</mat-dialog-actions>

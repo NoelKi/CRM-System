@@ -1,11 +1,3 @@
-.dFlex {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: row;
-  width: 100%;
-}
-
 .form-upper-container {
   display: flex;
   align-items: center;
@@ -32,21 +24,6 @@
 
 mat-form-field {
   width: 256px;
-}
-
-ol {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0;
-  width: 520px;
-  padding: 20px;
-}
-
-h2  {
-  width: 300px;
-  text-align: left;
 }
 
 .head-container {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -7,6 +7,7 @@ import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
+  MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,5 +35,11 @@ import { User } from '../../models/user.model';
   styleUrl: './dialog-add-user.component.scss'
 })
 export class DialogAddUserComponent {
+  readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
+  readonly userModel = model({});
   user = new User();
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
