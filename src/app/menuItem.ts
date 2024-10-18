@@ -26,7 +26,6 @@ export const menuItems: MenuItem[] = [
         route: '/profile'
       },
       {
-
         icon: 'lock',
         label: 'Change Password',
         route: '/change-password'
