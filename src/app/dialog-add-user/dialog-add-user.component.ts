@@ -11,6 +11,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -32,4 +33,6 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss'
 })
-export class DialogAddUserComponent {}
+export class DialogAddUserComponent {
+  user = new User();
+}
