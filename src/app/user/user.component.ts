@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user',
@@ -10,4 +10,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent {}
+export class UserComponent {
+  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+}
