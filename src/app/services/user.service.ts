@@ -17,6 +17,9 @@ export class UserService {
   }
 
   deleteUser(user: User) {
-    this.users().splice(this.users().indexOf(user), 1);
+    // this.users().splice(this.users().indexOf(user), 1);
+    this.users.update((users) => {
+      return users.filter((u) => u !== user);
+    });
   }
 }
