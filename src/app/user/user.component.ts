@@ -17,7 +17,7 @@ export class UserComponent {
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 
   dialog = inject(MatDialog);
-  user: User = new User();
+  user = new User();
 
   constructor() {}
 

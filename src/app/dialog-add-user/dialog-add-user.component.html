@@ -31,7 +31,7 @@
 
       <mat-form-field>
         <mat-label>Street + House No</mat-label>
-        <input [(ngModel)]="user.street" matInput />
+        <input [(ngModel)]="adressString" matInput />
       </mat-form-field>
 
       <mat-form-field>
@@ -54,5 +54,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="userModel()">Add</button>
+  <button mat-button (click)="saveUser()" [mat-dialog-close]="userModel()">Add</button>
 </mat-dialog-actions>
