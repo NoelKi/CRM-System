@@ -1,13 +1,12 @@
 import { Component, effect, inject } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { User } from '../../models/user.model';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
-import { MatCardModule } from '@angular/material/card';
-import { users } from '../../fake-db/user.data';
-import { MatTableModule } from '@angular/material/table';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -27,12 +26,10 @@ export class UserComponent {
   constructor() {
     effect(() => {
       console.log(this._userService.users());
-
-    }) ;
-
+    });
   }
 
-  displayedColumns: string[] = ['name', 'lastName','email'];
+  displayedColumns: string[] = ['name', 'lastName', 'email'];
 
   openDialog() {
     this.dialog.open(DialogAddUserComponent, {
