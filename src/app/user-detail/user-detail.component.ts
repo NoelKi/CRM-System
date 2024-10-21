@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
@@ -23,24 +24,30 @@ export class UserDetailComponent implements OnInit {
 
   private _route = inject(ActivatedRoute);
   private _userService = inject(UserService);
+  dialog = inject(MatDialog);
 
-  // constructor(private route: ActivatedRoute, public dialog: MatDialog) {}
   constructor() {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((paramMap) => {
-      this.userId = paramMap.get('id');
-      console.log('Got the ID: ' + this.userId);
-    });
+    const paramId = this._route.snapshot.paramMap.get('id');
+    if (paramId === null) {
+      return;
+    }
+    this.user = this._userService.getUser(paramId);
   }
 
   openAdressDialog() {}
 
   editUserAdress() {
     const dialog = this.dialog.open(DialogEditAdressComponent);
-    dialog.componentInstance.user = this.user;
+    if (this.user) {
+      dialog.componentInstance.user = this.user;
+    }
   }
   editUserDetail() {
-    this.dialog.open(DialogEditUserComponent);
+    const dialog = this.dialog.open(DialogEditUserComponent);
+    if (this.user) {
+      dialog.componentInstance.user = this.user;
+    }
   }
 }

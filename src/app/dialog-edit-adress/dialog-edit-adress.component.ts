@@ -31,5 +31,5 @@ import { User } from '../../models/user.model';
 })
 export class DialogEditAdressComponent {
   loading = false;
-  user: User;
+  user!: User;
 }

@@ -28,7 +28,7 @@ export class UserComponent {
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['id', 'name', 'lastName', 'email'];
+  displayedColumns: string[] = ['name', 'lastName', 'email', 'id'];
   dataSource = this._userService.users;
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];

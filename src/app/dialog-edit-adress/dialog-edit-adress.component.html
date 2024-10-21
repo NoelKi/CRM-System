@@ -2,33 +2,33 @@
 <mat-dialog-content>
   <div class="form-container">
     <div class="form-upper-container">
+      <div class="form-bottom-container">
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
+        </mat-form-field>
 
-    <div class="form-bottom-container">
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>Postal Code</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            [(ngModel)]="user.postalCode"
+            #postalCode
+            maxlength="5"
+            placeholder="Ex. 94105"
+          />
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Postal Code</mat-label>
-        <input
-          [disabled]="loading"
-          matInput
-          [(ngModel)]="user.postalCode"
-          #postalCode
-          maxlength="5"
-          placeholder="Ex. 94105"
-        />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>City</mat-label>
-        <input [disabled]="loading" matInput [(ngModel)]="user.city" />
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>City</mat-label>
+          <input [disabled]="loading" matInput [(ngModel)]="user.city" />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
-  <button [disabled]="loading" mat-button (click)="saveUser()">Add</button>
+  <!-- <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
+  <button [disabled]="loading" mat-button (click)="saveUser()">Add</button> -->
 </mat-dialog-actions>
