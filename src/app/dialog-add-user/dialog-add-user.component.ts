@@ -13,6 +13,8 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { User } from '../../models/user.model';
+import { UserService } from '../services/user.service';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -30,7 +32,8 @@ import { User } from '../../models/user.model';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatProgressBarModule
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss'
@@ -38,11 +41,13 @@ import { User } from '../../models/user.model';
 export class DialogAddUserComponent {
   readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
   readonly userModel = model({});
+  private _userService = inject(UserService);
   user = new User();
   adressString = '';
   firstString = '';
   secoundString = '';
   thirdString = '';
+  loading = false;
 
   constructor() {
     this.splitStreetAndHouseNumber();
@@ -61,7 +66,11 @@ export class DialogAddUserComponent {
   }
 
   saveUser() {
-    this.splitStreetAndHouseNumber();
+    this.loading = true;
+    // this.splitStreetAndHouseNumber();
+    this._userService.addUser(this.user);
     console.log(this.user);
+
+    this._userService.deleteUser(this.user);
   }
 }
