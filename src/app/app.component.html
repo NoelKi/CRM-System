@@ -29,10 +29,15 @@
   </mat-drawer>
   <mat-drawer-content>
     <mat-toolbar class="mat-elevation-z3">
-      <mat-toolbar-row>
-        <mat-icon (click)="drawer.toggle()" style="padding-right: 10px">menu</mat-icon>
-        <span>{{ title }}</span>
-      </mat-toolbar-row>
+      <button
+        mat-icon-button
+        class="primary-icon-button"
+        (click)="drawer.toggle()"
+        aria-label="icon-button with menu icon"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>{{ title }}</span>
       <router-outlet />
     </mat-toolbar>
     <div class="router-container">
