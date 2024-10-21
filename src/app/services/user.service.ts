@@ -11,11 +11,9 @@ export class UserService {
   constructor() {}
 
   addUser(user: User) {
-    // this.users().push(user);
-    const users = this.users();
-    users.push(user);
-    this.users.set(users);
-    // console.log(this.users());
+    this.users.update((users) => {
+      return [...users, user];
+    });
   }
 
   deleteUser(user: User) {
