@@ -23,6 +23,7 @@ export class UserService {
   }
 
   getUser(id: string): User | undefined {
-    return this.users().find((user) => user.id === id);
+    const user = this.users().find((user) => user.id === id);
+    return user ? { ...user } : undefined;
   }
 }
