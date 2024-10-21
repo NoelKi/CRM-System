@@ -22,6 +22,10 @@ export class UserComponent {
   constructor() {}
 
   openDialog() {
-    this.dialog.open(DialogAddUserComponent);
+    this.dialog.open(DialogAddUserComponent, {
+      height: '560px',
+      width: '620px',
+      maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
+    });
   }
 }

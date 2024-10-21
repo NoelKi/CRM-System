@@ -1,3 +1,8 @@
+h2 {
+  padding: 30px 45px;
+  padding-top: 30px;
+}
+
 .form-upper-container {
   display: flex;
   align-items: center;
@@ -41,4 +46,8 @@ mat-form-field {
   justify-content: center;
   gap: 20px;
   padding: 0 20px;
+}
+
+mat-dialog-actions {
+  margin-bottom: 20px;
 }
