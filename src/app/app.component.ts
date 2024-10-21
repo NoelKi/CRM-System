@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { menuItems } from './menuItem';
 import { ThemeService } from './services/theme.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,

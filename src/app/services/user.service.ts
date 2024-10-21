@@ -21,4 +21,8 @@ export class UserService {
       return users.filter((u) => u !== user);
     });
   }
+
+  getUser(id: string): User | undefined {
+    return this.users().find((user) => user.id === id);
+  }
 }
