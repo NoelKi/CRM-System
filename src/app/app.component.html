@@ -38,6 +38,14 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span>{{ title }}</span>
+      <span class="spacer"></span>
+      <button
+        mat-icon-button
+        (click)="themeService.toggleMode()"
+        aria-label="icon-button with dark_mode or ligth_mode icon"
+      >
+        <mat-icon>{{ themeService.themeModeIcon }}</mat-icon>
+      </button>
       <router-outlet />
     </mat-toolbar>
     <div class="router-container">

@@ -3,7 +3,8 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 
-@use './m3-theme.scss' as m3;
+@use './core/styles/theme/m3-theme' as m3;
+@use './core/styles/mixins/spacings';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -43,15 +44,14 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-.mt-32 {
-  margin-top: 32px;
-}
-
-.mt-16 {
-  margin-top: 16px;
+.dark-theme {
+  @include mat.all-component-colors(m3.$dark-theme);
+  @include mat.all-component-densities(m3.$dark-theme);
+  @include mat.system-level-colors(m3.$dark-theme);
 }

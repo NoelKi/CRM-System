@@ -11,6 +11,10 @@
   color: var(--sys-on-primary);
 }
 
+.spacer {
+  flex: 1 1 auto;
+}
+
 .sidenav {
   width: 300px;
 }
