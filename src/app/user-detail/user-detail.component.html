@@ -1,13 +1,35 @@
 @if (user) {
 
 <mat-card class="user-detail-header">
+  <button
+    (click)="openAdressDialog()"
+    [matMenuTriggerFor]="userMenu"
+    mat-icon-button
+    class="edit-btn"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="editUserDetail()">Edit</button>
+  </mat-menu>
   <img src="./assets/img/logos/profil.jpg" />
   <div class="user-details">
     <h2>{{ user.firstName }} {{ user.lastName }}</h2>
     <p>{{ user.email }}</p>
   </div>
 </mat-card>
-<mat-card class="user-infos layout--margin-top-32">
+<mat-card class="user-infos mt-32">
+  <button
+    (click)="openAdressDialog()"
+    [matMenuTriggerFor]="adressMenu"
+    mat-icon-button
+    class="edit-btn"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #adressMenu="matMenu">
+    <button mat-menu-item (click)="editUserAdress()">Edit</button>
+  </mat-menu>
   <mat-card-title>Address</mat-card-title>
   <mat-card-content>
     <p>{{ user.street }} {{ user.houseNumber }}</p>
