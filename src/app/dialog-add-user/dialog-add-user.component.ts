@@ -69,8 +69,8 @@ export class DialogAddUserComponent {
     this.loading = true;
     // this.splitStreetAndHouseNumber();
     this._userService.addUser(this.user);
-    console.log(this.user);
-
-    this._userService.deleteUser(this.user);
+    setTimeout(() => {
+      this.dialogRef.close();
+    }, 2000);
   }
 }
