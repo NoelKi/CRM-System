@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { User } from '../../models/user.model';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-dialog-edit-adress',
@@ -32,8 +33,18 @@ import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.compo
 export class DialogEditAdressComponent {
   loading = false;
   user!: User;
+  private _userService = inject(UserService);
   readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  saveUser() {
+    this.loading = true;
+    this._userService.editUser(this.user);
+    console.log(this.user);
+    setTimeout(() => {
+      this.dialogRef.close();
+    }, 2000);
   }
 }

@@ -12,9 +12,9 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { User } from '../../models/user.model';
 import { UserService } from '../services/user.service';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -71,6 +71,7 @@ export class DialogAddUserComponent {
     this._userService.addUser(this.user);
     setTimeout(() => {
       this.dialogRef.close();
+      this.loading = false;
     }, 2000);
   }
 }

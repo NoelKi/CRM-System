@@ -26,4 +26,16 @@ export class UserService {
     const user = this.users().find((user) => user.id === id);
     return user ? { ...user } : undefined;
   }
+
+  editUser(newUser: User) {
+    this.users.update((users) => {
+      for (let i = 0; i < users.length; i++) {
+        const id = users[i].id;
+        if (id == newUser.id) {
+          users[i] = newUser;
+        }
+      }
+      return users;
+    });
+  }
 }
