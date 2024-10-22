@@ -1,1 +1,23 @@
-<p>dialog-edit-user works!</p>
+@if (loading) {
+<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+<h2 mat-dialog-title>Add User</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>First Name</mat-label>
+    <input [disabled]="loading" [(ngModel)]="user.firstName" matInput />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Last Name</mat-label>
+    <input [disabled]="loading" [(ngModel)]="user.lastName" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
+  <!-- <button [disabled]="loading" mat-button (click)="saveUser()">Add</button> -->
+</mat-dialog-actions>

@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
+  MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { User } from '../../models/user.model';
+import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
 
 @Component({
   selector: 'app-dialog-edit-adress',
@@ -22,9 +24,7 @@ import { User } from '../../models/user.model';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
-    MatFormFieldModule,
-    MatInputModule
+    MatDialogClose
   ],
   templateUrl: './dialog-edit-adress.component.html',
   styleUrl: './dialog-edit-adress.component.scss'
@@ -32,4 +32,8 @@ import { User } from '../../models/user.model';
 export class DialogEditAdressComponent {
   loading = false;
   user!: User;
+  readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
