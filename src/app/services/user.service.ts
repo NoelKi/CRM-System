@@ -18,7 +18,9 @@ export class UserService {
 
   deleteUser(user: User) {
     this.users.update((users) => {
-      return users.filter((u) => u !== user);
+      return users.filter((u) => {
+        u !== user;
+      });
     });
   }
 
@@ -27,7 +29,7 @@ export class UserService {
     return user ? { ...user } : undefined;
   }
 
-  editUser(newUser: User) {
+  editUser3(newUser: User) {
     this.users.update((users) => {
       for (let i = 0; i < users.length; i++) {
         const id = users[i].id;
@@ -36,6 +38,19 @@ export class UserService {
         }
       }
       return users;
+    });
+  }
+
+  // lerning in map-fun functions: no {} = implizit return, with {} = no return
+  editUser(newUser: User) {
+    this.users.update((users) => {
+      return users.map((user) => {
+        // user.id === newUser.id ? newUser : user;
+        if (user.id == newUser.id) {
+          user = newUser;
+        }
+        return user;
+      });
     });
   }
 }
