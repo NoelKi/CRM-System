@@ -29,7 +29,7 @@ export class UserService {
     return user ? { ...user } : undefined;
   }
 
-  editUser3(newUser: User) {
+  editUserDepricated(newUser: User) {
     this.users.update((users) => {
       for (let i = 0; i < users.length; i++) {
         const id = users[i].id;
