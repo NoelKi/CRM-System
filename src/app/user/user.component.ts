@@ -29,7 +29,7 @@ export class UserComponent {
   dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['name', 'lastName', 'email', 'id'];
-  dataSource = this._userService.users;
+  dataSource = this._userService.getUsers();
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 

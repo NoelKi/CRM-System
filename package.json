@@ -2,7 +2,7 @@
   "name": "crm-system",
   "version": "2024.42.0",
   "scripts": {
-    "local": "ng serve --port=4203 --proxy-config proxy.conf.json",
+    "local": "ng serve --port=4200 --proxy-config proxy.conf.json",
     "prod": "ng lint && ng build -c=production",
     "deploy": "rsync -av --delete dist/browser/ -e ssh ???"
   },

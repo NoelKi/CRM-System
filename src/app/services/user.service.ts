@@ -1,4 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { UserEnum } from '../../core/enum/api.enum';
 import { users } from '../../fake-db/user.data';
 import { User } from '../../models/user.model';
 
@@ -6,6 +8,7 @@ import { User } from '../../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
+  http = inject(HttpClient);
   users = signal(users);
 
   constructor() {}
@@ -24,9 +27,17 @@ export class UserService {
     });
   }
 
-  getUser(id: string): User | undefined {
-    const user = this.users().find((user) => user.id === id);
-    return user ? { ...user } : undefined;
+  getUsers() {
+    this.http.get<User[]>(UserEnum.getUsers).subscribe((res) => {
+      console.log(res);
+    });
+    return this.users;
+  }
+
+  getUser(id: string) {
+    return this.http.get<User>(UserEnum.getUser.replace(':id', id)).subscribe((res) => {
+      res ? res : undefined;
+    });
   }
 
   editUserDepricated(newUser: User) {
