@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
-import { users } from '../../fake-db/user.data';
 import { User } from '../../models/user.model';
 
 @Injectable({
@@ -10,7 +9,7 @@ import { User } from '../../models/user.model';
 })
 export class UserService {
   http = inject(HttpClient);
-  users = signal(users);
+  users = signal([] as User[]);
 
   constructor() {}
 
@@ -29,10 +28,17 @@ export class UserService {
   }
 
   getUsers() {
-    this.http.get<User[]>(UserEnum.getUsers).subscribe((res) => {
-      console.log(res);
+    this.http.get<User[]>(UserEnum.getUsers).subscribe({
+      next: (users: User[]) => {
+        this.users.set(users); // wird aufgerufen, wenn Daten erfolgreich abgerufen werden
+      },
+      error: (error) => {
+        console.error('Error fetching user', error); // Fehlerbehandlung
+      },
+      complete: () => {
+        console.log('User fetch completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
+      }
     });
-    return this.users;
   }
 
   getUser(id: string): Observable<User> {
@@ -52,7 +58,7 @@ export class UserService {
   }
 
   // lerning in map-fun functions: no {} = implizit return, with {} = no return
-  editUser(newUser: User) {
+  editUserDepricated2(newUser: User) {
     this.users.update((users) => {
       return users.map((user) => {
         // user.id === newUser.id ? newUser : user;
@@ -61,6 +67,21 @@ export class UserService {
         }
         return user;
       });
+    });
+  }
+
+  editUser(newUser: User) {
+    const id = newUser.id;
+    this.http.put<User>(UserEnum.editUser, newUser).subscribe({
+      next: (user: User) => {
+        console.log('User updated successfully:', user);
+      },
+      error: (error) => {
+        console.error('Error fetching user', error); // Fehlerbehandlung
+      },
+      complete: () => {
+        console.log('User update completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
+      }
     });
   }
 }

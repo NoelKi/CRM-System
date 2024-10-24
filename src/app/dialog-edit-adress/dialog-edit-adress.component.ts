@@ -42,8 +42,7 @@ export class DialogEditAdressComponent {
   saveUser() {
     this.loading = true;
     this._userService.editUser(this.user);
-    setTimeout(() => {
-      this.dialogRef.close();
-    }, 2000);
+    this.loading = false;
+    this.dialogRef.close();
   }
 }

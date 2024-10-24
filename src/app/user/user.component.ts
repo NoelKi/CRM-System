@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,12 +24,16 @@ import { UserService } from '../services/user.service';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent {
+export class UserComponent implements OnInit {
+  ngOnInit(): void {
+    this._userService.getUsers();
+  }
+
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['name', 'lastName', 'email', 'id'];
-  dataSource = this._userService.getUsers();
+  dataSource = this._userService.users;
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 
