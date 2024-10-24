@@ -33,7 +33,17 @@ export class UserDetailComponent implements OnInit {
     if (paramId === null) {
       return;
     }
-    this.user = this._userService.getUser(paramId);
+    this._userService.getUser(paramId).subscribe({
+      next: (user: User) => {
+        this.user = user; // wird aufgerufen, wenn Daten erfolgreich abgerufen werden
+      },
+      error: (error) => {
+        console.error('Error fetching user', error); // Fehlerbehandlung
+      },
+      complete: () => {
+        console.log('User fetch completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
+      }
+    });
   }
 
   openAdressDialog() {}

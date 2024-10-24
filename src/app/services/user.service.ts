@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
 import { users } from '../../fake-db/user.data';
 import { User } from '../../models/user.model';
@@ -34,10 +35,8 @@ export class UserService {
     return this.users;
   }
 
-  getUser(id: string) {
-    return this.http.get<User>(UserEnum.getUser.replace(':id', id)).subscribe((res) => {
-      res ? res : undefined;
-    });
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(UserEnum.getUser.replace(':id', id));
   }
 
   editUserDepricated(newUser: User) {
