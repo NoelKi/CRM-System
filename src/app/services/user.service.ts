@@ -71,17 +71,6 @@ export class UserService {
   }
 
   editUser(newUser: User) {
-    const id = newUser.id;
-    this.http.put<User>(UserEnum.editUser, newUser).subscribe({
-      next: (user: User) => {
-        console.log('User updated successfully:', user);
-      },
-      error: (error) => {
-        console.error('Error fetching user', error); // Fehlerbehandlung
-      },
-      complete: () => {
-        console.log('User update completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
-      }
-    });
+    return this.http.put<{ status: string }>(UserEnum.editUser, newUser);
   }
 }

@@ -39,9 +39,6 @@ export class UserDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching user', error); // Fehlerbehandlung
-      },
-      complete: () => {
-        console.log('User fetch completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
       }
     });
   }
@@ -51,13 +48,34 @@ export class UserDetailComponent implements OnInit {
   editUserAdress() {
     const dialog = this.dialog.open(DialogEditAdressComponent);
     if (this.user) {
-      dialog.componentInstance.user = this.user;
+      dialog.componentInstance.user = { ...this.user };
+      const output = dialog.componentInstance.output.subscribe((user) => {
+        this.saveUser(user);
+      });
     }
   }
+
   editUserDetail() {
     const dialog = this.dialog.open(DialogEditUserComponent);
+
     if (this.user) {
-      dialog.componentInstance.user = this.user;
+      dialog.componentInstance.user = Object.assign({}, this.user);
+      const output = dialog.componentInstance.output.subscribe((user) => {
+        this.saveUser(user);
+      });
     }
+  }
+
+  saveUser(editedUser: User) {
+    this._userService.editUser(editedUser).subscribe({
+      next: (res) => {
+        if ((res.status = 'OK')) {
+          this.user = editedUser;
+        }
+      },
+      error: (error) => {
+        console.error('Fehler beim Aktualisieren des Benutzers:', error);
+      }
+    });
   }
 }
