@@ -14,16 +14,32 @@ export class UserService {
   constructor() {}
 
   addUser(user: User) {
-    this.users.update((users) => {
-      return [...users, user];
+    this.http.post<IPostRes>(UserEnum.addUser, user).subscribe({
+      next: (res) => {
+        if (res.status === 'OK') {
+          user.id = res.id;
+          user.profilPicSrc = res.profilePicSrc;
+          this.users.update((users) => {
+            return [...users, user];
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error posting user', error); // Fehlerbehandlung
+      }
     });
   }
 
-  deleteUser(user: User) {
-    this.users.update((users) => {
-      return users.filter((u) => {
-        u !== user;
-      });
+  deleteUser(id: string) {
+    this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
+      next: (res) => {
+        if (res.status === 'OK') {
+          console.log(res + 'user gelöscht');
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting user', error); // Fehlerbehandlung
+      }
     });
   }
 
@@ -34,9 +50,6 @@ export class UserService {
       },
       error: (error) => {
         console.error('Error fetching user', error); // Fehlerbehandlung
-      },
-      complete: () => {
-        console.log('User fetch completed'); // optional, falls du etwas tun möchtest, wenn der Stream abgeschlossen ist
       }
     });
   }
@@ -71,6 +84,18 @@ export class UserService {
   }
 
   editUser(newUser: User) {
-    return this.http.put<{ status: string }>(UserEnum.editUser, newUser);
+    return this.http.put<IPutRes>(UserEnum.editUser, newUser);
   }
+}
+
+interface IPutRes {
+  status: string;
+}
+
+interface IDeleteRes extends IPutRes {
+  id: string;
+}
+
+interface IPostRes extends IDeleteRes {
+  profilePicSrc: string;
 }

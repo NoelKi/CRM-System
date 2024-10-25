@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
+import { DialogDeleteUserComponent } from '../dialog-delete-user/dialog-delete-user.component';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -31,8 +32,9 @@ export class UserComponent implements OnInit {
 
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
+  deleteDialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['name', 'lastName', 'email', 'id'];
+  displayedColumns: string[] = ['name', 'lastName', 'email', 'edit', 'delete'];
   dataSource = this._userService.users;
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
@@ -43,5 +45,14 @@ export class UserComponent implements OnInit {
       width: '620px',
       maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
     });
+  }
+
+  openDeleteDialog(id: string) {
+    const dialog = this.dialog.open(DialogDeleteUserComponent, {
+      height: '200px',
+      width: '200px',
+      maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
+    });
+    dialog.componentInstance.id = id;
   }
 }

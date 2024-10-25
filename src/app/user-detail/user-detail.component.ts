@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, OutputRefSubscription } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,16 +8,17 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { DialogEditAdressComponent } from '../dialog-edit-adress/dialog-edit-adress.component';
 import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
+import { ProfilPictureComponent } from '../profil-picture/profil-picture.component';
 import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, ProfilPictureComponent],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss'
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit, OnDestroy {
   userId: string | null = '';
 
   user!: User | undefined;
@@ -25,6 +26,7 @@ export class UserDetailComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
+  subs = [] as OutputRefSubscription[];
 
   constructor() {}
 
@@ -43,8 +45,6 @@ export class UserDetailComponent implements OnInit {
     });
   }
 
-  openAdressDialog() {}
-
   editUserAdress() {
     const dialog = this.dialog.open(DialogEditAdressComponent);
     if (this.user) {
@@ -52,17 +52,18 @@ export class UserDetailComponent implements OnInit {
       const output = dialog.componentInstance.output.subscribe((user) => {
         this.saveUser(user);
       });
+      this.subs.push(output);
     }
   }
 
   editUserDetail() {
     const dialog = this.dialog.open(DialogEditUserComponent);
-
     if (this.user) {
       dialog.componentInstance.user = Object.assign({}, this.user);
       const output = dialog.componentInstance.output.subscribe((user) => {
         this.saveUser(user);
       });
+      this.subs.push(output);
     }
   }
 
@@ -76,6 +77,12 @@ export class UserDetailComponent implements OnInit {
       error: (error) => {
         console.error('Fehler beim Aktualisieren des Benutzers:', error);
       }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
     });
   }
 }

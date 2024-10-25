@@ -3,5 +3,5 @@ export enum UserEnum {
   getUser = './api/users/:id',
   addUser = './api/users',
   editUser = './api/users',
-  deleteUser = './api/users'
+  deleteUser = './api/users/:id'
 }
