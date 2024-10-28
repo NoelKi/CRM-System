@@ -6,9 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
-import { DialogEditAdressComponent } from '../dialog-edit-adress/dialog-edit-adress.component';
-import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
+
 import { UserService } from '../services/user.service';
+import { DialogEditAdressComponent } from './components/dialog-edit-adress/dialog-edit-adress.component';
+import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
 @Component({
