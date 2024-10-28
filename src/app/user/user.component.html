@@ -1,5 +1,4 @@
-<!-- <mat-card appearance="outlined"> -->
-<table mat-table [dataSource]="dataSource()" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <!-- Edit Column -->
   <ng-container matColumnDef="edit">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Edit</th>
@@ -41,7 +40,9 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
-<!-- </mat-card> -->
+
+<mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons aria-label="Select user of users">
+</mat-paginator>
 
 <button mat-fab class="add-user-btn" matTooltip="Add User" (click)="openDialog()">
   <mat-icon>add</mat-icon>
