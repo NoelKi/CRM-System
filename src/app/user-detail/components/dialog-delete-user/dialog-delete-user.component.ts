@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-dialog-delete-user',
