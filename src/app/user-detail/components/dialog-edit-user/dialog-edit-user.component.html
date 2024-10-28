@@ -1,33 +1,29 @@
 @if (loading) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
-@if (kind == 'details') {
+@if (data.kind === 'details') {
   <h2 mat-dialog-title>Edit User</h2>
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>First Name</mat-label>
-      <input [disabled]="loading" [(ngModel)]="user.firstName" matInput />
+      <input [disabled]="loading" [(ngModel)]="data.user.firstName" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Last Name</mat-label>
-      <input [disabled]="loading" [(ngModel)]="user.lastName" matInput />
+      <input [disabled]="loading" [(ngModel)]="data.user.lastName" matInput />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
+      <input [disabled]="loading" [(ngModel)]="data.user.email" matInput type="email" matInput />
     </mat-form-field>
   </mat-dialog-content>
-  <mat-dialog-actions>
-    <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
-    <button [disabled]="loading" mat-button (click)="saveUser()">Edit</button>
-  </mat-dialog-actions>
-} @else if (kind == 'adress') {
+} @else if (data.kind === 'address') {
   <h2 mat-dialog-title>Add User</h2>
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Street + House No</mat-label>
-      <input [disabled]="loading" [(ngModel)]="user.street" matInput />
+      <input [disabled]="loading" [(ngModel)]="data.user.street" matInput />
     </mat-form-field>
 
     <mat-form-field>
@@ -35,7 +31,7 @@
       <input
         [disabled]="loading"
         matInput
-        [(ngModel)]="user.postalCode"
+        [(ngModel)]="data.user.postalCode"
         #postalCode
         maxlength="5"
         placeholder="Ex. 94105"
@@ -44,11 +40,11 @@
 
     <mat-form-field>
       <mat-label>City</mat-label>
-      <input [disabled]="loading" matInput [(ngModel)]="user.city" />
+      <input [disabled]="loading" matInput [(ngModel)]="data.user.city" />
     </mat-form-field>
   </mat-dialog-content>
-  <mat-dialog-actions>
-    <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
-    <button [disabled]="loading" mat-button (click)="saveUser()">Edit</button>
-  </mat-dialog-actions>
 }
+<mat-dialog-actions>
+  <button [disabled]="loading" mat-button mat-dialog-close>Cancel</button>
+  <button [disabled]="loading" mat-button [mat-dialog-close]="data.user">Edit</button>
+</mat-dialog-actions>

@@ -45,18 +45,17 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  editUserDetail(kind: string) {
+  editUserDetail(kind: 'address' | 'details') {
     if (this.user) {
       const dialogRef = this.dialog.open(DialogEditUserComponent, {
         data: {
+          user: { ...this.user },
           kind: kind
         }
       });
-      dialogRef.componentInstance.user = Object.assign({}, this.user);
-      const output = dialogRef.componentInstance.output.subscribe((user) => {
-        this.saveUser(user);
+      dialogRef.afterClosed().subscribe((editedUser) => {
+        this.saveUser(editedUser);
       });
-      this.subs.push(output);
     }
   }
 
