@@ -47,15 +47,8 @@ export class UserService {
     });
   }
 
-  getUsers() {
-    this.http.get<User[]>(UserEnum.getUsers).subscribe({
-      next: (users: User[]) => {
-        this.users.set(users); // wird aufgerufen, wenn Daten erfolgreich abgerufen werden
-      },
-      error: (error) => {
-        console.error('Error fetching user', error); // Fehlerbehandlung
-      }
-    });
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(UserEnum.getUsers); // Return observable without subscribing
   }
 
   getUser(id: string): Observable<User> {
