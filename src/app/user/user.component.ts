@@ -6,9 +6,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
-import { DialogDeleteUserComponent } from '../dialog-delete-user/dialog-delete-user.component';
 import { UserService } from '../services/user.service';
+import { DialogDeleteUserComponent } from '../user-detail/components/dialog-delete-user/dialog-delete-user.component';
+import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-user.component';
 
 @Component({
   selector: 'app-user',
