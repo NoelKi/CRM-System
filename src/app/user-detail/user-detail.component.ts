@@ -20,9 +20,7 @@ import { ProfilPictureComponent } from './components/profil-picture/profil-pictu
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
   userId: string | null = '';
-
   user!: User | undefined;
-
   private _route = inject(ActivatedRoute);
   private _userService = inject(UserService);
   dialog = inject(MatDialog);

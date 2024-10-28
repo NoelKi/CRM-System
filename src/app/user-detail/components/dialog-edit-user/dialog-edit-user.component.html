@@ -1,6 +1,3 @@
-@if (loading) {
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-}
 @if (data.kind === 'details') {
   <h2 mat-dialog-title>Edit User</h2>
   <mat-dialog-content>
@@ -45,6 +42,6 @@
   </mat-dialog-content>
 }
 <mat-dialog-actions>
-  <button [disabled]="loading" mat-button mat-dialog-close>Cancel</button>
-  <button [disabled]="loading" mat-button [mat-dialog-close]="data.user">Edit</button>
+  <button mat-button mat-dialog-close [disabled]="loading">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.user" [disabled]="loading">Edit</button>
 </mat-dialog-actions>
