@@ -8,8 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { DialogEditAdressComponent } from '../dialog-edit-adress/dialog-edit-adress.component';
 import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
-import { ProfilPictureComponent } from '../profil-picture/profil-picture.component';
 import { UserService } from '../services/user.service';
+import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
 @Component({
   selector: 'app-user-detail',
