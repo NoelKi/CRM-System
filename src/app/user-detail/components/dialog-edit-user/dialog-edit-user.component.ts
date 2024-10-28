@@ -1,8 +1,9 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, Inject, inject, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -34,9 +35,16 @@ import { DialogAddUserComponent } from '../../../user/components/dialog-add-user
   styleUrl: './dialog-edit-user.component.scss'
 })
 export class DialogEditUserComponent {
+  variable = 0;
   loading = false;
   user!: User;
   output = output<User>();
+  // kind = input<string>('details');
+  kind: string;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this.kind = data.kind;
+  }
 
   readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
 

@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 
 import { UserService } from '../services/user.service';
-import { DialogEditAdressComponent } from './components/dialog-edit-adress/dialog-edit-adress.component';
 import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
@@ -46,22 +45,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  editUserAdress() {
-    const dialog = this.dialog.open(DialogEditAdressComponent);
+  editUserDetail(kind: string) {
     if (this.user) {
-      dialog.componentInstance.user = { ...this.user };
-      const output = dialog.componentInstance.output.subscribe((user) => {
-        this.saveUser(user);
+      const dialogRef = this.dialog.open(DialogEditUserComponent, {
+        data: {
+          kind: kind
+        }
       });
-      this.subs.push(output);
-    }
-  }
-
-  editUserDetail() {
-    const dialog = this.dialog.open(DialogEditUserComponent);
-    if (this.user) {
-      dialog.componentInstance.user = Object.assign({}, this.user);
-      const output = dialog.componentInstance.output.subscribe((user) => {
+      dialogRef.componentInstance.user = Object.assign({}, this.user);
+      const output = dialogRef.componentInstance.output.subscribe((user) => {
         this.saveUser(user);
       });
       this.subs.push(output);
