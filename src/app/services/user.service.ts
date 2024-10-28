@@ -34,7 +34,11 @@ export class UserService {
     this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
       next: (res) => {
         if (res.status === 'OK') {
-          console.log(res + 'user gelöscht');
+          this.users.update((users) => {
+            return users.filter((u) => {
+              return u.id !== id;
+            });
+          });
         }
       },
       error: (error) => {

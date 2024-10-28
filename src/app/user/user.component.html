@@ -15,7 +15,7 @@
   <ng-container matColumnDef="delete">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Delete</th>
     <td mat-cell *matCellDef="let element">
-      <button mat-icon-button (click)="openDeleteDialog(element.id)">
+      <button mat-icon-button (click)="openDeleteDialog(element.id, element.firstName)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>

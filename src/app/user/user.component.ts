@@ -47,12 +47,13 @@ export class UserComponent implements OnInit {
     });
   }
 
-  openDeleteDialog(id: string) {
+  openDeleteDialog(id: string, name: string) {
     const dialog = this.dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
       maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
     });
     dialog.componentInstance.id = id;
+    dialog.componentInstance.name = name;
   }
 }

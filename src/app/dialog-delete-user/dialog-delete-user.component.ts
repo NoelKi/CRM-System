@@ -16,6 +16,7 @@ export class DialogDeleteUserComponent {
   loading = false;
   private _userService = inject(UserService);
   id!: string;
+  name!: string;
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -24,6 +25,8 @@ export class DialogDeleteUserComponent {
   deleteUser() {
     this.loading = true;
     console.log(this.id);
+    console.log(this.name);
+
     // this.loading = true;
     this._userService.deleteUser(this.id);
     this.loading = false;

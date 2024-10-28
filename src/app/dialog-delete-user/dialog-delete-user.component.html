@@ -2,7 +2,7 @@
 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 <h2 mat-dialog-title>Delete User</h2>
-<mat-dialog-content>Are you sure to Delete the User ?</mat-dialog-content>
+<mat-dialog-content>Are you sure to Delete {{ name }} ?</mat-dialog-content>
 <mat-dialog-actions>
   <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
   <button [disabled]="loading" mat-button (click)="deleteUser()">Delete</button>
