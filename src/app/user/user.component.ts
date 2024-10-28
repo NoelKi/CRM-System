@@ -1,11 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
+import { User } from '../../models/user.model';
 import { UserService } from '../services/user.service';
 import { DialogDeleteUserComponent } from '../user-detail/components/dialog-delete-user/dialog-delete-user.component';
 import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-user.component';
@@ -20,22 +22,33 @@ import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-
     MatTooltipModule,
     MatCardModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
+    MatPaginatorModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements OnInit {
-  ngOnInit(): void {
-    this._userService.getUsers();
-  }
-
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
+  dataSource = new MatTableDataSource<User>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngOnInit(): void {
+    this._userService.getUsers().subscribe({
+      next: (users) => {
+        this.dataSource.data = users;
+        this.dataSource.paginator = this.paginator; // Set paginator after data is loaded
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      }
+    });
+  }
 
   displayedColumns: string[] = ['name', 'lastName', 'email', 'edit', 'delete'];
-  dataSource = this._userService.users;
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 
@@ -43,7 +56,7 @@ export class UserComponent implements OnInit {
     this.dialog.open(DialogAddUserComponent, {
       height: '560px',
       width: '620px',
-      maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
+      maxWidth: '100%'
     });
   }
 
@@ -51,7 +64,7 @@ export class UserComponent implements OnInit {
     const dialog = this.dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
-      maxWidth: '100%' // Maximale Breite, um sicherzustellen, dass der Dialog auf kleinen Bildschirmen passt
+      maxWidth: '100%'
     });
     dialog.componentInstance.id = id;
     dialog.componentInstance.name = name;
