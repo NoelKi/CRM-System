@@ -3,16 +3,16 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>First Name</mat-label>
-      <input [disabled]="loading" [(ngModel)]="data.user.firstName" matInput />
+      <input [(ngModel)]="data.user.firstName" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Last Name</mat-label>
-      <input [disabled]="loading" [(ngModel)]="data.user.lastName" matInput />
+      <input [(ngModel)]="data.user.lastName" matInput />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input [disabled]="loading" [(ngModel)]="data.user.email" matInput type="email" matInput />
+      <input [(ngModel)]="data.user.email" matInput type="email" matInput />
     </mat-form-field>
   </mat-dialog-content>
 } @else if (data.kind === 'address') {
@@ -20,13 +20,12 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Street + House No</mat-label>
-      <input [disabled]="loading" [(ngModel)]="data.user.street" matInput />
+      <input [(ngModel)]="data.user.street" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Postal Code</mat-label>
       <input
-        [disabled]="loading"
         matInput
         [(ngModel)]="data.user.postalCode"
         #postalCode
@@ -37,11 +36,11 @@
 
     <mat-form-field>
       <mat-label>City</mat-label>
-      <input [disabled]="loading" matInput [(ngModel)]="data.user.city" />
+      <input matInput [(ngModel)]="data.user.city" />
     </mat-form-field>
   </mat-dialog-content>
 }
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close [disabled]="loading">Cancel</button>
-  <button mat-button [mat-dialog-close]="data.user" [disabled]="loading">Edit</button>
+  <button mat-button mat-dialog-close>loadingCancel</button>
+  <button mat-button [mat-dialog-close]="data.user">Edit</button>
 </mat-dialog-actions>
