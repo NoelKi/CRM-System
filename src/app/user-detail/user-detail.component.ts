@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../services/user.service';
 import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
@@ -23,6 +24,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   user!: User | undefined;
   private _route = inject(ActivatedRoute);
   private _userService = inject(UserService);
+  private _snackBar = inject(MatSnackBar);
   dialog = inject(MatDialog);
   subs = [] as OutputRefSubscription[];
 
@@ -41,6 +43,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         console.error('Error fetching user', error); // Fehlerbehandlung
       }
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 3000 });
   }
 
   editUserDetail(kind: 'address' | 'details') {
@@ -62,10 +68,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       next: (res) => {
         if ((res.status = 'OK')) {
           this.user = editedUser;
+          this.openSnackBar(
+            this.user.firstName + ' ' + this.user.lastName + ' updated successfully !',
+            'close'
+          );
         }
       },
       error: (error) => {
         console.error('Fehler beim Aktualisieren des Benutzers:', error);
+        this.user = editedUser;
+        this.openSnackBar('User update failed, please retry!', 'close');
       }
     });
   }
