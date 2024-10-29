@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
@@ -33,24 +33,34 @@ export class UserComponent implements OnInit {
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
   dataSource = new MatTableDataSource<User>([]);
+  pageSize = 5;
+  pageIndex = 0;
+  usersLength = 0;
+  paginator = viewChild.required(MatPaginator);
+  displayedColumns: string[] = ['name', 'lastName', 'email', 'edit', 'delete'];
+  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  ngOnInit(): void {
-    this._userService.getUsers().subscribe({
-      next: (users) => {
-        this.dataSource.data = users;
-        this.dataSource.paginator = this.paginator; // Set paginator after data is loaded
-      },
-      error: (error) => {
-        console.error('Error fetching users:', error);
+  constructor() {
+    effect(() => {
+      if (this._userService.users()) {
+        this.dataSource.data = this._userService.users();
+        this.usersLength = this._userService.usersLength;
+        this.paginator()!.length = this.usersLength;
       }
     });
   }
 
-  displayedColumns: string[] = ['name', 'lastName', 'email', 'edit', 'delete'];
+  ngOnInit(): void {
+    this._userService.getUsers(this.pageSize, this.pageIndex);
+    this.usersLength = this._userService.usersLength;
+    console.log(this.usersLength);
+  }
 
-  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this._userService.getUsers(this.pageSize, this.pageIndex);
+  }
 
   openDialog() {
     this.dialog.open(DialogAddUserComponent, {

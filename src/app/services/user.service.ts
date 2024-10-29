@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
@@ -10,6 +10,7 @@ import { User } from '../../models/user.model';
 export class UserService {
   http = inject(HttpClient);
   users = signal([] as User[]);
+  usersLength: number = 0;
 
   constructor() {}
 
@@ -47,8 +48,17 @@ export class UserService {
     });
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(UserEnum.getUsers); // Return observable without subscribing
+  getUsers(pageSize: number, pageIndex: number) {
+    const params = new HttpParams().set('pageSize', pageSize).set('pageIndex', pageIndex); //Create new HttpParams
+    this.http.get<IGetRes>(UserEnum.getUsers, { params: params }).subscribe({
+      next: (res: IGetRes) => {
+        this.users.set(res.users); // Nutzer-Daten setzen
+        this.usersLength = res.totalLength;
+      },
+      error: (error) => {
+        console.error('Error fetching user', error); // Fehlerbehandlung
+      }
+    });
   }
 
   getUser(id: string): Observable<User> {
@@ -95,4 +105,9 @@ interface IDeleteRes extends IPutRes {
 
 interface IPostRes extends IDeleteRes {
   profilePicSrc: string;
+}
+
+interface IGetRes {
+  users: User[];
+  totalLength: number;
 }
