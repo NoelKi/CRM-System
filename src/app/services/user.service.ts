@@ -48,8 +48,11 @@ export class UserService {
     });
   }
 
-  getUsers(pageSize: number, pageIndex: number) {
-    const params = new HttpParams().set('pageSize', pageSize).set('pageIndex', pageIndex); //Create new HttpParams
+  getUsers(pageSize: number, pageIndex: number, filter: string = '') {
+    const params = new HttpParams()
+      .set('pageSize', pageSize)
+      .set('pageIndex', pageIndex)
+      .set('filter', filter); //Create new HttpParams
     this.http.get<IGetRes>(UserEnum.getUsers, { params: params }).subscribe({
       next: (res: IGetRes) => {
         this.users.set(res.users); // Nutzer-Daten setzen

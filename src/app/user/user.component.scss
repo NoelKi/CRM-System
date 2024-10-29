@@ -19,10 +19,29 @@ table {
   width: 100%;
 }
 
-.mat-column-delete {
+.mat-column-delete .mat-column-edit {
   width: 5px;
 }
 
-.mat-column-edit {
-  width: 5px;
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-elevation-z8 {
+  position: relative;
+  box-shadow: var(--mat-app-elevation-shadow-level-8, none);
 }

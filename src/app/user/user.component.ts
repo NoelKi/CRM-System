@@ -1,9 +1,12 @@
-import { Component, effect, inject, OnInit, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
@@ -23,12 +26,15 @@ import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-
     MatCardModule,
     MatTableModule,
     RouterModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, AfterViewInit {
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
@@ -37,8 +43,11 @@ export class UserComponent implements OnInit {
   pageIndex = 0;
   usersLength = 0;
   paginator = viewChild.required(MatPaginator);
+  input = viewChild.required(MatInput);
   displayedColumns: string[] = ['name', 'lastName', 'email', 'edit', 'delete'];
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  isLoadingResults = true;
+  isRateLimitReached = true;
 
   constructor() {
     effect(() => {
@@ -46,14 +55,31 @@ export class UserComponent implements OnInit {
         this.dataSource.data = this._userService.users();
         this.usersLength = this._userService.usersLength;
         this.paginator()!.length = this.usersLength;
+        this.isLoadingResults = false;
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    // effect(() => {
+    //   if (this.input().value) {
+    //     this.paginator().pageIndex = 0;
+    //   }
+    // });
   }
 
   ngOnInit(): void {
     this._userService.getUsers(this.pageSize, this.pageIndex);
     this.usersLength = this._userService.usersLength;
     console.log(this.usersLength);
+  }
+
+  applyFilter(event: Event) {
+    this.isLoadingResults = true;
+
+    this.pageIndex = 0;
+    const filterValue = (event.target as HTMLInputElement).value;
+    this._userService.getUsers(this.pageSize, this.pageIndex, filterValue);
   }
 
   onPageChange(event: PageEvent) {
