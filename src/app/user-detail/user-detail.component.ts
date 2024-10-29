@@ -4,10 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../services/user.service';
 import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
