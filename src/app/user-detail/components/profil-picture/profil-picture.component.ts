@@ -8,10 +8,14 @@ import { MatIcon } from '@angular/material/icon';
   template: `<img
       [src]="source()"
       alt="profil-image"
-      (mouseenter)="onHover()"
-      (mouseleave)="onLeave()"
+      (mouseenter)="isHovered = true"
+      (mouseleave)="isHovered = false"
     />
-    <mat-icon aria-hidden="false" [class]="{ hovered: isHovered }" aria-label="edit"
+    <mat-icon
+      aria-hidden="false"
+      aria-label="edit"
+      [class]="{ hovered: isHovered }"
+      (click)="editImg()"
       >edit</mat-icon
     >`,
   styleUrl: './profil-picture.component.scss'
@@ -20,11 +24,7 @@ export class ProfilPictureComponent {
   source = input.required<string>();
   isHovered = false;
 
-  onHover() {
-    this.isHovered = true;
-  }
-
-  onLeave() {
-    this.isHovered = false;
+  editImg() {
+    console.log('add edit logic here');
   }
 }
