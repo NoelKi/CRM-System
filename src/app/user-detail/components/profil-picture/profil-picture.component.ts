@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { Component, ElementRef, input, output, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-profil-picture',
   standalone: true,
-  imports: [MatIcon],
+  imports: [MatIcon, MatTooltip],
   template: `<img
       [src]="source()"
       alt="profil-image"
@@ -14,17 +15,35 @@ import { MatIcon } from '@angular/material/icon';
     <mat-icon
       aria-hidden="false"
       aria-label="edit"
-      [class]="{ hovered: isHovered }"
       (click)="editImg()"
+      [class.hovered]="isHovered"
+      matTooltip="UPLOAD IMAGE"
+      class="md-button md-raised md-primary"
       >edit</mat-icon
-    >`,
+    >
+    <!-- style="display: none;" -->
+    <input #fileInput id="input-file-id" type="file" (change)="onFileSelected()" /> `,
   styleUrl: './profil-picture.component.scss'
 })
 export class ProfilPictureComponent {
   source = input.required<string>();
   isHovered = false;
+  imgFile = output<File>();
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>; // Reference to the hidden input
 
   editImg() {
-    console.log('add edit logic here');
+    this.fileInput.nativeElement.click(); // Programmatically trigger file input
+  }
+
+  onFileSelected() {
+    const file = this.fileInput.nativeElement.files?.[0];
+    if (file) {
+      this.setNewFile(file);
+    }
+  }
+
+  setNewFile(file: File) {
+    this.imgFile.emit(file);
   }
 }

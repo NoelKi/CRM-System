@@ -6,7 +6,10 @@
     <mat-menu #userMenu="matMenu">
       <button mat-menu-item (click)="editUserDetail('details')">Edit</button>
     </mat-menu>
-    <app-profil-picture [source]="user.profilPicSrc"></app-profil-picture>
+    <app-profil-picture
+      [source]="user.profilPicSrc"
+      (imgFile)="saveFile(user, $event)"
+    ></app-profil-picture>
     <div class="user-details">
       <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <p>{{ user.email }}</p>
@@ -27,7 +30,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="user-infos layout--margin-top-32 layout--padding-20">
+  <!-- <mat-card class="user-infos layout--margin-top-32 layout--padding-20">
     <button [matMenuTriggerFor]="adressMenu" mat-icon-button class="edit-btn">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -39,7 +42,7 @@
       <input class="ng-hide" id="input-file-id" multiple type="file" />
       <label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 } @else {
   <p>No User found</p>
 }

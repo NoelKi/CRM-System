@@ -93,8 +93,9 @@ export class UserService {
     });
   }
 
-  editUser(newUser: User) {
-    return this.http.put<IPutRes>(UserEnum.editUser, newUser);
+  editUser(newUser: User, file?: File) {
+    if (!file) return this.http.put<IPutRes>(UserEnum.editUser, newUser);
+    return this.http.put<IPutRes>(UserEnum.editUserImg, { id: newUser.id, file });
   }
 }
 

@@ -86,4 +86,18 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     });
   }
+
+  saveFile(user: User, $event: File) {
+    console.log('Selected file:', $event);
+    this._userService.editUser(user, $event).subscribe({
+      next: (res) => {
+        if ((res.status = 'OK')) {
+          this.openSnackBar('Profile Image Edited Successfully', 'close');
+        }
+      },
+      error: (error) => {
+        console.error('Error while update user image:', error);
+      }
+    });
+  }
 }

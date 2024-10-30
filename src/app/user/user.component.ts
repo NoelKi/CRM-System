@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, inject, OnInit, viewChild } from '@angular/core';
+import { Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,7 +34,7 @@ import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit, AfterViewInit {
+export class UserComponent implements OnInit {
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
@@ -60,14 +60,6 @@ export class UserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    // effect(() => {
-    //   if (this.input().value) {
-    //     this.paginator().pageIndex = 0;
-    //   }
-    // });
-  }
-
   ngOnInit(): void {
     this._userService.getUsers(this.pageSize, this.pageIndex);
     this.usersLength = this._userService.usersLength;
@@ -76,13 +68,13 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     this.isLoadingResults = true;
-
     this.pageIndex = 0;
     const filterValue = (event.target as HTMLInputElement).value;
     this._userService.getUsers(this.pageSize, this.pageIndex, filterValue);
   }
 
   onPageChange(event: PageEvent) {
+    this.isLoadingResults = true;
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this._userService.getUsers(this.pageSize, this.pageIndex);
