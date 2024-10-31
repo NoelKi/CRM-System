@@ -24,7 +24,6 @@ import { MatTooltip } from '@angular/material/tooltip';
     <input
       #fileInput
       style="display: none;"
-      id="input-file-id"
       type="file"
       accept="image/png, image/jpeg"
       (change)="onFileSelected()"
