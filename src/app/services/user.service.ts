@@ -93,9 +93,24 @@ export class UserService {
     });
   }
 
-  editUser(newUser: User, file?: File) {
-    if (!file) return this.http.put<IPutRes>(UserEnum.editUser, newUser);
-    return this.http.put<IPutRes>(UserEnum.editUserImg, { id: newUser.id, file });
+  editUser(newUser: User) {
+    return this.http.put<IPutRes>(UserEnum.editUser, newUser);
+  }
+
+  editUserImg(newUser: User, file: File) {
+    // Erstellen Sie ein FormData-Objekt
+    const formData = new FormData();
+
+    // Fügen Sie die Benutzer-ID hinzu
+    formData.append('id', newUser.id);
+
+    // Fügen Sie die Datei hinzu
+    formData.append('file', file);
+
+    // const filename = file.name;
+    // const url = UserEnum.editUserImg.replace(':filename', filename);
+
+    return this.http.put<IPutImgRes>(UserEnum.editUserImg, formData);
   }
 }
 
@@ -103,6 +118,9 @@ interface IPutRes {
   status: string;
 }
 
+interface IPutImgRes extends IPutRes {
+  path: string;
+}
 interface IDeleteRes extends IPutRes {
   id: string;
 }

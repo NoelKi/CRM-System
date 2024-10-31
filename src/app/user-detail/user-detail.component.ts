@@ -34,7 +34,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     if (paramId === null) {
       return;
     }
-    this._userService.getUser(paramId).subscribe({
+    const sub_0 = this._userService.getUser(paramId).subscribe({
       next: (user: User) => {
         this.user = user; // wird aufgerufen, wenn Daten erfolgreich abgerufen werden
       },
@@ -42,6 +42,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         console.error('Error fetching user', error); // Fehlerbehandlung
       }
     });
+    this.subs.push(sub_0);
   }
 
   openSnackBar(message: string, action: string) {
@@ -63,7 +64,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   saveUser(editedUser: User) {
-    this._userService.editUser(editedUser).subscribe({
+    const sub_1 = this._userService.editUser(editedUser).subscribe({
       next: (res) => {
         if ((res.status = 'OK')) {
           this.user = editedUser;
@@ -75,10 +76,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Fehler beim Aktualisieren des Benutzers:', error);
-        this.user = editedUser;
         this.openSnackBar('User update failed, please retry!', 'close');
       }
     });
+    this.subs.push(sub_1);
   }
 
   ngOnDestroy(): void {
@@ -89,15 +90,19 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   saveFile(user: User, $event: File) {
     console.log('Selected file:', $event);
-    this._userService.editUser(user, $event).subscribe({
+    const sub_2 = this._userService.editUserImg(user, $event).subscribe({
       next: (res) => {
         if ((res.status = 'OK')) {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
+          if (this.user) {
+            this.user.profilPicSrc = res.path;
+          }
         }
       },
       error: (error) => {
         console.error('Error while update user image:', error);
       }
     });
+    this.subs.push(sub_2);
   }
 }

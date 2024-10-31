@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, output, ViewChild } from '@angular/core';
+import { Component, ElementRef, input, output, viewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
@@ -21,23 +21,28 @@ import { MatTooltip } from '@angular/material/tooltip';
       class="md-button md-raised md-primary"
       >edit</mat-icon
     >
-    <!-- style="display: none;" -->
-    <input #fileInput id="input-file-id" type="file" (change)="onFileSelected()" /> `,
+    <input
+      #fileInput
+      style="display: none;"
+      id="input-file-id"
+      type="file"
+      accept="image/png, image/jpeg"
+      (change)="onFileSelected()"
+    /> `,
   styleUrl: './profil-picture.component.scss'
 })
 export class ProfilPictureComponent {
   source = input.required<string>();
   isHovered = false;
   imgFile = output<File>();
-
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>; // Reference to the hidden input
+  fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
 
   editImg() {
-    this.fileInput.nativeElement.click(); // Programmatically trigger file input
+    this.fileInput().nativeElement.click();
   }
 
   onFileSelected() {
-    const file = this.fileInput.nativeElement.files?.[0];
+    const file = this.fileInput().nativeElement.files?.[0];
     if (file) {
       this.setNewFile(file);
     }
