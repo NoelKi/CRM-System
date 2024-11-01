@@ -18,7 +18,7 @@
 
     <div class="form-middle-container">
       <mat-form-field>
-        <mat-label>Choose a date</mat-label>
+        <mat-label>Birthdate</mat-label>
         <input
           [disabled]="loading"
           matInput
@@ -33,13 +33,13 @@
 
     <div class="form-bottom-container">
       <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
+        <mat-label>Street</mat-label>
+        <input [disabled]="loading" [(ngModel)]="user.street" matInput />
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Street + House No</mat-label>
-        <input [disabled]="loading" [(ngModel)]="adressString" matInput />
+        <mat-label>House No</mat-label>
+        <input [disabled]="loading" [(ngModel)]="user.houseNumber" matInput />
       </mat-form-field>
 
       <mat-form-field>
@@ -57,6 +57,11 @@
       <mat-form-field>
         <mat-label>City</mat-label>
         <input [disabled]="loading" matInput [(ngModel)]="user.city" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
       </mat-form-field>
     </div>
   </div>

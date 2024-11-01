@@ -141,3 +141,11 @@ interface IGetRes {
   users: User[];
   totalLength: number;
 }
+
+interface IGetUsersParams {
+  pageSize: number;
+  pageIndex: number;
+  filter: string;
+  sortField: string;
+  sortDirection: string;
+}

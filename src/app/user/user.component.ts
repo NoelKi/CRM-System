@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,7 +29,8 @@ import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatSortModule
+    MatSortModule,
+    DatePipe
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -45,7 +47,15 @@ export class UserComponent implements OnInit {
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'edit', 'delete'];
+  displayedColumns: string[] = [
+    'firstName',
+    'lastName',
+    'email',
+    'birthDate',
+    'adress',
+    'edit',
+    'delete'
+  ];
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   isLoadingResults = true;
   isRateLimitReached = true;
@@ -89,7 +99,7 @@ export class UserComponent implements OnInit {
 
   openDialog() {
     this.dialog.open(DialogAddUserComponent, {
-      height: '560px',
+      height: '660px',
       width: '620px',
       maxWidth: '100%'
     });
