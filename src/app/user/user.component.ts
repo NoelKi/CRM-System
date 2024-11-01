@@ -1,4 +1,3 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,15 +35,12 @@ import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-
 })
 export class UserComponent implements OnInit {
   private _userService = inject(UserService);
-  private _liveAnnouncer = inject(LiveAnnouncer);
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
   dataSource = new MatTableDataSource<User>([]);
   pageSize = 5;
   pageIndex = 0;
   usersLength = 0;
-  sortDirection = '';
-  sortField = '';
   filterValue = '';
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
@@ -79,8 +75,8 @@ export class UserComponent implements OnInit {
       this.pageSize,
       this.pageIndex,
       this.filterValue,
-      this.sortField,
-      this.sortDirection
+      this.sort().active,
+      this.sort().direction
     );
   }
 
@@ -110,14 +106,14 @@ export class UserComponent implements OnInit {
   }
 
   announceSortChange(sortState: Sort) {
-    this.sortDirection = sortState.direction;
-    this.sortField = sortState.active;
+    const sortDirection = sortState.direction;
+    const sortField = sortState.active;
     this._userService.getUsers(
       this.pageSize,
       this.pageIndex,
       this.filterValue,
-      this.sortField,
-      this.sortDirection
+      sortField,
+      sortDirection
     );
   }
 }
