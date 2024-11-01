@@ -11,7 +11,7 @@ export const users: User[] = [
     city: 'Berlin',
     postalCode: '12161',
     email: 'kieran.noel@icloud.com',
-    profilPicSrc: ''
+    profilPicSrc: ' '
   }),
   new User({
     id: '1',
