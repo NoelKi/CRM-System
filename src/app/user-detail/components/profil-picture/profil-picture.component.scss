@@ -5,6 +5,9 @@ img {
   margin: 10px;
   border-radius: 100px;
   background-color: rgba(0, 0, 0, 0.074);
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 mat-icon {

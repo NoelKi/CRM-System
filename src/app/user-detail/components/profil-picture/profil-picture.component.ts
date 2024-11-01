@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, output, viewChild } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
@@ -11,11 +11,12 @@ import { MatTooltip } from '@angular/material/tooltip';
       alt="profil-image"
       (mouseenter)="isHovered = true"
       (mouseleave)="isHovered = false"
+      (click)="fileInput.click()"
     />
     <mat-icon
       aria-hidden="false"
       aria-label="edit"
-      (click)="editImg()"
+      (click)="fileInput.click()"
       [class.hovered]="isHovered"
       matTooltip="UPLOAD IMAGE"
       class="md-button md-raised md-primary"
@@ -26,28 +27,19 @@ import { MatTooltip } from '@angular/material/tooltip';
       style="display: none;"
       type="file"
       accept="image/png, image/jpeg"
-      (change)="onFileSelected()"
+      (change)="onFileSelected($event)"
     /> `,
   styleUrl: './profil-picture.component.scss'
 })
 export class ProfilPictureComponent {
   source = input.required<string>();
-  isHovered = false;
   imgFile = output<File>();
-  fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
+  isHovered = false;
 
-  editImg() {
-    this.fileInput().nativeElement.click();
-  }
-
-  onFileSelected() {
-    const file = this.fileInput().nativeElement.files?.[0];
-    if (file) {
-      this.setNewFile(file);
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.imgFile.emit(input.files[0]);
     }
-  }
-
-  setNewFile(file: File) {
-    this.imgFile.emit(file);
   }
 }
