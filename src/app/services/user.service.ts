@@ -48,11 +48,19 @@ export class UserService {
     });
   }
 
-  getUsers(pageSize: number, pageIndex: number, filter: string = '') {
+  getUsers(
+    pageSize: number,
+    pageIndex: number,
+    filter: string = '',
+    sortField: string = '',
+    sortDirection: string = ''
+  ) {
     const params = new HttpParams()
       .set('pageSize', pageSize)
       .set('pageIndex', pageIndex)
-      .set('filter', filter); //Create new HttpParams
+      .set('filter', filter) //Create new HttpParams
+      .set('sortField', sortField)
+      .set('sortDirection', sortDirection);
     this.http.get<IGetRes>(UserEnum.getUsers, { params: params }).subscribe({
       next: (res: IGetRes) => {
         this.users.set(res.users); // Nutzer-Daten setzen
@@ -119,7 +127,7 @@ interface IPutRes {
 }
 
 interface IPutImgRes extends IPutRes {
-  path: string;
+  profilPicSrc: string;
 }
 interface IDeleteRes extends IPutRes {
   id: string;

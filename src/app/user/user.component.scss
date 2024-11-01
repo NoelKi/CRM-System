@@ -45,3 +45,7 @@ table {
   position: relative;
   box-shadow: var(--mat-app-elevation-shadow-level-8, none);
 }
+
+th.mat-sort-header-sorted {
+  color: black;
+}

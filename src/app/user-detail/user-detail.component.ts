@@ -66,7 +66,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   saveUser(editedUser: User) {
     const sub_1 = this._userService.editUser(editedUser).subscribe({
       next: (res) => {
-        if ((res.status = 'OK')) {
+        if (res.status === 'OK') {
           this.user = editedUser;
           this.openSnackBar(
             this.user.firstName + ' ' + this.user.lastName + ' updated successfully !',
@@ -92,11 +92,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     console.log('Selected file:', $event);
     const sub_2 = this._userService.editUserImg(user, $event).subscribe({
       next: (res) => {
-        if ((res.status = 'OK')) {
+        if (res.status === 'OK') {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
-          if (this.user) {
-            this.user.profilPicSrc = res.path;
-          }
+          user.profilPicSrc = res.profilPicSrc;
         }
       },
       error: (error) => {
