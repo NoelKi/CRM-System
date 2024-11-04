@@ -48,26 +48,20 @@ export class UserService {
     });
   }
 
-  getUsers(
-    pageSize: number,
-    pageIndex: number,
-    filter: string = '',
-    sortField: string = '',
-    sortDirection: string = ''
-  ) {
-    const params = new HttpParams()
-      .set('pageSize', pageSize)
-      .set('pageIndex', pageIndex)
-      .set('filter', filter) //Create new HttpParams
-      .set('sortField', sortField)
-      .set('sortDirection', sortDirection);
-    this.http.get<IGetRes>(UserEnum.getUsers, { params: params }).subscribe({
+  getUsers(data: IGetUsersParams) {
+    const httpParams = new HttpParams()
+      .set('pageSize', data.pageSize.toString())
+      .set('pageIndex', data.pageIndex.toString());
+    if (data.filterValue) httpParams.set('filter', data.filterValue);
+    if (data.sortField) httpParams.set('filter', data.sortField);
+    if (data.sortDirection) httpParams.set('filter', data.sortDirection);
+    this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams }).subscribe({
       next: (res: IGetRes) => {
-        this.users.set(res.users); // Nutzer-Daten setzen
+        this.users.set(res.users);
         this.usersLength = res.totalLength;
       },
       error: (error) => {
-        console.error('Error fetching user', error); // Fehlerbehandlung
+        console.error('Error fetching user', error);
       }
     });
   }
@@ -142,10 +136,10 @@ interface IGetRes {
   totalLength: number;
 }
 
-interface IGetUsersParams {
+export interface IGetUsersParams {
   pageSize: number;
   pageIndex: number;
-  filter: string;
-  sortField: string;
-  sortDirection: string;
+  filterValue?: string;
+  sortField?: string;
+  sortDirection?: string;
 }

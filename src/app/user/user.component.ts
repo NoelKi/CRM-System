@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { User } from '../../models/user.model';
-import { UserService } from '../services/user.service';
+import { IGetUsersParams, UserService } from '../services/user.service';
 import { DialogDeleteUserComponent } from '../user-detail/components/dialog-delete-user/dialog-delete-user.component';
 import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-user.component';
 
@@ -40,10 +40,7 @@ export class UserComponent implements OnInit {
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
   dataSource = new MatTableDataSource<User>([]);
-  pageSize = 5;
-  pageIndex = 0;
-  usersLength = 0;
-  filterValue = '';
+
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
@@ -56,14 +53,23 @@ export class UserComponent implements OnInit {
     'edit',
     'delete'
   ];
+  usersLength = 0;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   isLoadingResults = true;
   isRateLimitReached = true;
+  pageSize = 5;
+  pageIndex = 0;
+  filterVariables: IGetUsersParams = {
+    pageSize: this.pageSize,
+    pageIndex: this.pageIndex,
+    filterValue: '',
+    sortField: '',
+    sortDirection: ''
+  };
 
   constructor() {
     effect(() => {
       if (this._userService.users()) {
-        // this.dataSource.data = this._userService.users();
         this.dataSource = new MatTableDataSource(this._userService.users());
         this.usersLength = this._userService.usersLength;
         this.paginator()!.length = this.usersLength;
@@ -73,28 +79,22 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._userService.getUsers(this.pageSize, this.pageIndex);
+    this._userService.getUsers(this.filterVariables);
     this.usersLength = this._userService.usersLength;
   }
 
   applyFilter(event: Event) {
     this.isLoadingResults = true;
-    this.pageIndex = 0;
-    this.filterValue = (event.target as HTMLInputElement).value;
-    this._userService.getUsers(
-      this.pageSize,
-      this.pageIndex,
-      this.filterValue,
-      this.sort().active,
-      this.sort().direction
-    );
+    this.filterVariables.pageIndex = 0;
+    this.filterVariables.filterValue = (event.target as HTMLInputElement).value;
+    this._userService.getUsers(this.filterVariables);
   }
 
   onPageChange(event: PageEvent) {
     this.isLoadingResults = true;
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    this._userService.getUsers(this.pageSize, this.pageIndex);
+    this.filterVariables.pageSize = event.pageSize;
+    this.filterVariables.pageIndex = event.pageIndex;
+    this._userService.getUsers(this.filterVariables);
   }
 
   openDialog() {
@@ -116,14 +116,8 @@ export class UserComponent implements OnInit {
   }
 
   announceSortChange(sortState: Sort) {
-    const sortDirection = sortState.direction;
-    const sortField = sortState.active;
-    this._userService.getUsers(
-      this.pageSize,
-      this.pageIndex,
-      this.filterValue,
-      sortField,
-      sortDirection
-    );
+    this.filterVariables.sortDirection = sortState.direction;
+    this.filterVariables.sortField = sortState.active;
+    this._userService.getUsers(this.filterVariables);
   }
 }
