@@ -4,18 +4,20 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ThemeService {
-  isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  themeModeIcon: 'light_mode' | 'dark_mode' = 'dark_mode';
+  themeModeIcon: TthemeMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark_mode'
+    : 'light_mode';
 
   constructor() {
-    if (this.isDarkMode) {
-      this.toggleMode();
+    if (this.themeModeIcon === 'dark_mode') {
+      this.toggleMode(this.themeModeIcon);
     }
   }
 
-  toggleMode() {
+  toggleMode(themeModeIcon: TthemeMode) {
     document.body.classList.toggle('dark-theme');
-    this.isDarkMode = !this.isDarkMode;
-    this.themeModeIcon = this.isDarkMode ? 'light_mode' : 'dark_mode';
+    themeModeIcon === 'light_mode' ? 'dark_mode' : 'light_mode';
   }
 }
+
+type TthemeMode = 'light_mode' | 'dark_mode';

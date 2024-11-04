@@ -3,28 +3,31 @@
     <div class="logo-container"><img src="./assets/img/logos/crm-logo.png" /></div>
     <mat-nav-list>
       @for (item of menuItems(); track item.label) {
-      <a
-        mat-list-item
-        [routerLink]="item.route"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [activated]="rla.isActive"
-      >
-        <mat-icon matListItemIcon> {{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
-      </a>
-      @if (item.subItems) { @for (subItem of item.subItems; track subItem.label) {
-      <a
-        mat-list-item
-        [routerLink]="subItem.route"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [activated]="rla.isActive"
-      >
-        <mat-icon matListItemIcon> {{ subItem.icon }}</mat-icon>
-        <span matListItemTitle>{{ subItem.label }}</span>
-      </a>
-      } } }
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [activated]="rla.isActive"
+        >
+          <mat-icon matListItemIcon> {{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+        @if (item.subItems) {
+          @for (subItem of item.subItems; track subItem.label) {
+            <a
+              mat-list-item
+              [routerLink]="subItem.route"
+              routerLinkActive
+              #rla="routerLinkActive"
+              [activated]="rla.isActive"
+            >
+              <mat-icon matListItemIcon> {{ subItem.icon }}</mat-icon>
+              <span matListItemTitle>{{ subItem.label }}</span>
+            </a>
+          }
+        }
+      }
     </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content>
@@ -41,7 +44,7 @@
       <span class="spacer"></span>
       <button
         mat-icon-button
-        (click)="themeService.toggleMode()"
+        (click)="themeService.toggleMode(themeService.themeModeIcon)"
         aria-label="icon-button with dark_mode or ligth_mode icon"
       >
         <mat-icon>{{ themeService.themeModeIcon }}</mat-icon>
