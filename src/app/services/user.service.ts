@@ -116,7 +116,7 @@ export class UserService {
   }
 }
 
-interface IPutRes {
+export interface IPutRes {
   status: string;
 }
 

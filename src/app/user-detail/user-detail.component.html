@@ -1,10 +1,10 @@
-@if (user) {
+@if (user$ | async; as user) {
   <mat-card class="user-detail-header layout--padding-20">
     <button [matMenuTriggerFor]="userMenu" mat-icon-button class="edit-btn">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">
-      <button mat-menu-item (click)="editUserDetail('details')">Edit</button>
+      <button mat-menu-item (click)="editUserDetail('details', user)">Edit</button>
     </mat-menu>
     <app-profil-picture
       [source]="user.profilPicSrc"
@@ -21,7 +21,7 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #adressMenu="matMenu">
-      <button mat-menu-item (click)="editUserDetail('address')">Edit</button>
+      <button mat-menu-item (click)="editUserDetail('address', user)">Edit</button>
     </mat-menu>
     <mat-card-title>Address</mat-card-title>
     <mat-card-content>
@@ -32,3 +32,5 @@
 } @else {
   <p>No User found</p>
 }
+
+@if (editedUser$ | async) {}
