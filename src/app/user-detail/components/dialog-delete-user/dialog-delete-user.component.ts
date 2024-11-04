@@ -13,8 +13,8 @@ import { UserService } from '../../../services/user.service';
 })
 export class DialogDeleteUserComponent {
   readonly dialogRef = inject(MatDialogRef<DialogDeleteUserComponent>);
-  loading = false;
   private _userService = inject(UserService);
+  loading = false;
   id!: string;
   name!: string;
 
@@ -24,10 +24,6 @@ export class DialogDeleteUserComponent {
 
   deleteUser() {
     this.loading = true;
-    console.log(this.id);
-    console.log(this.name);
-
-    // this.loading = true;
     this._userService.deleteUser(this.id);
     this.loading = false;
     this.dialogRef.close();
