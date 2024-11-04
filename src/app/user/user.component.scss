@@ -17,6 +17,19 @@
 
 table {
   width: 100%;
+  table-layout: fixed;
+  mat-header-cell,
+  mat-cell {
+    overflow-wrap: normal;
+    white-space: nowrap;
+    overflow: visible !important;
+  }
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .mat-column-delete .mat-column-edit {
