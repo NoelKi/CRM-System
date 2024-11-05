@@ -29,8 +29,10 @@
       <p>{{ user.postalCode }} {{ user.city }}</p>
     </mat-card-content>
   </mat-card>
+  {{ user.extraProperty | date: 'short' }}
 } @else {
   <p>No User found</p>
 }
 
 @if (editedUser$ | async) {}
+@if (editedUserImg$ | async) {}

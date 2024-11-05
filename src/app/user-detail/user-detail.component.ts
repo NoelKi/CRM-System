@@ -1,13 +1,5 @@
-import { AsyncPipe, JsonPipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  inject,
-  OnDestroy,
-  OnInit,
-  OutputRefSubscription,
-  signal
-} from '@angular/core';
+import { AsyncPipe, DatePipe, JsonPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, OutputRefSubscription, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, EMPTY, Observable, of, tap } from 'rxjs';
 import { User } from '../../models/user.model';
-import { IPutRes, UserService } from '../services/user.service';
+import { IPutImgRes, IPutRes, UserService } from '../services/user.service';
 import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
@@ -31,12 +23,13 @@ import { ProfilPictureComponent } from './components/profil-picture/profil-pictu
     MatMenuModule,
     ProfilPictureComponent,
     AsyncPipe,
-    JsonPipe
+    JsonPipe,
+    DatePipe
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss'
 })
-export class UserDetailComponent implements OnInit, OnDestroy {
+export class UserDetailComponent implements OnInit {
   userId: string | null = '';
   user!: User | undefined;
   private _route = inject(ActivatedRoute);
@@ -44,8 +37,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   private _snackBar = inject(MatSnackBar);
   dialog = inject(MatDialog);
   subs = [] as OutputRefSubscription[];
-  user$!: Observable<User>;
+  user$!: Observable<any>; // <User>
   editedUser$!: Observable<IPutRes>;
+  editedUserImg$!: Observable<IPutImgRes>;
   x = signal(10);
   y = computed(() => this.x() * 10);
   z = this.x() * 10;
@@ -61,15 +55,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     if (paramId === null) {
       return;
     }
-    // const sub_0 = this._userService.getUser(paramId).subscribe({
-    //   next: (user: User) => {
-    //     this.user = user; // wird aufgerufen, wenn Daten erfolgreich abgerufen werden
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching user', error); // Fehlerbehandlung
-    //   }
-    // });
-    // this.subs.push(sub_0);
     this.user$ = this._userService.getUser(paramId);
   }
 
@@ -109,43 +94,23 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         return EMPTY;
       })
     );
-    // const sub_1 = this._userService.editUser(editedUser).subscribe({
-    //   next: (res) => {
-    //     if (res.status === 'OK') {
-    //       this.user = editedUser;
-    //       this.openSnackBar(
-    //         this.user.firstName + ' ' + this.user.lastName + ' updated successfully !',
-    //         'close'
-    //       );
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('Fehler beim Aktualisieren des Benutzers:', error);
-    //     this.openSnackBar('User update failed, please retry!', 'close');
-    //   }
-    // });
-    // this.subs.push(sub_1);
   }
 
   saveFile(user: User, $event: File) {
-    console.log('Selected file:', $event);
-    const sub_2 = this._userService.editUserImg(user, $event).subscribe({
-      next: (res) => {
+    // console.log('Selected file:', $event);
+    this.editedUserImg$ = this._userService.editUserImg(user, $event).pipe(
+      tap((res) => {
         if (res.status === 'OK') {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
           user.profilPicSrc = res.profilPicSrc;
+          this.user$ = of(user);
         }
-      },
-      error: (error) => {
-        console.error('Error while update user image:', error);
-      }
-    });
-    this.subs.push(sub_2);
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach((sub) => {
-      sub.unsubscribe();
-    });
+      }),
+      catchError((error) => {
+        console.error('Fehler beim Aktualisieren des Benutzers:', error);
+        this.openSnackBar('User update failed, please retry!', 'close');
+        return EMPTY;
+      })
+    );
   }
 }
