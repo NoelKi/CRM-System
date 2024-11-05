@@ -1,5 +1,5 @@
 <mat-drawer-container class="example-container">
-  <mat-drawer #drawer class="sidenav" mode="side" opened="opened">
+  <mat-drawer #drawer class="sidenav" [mode]="themeSelectorMode()" opened="opened">
     <div class="logo-container"><img src="./assets/img/logos/crm-logo.png" /></div>
     <mat-nav-list>
       @for (item of menuItems(); track item.label) {
