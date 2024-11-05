@@ -49,12 +49,21 @@ export class UserService {
   }
 
   getUsers(data: IGetUsersParams) {
-    const httpParams = new HttpParams()
+    let httpParams = new HttpParams()
       .set('pageSize', data.pageSize.toString())
       .set('pageIndex', data.pageIndex.toString());
-    if (data.filterValue) httpParams.set('filter', data.filterValue);
-    if (data.sortField) httpParams.set('filter', data.sortField);
-    if (data.sortDirection) httpParams.set('filter', data.sortDirection);
+    if (data.filterValue) {
+      httpParams = httpParams.set('filter', data.filterValue);
+    }
+    if (data.sortField) {
+      httpParams = httpParams.set('sortField', data.sortField);
+    }
+    if (data.sortDirection) {
+      httpParams = httpParams.set('sortDirection', data.sortDirection);
+    }
+    console.log(data);
+    console.log(httpParams);
+
     this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams }).subscribe({
       next: (res: IGetRes) => {
         this.users.set(res.users);
@@ -120,7 +129,7 @@ export interface IPutRes {
   status: string;
 }
 
-interface IPutImgRes extends IPutRes {
+export interface IPutImgRes extends IPutRes {
   profilPicSrc: string;
 }
 interface IDeleteRes extends IPutRes {
