@@ -30,10 +30,18 @@ export class AppComponent {
   title = 'CRM-System';
   menuItems = signal(menuItems);
 
+  navToggle = computed(() => {
+    if (this.responsiveService.largeWidth()) {
+      return true;
+    } else return false;
+  });
+
   themeSelectorMode = computed(() => {
     if (this.responsiveService.largeWidth()) {
       return 'side';
     } else return 'over';
   });
-  constructor() {}
+  constructor() {
+    console.log(this.navToggle);
+  }
 }
