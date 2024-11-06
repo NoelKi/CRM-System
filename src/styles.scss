@@ -11,16 +11,6 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Light Theme Variables
-$scrollbar-track-bg-light: #ffffff; // Adjust to your light theme color
-$scrollbar-thumb-bg-light: #c0c0c0; // Adjust to your light theme color
-$scrollbar-thumb-border-light: #a0a0a0; // Adjust to your light theme color
-
-// Dark Theme Variables
-$scrollbar-track-bg-dark: #1b1015; // Adjust to your dark theme color
-$scrollbar-thumb-bg-dark: #1b1015; // Adjust to your dark theme color
-$scrollbar-thumb-border-dark: #ffffff; // Adjust to your dark theme color
-
 // Define the theme object.
 // $CRM-System-theme: mat.define-theme((
 //   color: (
@@ -60,40 +50,12 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+* {
+  scrollbar-color: var(--sys-secondary) transparent;
+}
+
 .dark-theme {
   @include mat.all-component-colors(m3.$dark-theme);
   @include mat.all-component-densities(m3.$dark-theme);
   @include mat.system-level-colors(m3.$dark-theme);
-
-  /* Dark Theme Scrollbar Styles */
-  ::-webkit-scrollbar {
-    width: 20px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: $scrollbar-track-bg-dark;
-    // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: $scrollbar-thumb-bg-dark;
-    border: 0.5px solid $scrollbar-thumb-border-dark;
-    border-radius: 10px;
-  }
-}
-
-/* Light Theme Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 20px;
-}
-
-::-webkit-scrollbar-track {
-  background: $scrollbar-track-bg-light;
-  // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-::-webkit-scrollbar-thumb {
-  background: $scrollbar-thumb-bg-light;
-  border: 1px solid $scrollbar-thumb-border-light;
-  border-radius: 10px;
 }
