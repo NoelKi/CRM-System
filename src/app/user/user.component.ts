@@ -44,15 +44,7 @@ export class UserComponent implements OnInit {
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
-  displayedColumns: string[] = [
-    'firstName',
-    'lastName',
-    'email',
-    'birthDate',
-    'adress',
-    'edit',
-    'delete'
-  ];
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
   usersLength = 0;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   isLoadingResults = true;

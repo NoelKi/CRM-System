@@ -17,19 +17,10 @@
 
 table {
   width: 100%;
-  table-layout: fixed;
-  mat-header-cell,
-  mat-cell {
-    overflow-wrap: normal;
-    white-space: nowrap;
-    overflow: visible !important;
-  }
 }
 
-.table-responsive {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
+.mat-mdc-table {
+  min-width: none;
 }
 
 .mat-column-delete .mat-column-edit {
@@ -57,8 +48,29 @@ table {
 .mat-elevation-z8 {
   position: relative;
   box-shadow: var(--mat-app-elevation-shadow-level-8, none);
+  max-width: 1100px;
 }
 
 th.mat-sort-header-sorted {
   color: black;
+}
+
+mat-form-field {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+mat-row,
+mat-header-row {
+  display: table-row;
+}
+
+td {
+  white-space: nowrap;
 }
