@@ -45,15 +45,12 @@ export class UserComponent implements OnInit {
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
-  usersLength = 0;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   isLoadingResults = true;
   isRateLimitReached = true;
-  pageSize = 5;
-  pageIndex = 0;
   filterVariables: IGetUsersParams = {
-    pageSize: this.pageSize,
-    pageIndex: this.pageIndex,
+    pageSize: 5,
+    pageIndex: 0,
     filterValue: '',
     sortField: '',
     sortDirection: ''
@@ -63,8 +60,7 @@ export class UserComponent implements OnInit {
     effect(() => {
       if (this._userService.users()) {
         this.dataSource = new MatTableDataSource(this._userService.users());
-        this.usersLength = this._userService.usersLength;
-        this.paginator()!.length = this.usersLength;
+        this.paginator().length = this._userService.usersLength;
         this.isLoadingResults = false;
       }
     });
@@ -72,7 +68,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this._userService.getUsers(this.filterVariables);
-    this.usersLength = this._userService.usersLength;
+    this.paginator().length = this._userService.usersLength;
   }
 
   applyFilter(event: Event) {
