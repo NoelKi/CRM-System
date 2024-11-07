@@ -18,11 +18,10 @@ export class UserService {
     this.http.post<IPostRes>(UserEnum.addUser, user).subscribe({
       next: (res) => {
         if (res.status === 'OK') {
-          user.id = res.id;
           user.profilPicSrc = res.profilePicSrc;
-          this.users.update((users) => {
-            return [...users, user];
-          });
+          // this.users.update((users) => {
+          //   return [...users, user];
+          // });
         }
       },
       error: (error) => {
@@ -50,7 +49,9 @@ export class UserService {
         if (res.status === 'OK') {
           this.users.update((users) => {
             return users.filter((u) => {
-              return u.id !== id;
+              console.log('id', u._id);
+
+              return u._id !== id;
             });
           });
         }
@@ -75,16 +76,6 @@ export class UserService {
       httpParams = httpParams.set('sortDirection', data.sortDirection);
     }
 
-    // this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams }).subscribe({
-    //   next: (res: IGetRes) => {
-    //     this.users.set(res.users);
-    //     this.usersLength = res.totalLength;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching user', error);
-    //   }
-    // });
-
     try {
       const { totalLength, users } = await firstValueFrom(
         this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams })
@@ -103,8 +94,8 @@ export class UserService {
   editUserDepricated(newUser: User) {
     this.users.update((users) => {
       for (let i = 0; i < users.length; i++) {
-        const id = users[i].id;
-        if (id == newUser.id) {
+        const id = users[i]._id;
+        if (id == newUser._id) {
           users[i] = newUser;
         }
       }
@@ -117,7 +108,7 @@ export class UserService {
     this.users.update((users) => {
       return users.map((user) => {
         // user.id === newUser.id ? newUser : user;
-        if (user.id == newUser.id) {
+        if (user._id == newUser._id) {
           user = newUser;
         }
         return user;
@@ -134,7 +125,7 @@ export class UserService {
     const formData = new FormData();
 
     // Fügen Sie die Benutzer-ID hinzu
-    formData.append('id', newUser.id);
+    formData.append('id', newUser._id);
 
     // Fügen Sie die Datei hinzu
     formData.append('file', file);
