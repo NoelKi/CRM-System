@@ -66,6 +66,10 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // addMongoUser() {
+  //   this._userService.fillDatabase();
+  // }
+
   ngOnInit(): void {
     this._userService.getUsers(this.filterVariables);
     this.paginator().length = this._userService.usersLength;

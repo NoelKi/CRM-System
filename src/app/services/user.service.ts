@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
 import { User } from '../../models/user.model';
 
@@ -31,6 +31,19 @@ export class UserService {
     });
   }
 
+  // Helpfunc to insert User initial in mongoDbd
+  // async fillDatabase() {
+  //   try {
+  //     const response = await fetch('http://localhost:3000/api/fillDb', {
+  //       method: 'POST'
+  //     });
+  //     const result = await response.json();
+  //     console.log(result.message); // Zeigt eine Bestätigung an
+  //   } catch (error) {
+  //     console.error('Fehler beim Befüllen der Datenbank:', error);
+  //   }
+  // }
+
   deleteUser(id: string) {
     this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
       next: (res) => {
@@ -48,7 +61,7 @@ export class UserService {
     });
   }
 
-  getUsers(data: IGetUsersParams) {
+  async getUsers(data: IGetUsersParams) {
     let httpParams = new HttpParams()
       .set('pageSize', data.pageSize.toString())
       .set('pageIndex', data.pageIndex.toString());
@@ -61,18 +74,26 @@ export class UserService {
     if (data.sortDirection) {
       httpParams = httpParams.set('sortDirection', data.sortDirection);
     }
-    console.log(data);
-    console.log(httpParams);
 
-    this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams }).subscribe({
-      next: (res: IGetRes) => {
-        this.users.set(res.users);
-        this.usersLength = res.totalLength;
-      },
-      error: (error) => {
-        console.error('Error fetching user', error);
-      }
-    });
+    // this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams }).subscribe({
+    //   next: (res: IGetRes) => {
+    //     this.users.set(res.users);
+    //     this.usersLength = res.totalLength;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error fetching user', error);
+    //   }
+    // });
+
+    try {
+      const { totalLength, users } = await firstValueFrom(
+        this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams })
+      );
+      this.users.set(users);
+      this.usersLength = totalLength;
+    } catch (error) {
+      console.error('Error fetching user', error);
+    }
   }
 
   getUser(id: string): Observable<User> {
