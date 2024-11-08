@@ -49,26 +49,9 @@ export class DialogAddUserComponent {
   thirdString = '';
   loading = false;
 
-  constructor() {
-    this.splitStreetAndHouseNumber();
-  }
+  constructor() {}
 
   onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  splitStreetAndHouseNumber() {
-    if (this.adressString.length > 3) {
-      [this.firstString, this.secoundString, this.thirdString] = this.adressString.split(' ');
-      if (this.firstString === 'string') {
-      }
-    }
-  }
-
-  saveUser() {
-    this.loading = true;
-    // this.splitStreetAndHouseNumber();
-    this._userService.addUser(this.user);
     this.dialogRef.close();
   }
 }
