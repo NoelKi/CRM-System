@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom, Observable } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
 import { User } from '../../models/user.model';
@@ -11,71 +12,42 @@ export class UserService {
   http = inject(HttpClient);
   users = signal([] as User[]);
   usersLength: number = 0;
-
+  private _snackBar = inject(MatSnackBar);
   constructor() {}
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 3000 });
+  }
+
   addUser(user: User) {
-    // this.http.post<IPostRes>(UserEnum.addUser, user).subscribe({
-    //   next: (res) => {
-    //     if (res.status === 'OK') {
-    //       user.profilPicSrc = res.profilePicSrc;
-    //       user._id = res._id;
-    //       console.log(user._id);
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('Error posting user', error); // Fehlerbehandlung
-    //   }
-    // });
+    console.log('user service');
     return this.http.post<IPostRes>(UserEnum.addUser, user);
   }
 
-  // Helpfunc to insert User initial in mongoDbd
-  // async fillDatabase() {
-  //   try {
-  //     const response = await fetch('http://localhost:3000/api/fillDb', {
-  //       method: 'POST'
-  //     });
-  //     const result = await response.json();
-  //     console.log(result.message); // Zeigt eine Bestätigung an
-  //   } catch (error) {
-  //     console.error('Fehler beim Befüllen der Datenbank:', error);
-  //   }
-  // }
-
-  deleteUser(id: string) {
+  deleteUser(id: string, data: IGetUsersParams) {
     this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
       next: (res) => {
         if (res.status === 'OK') {
-          this.users.update((users) => {
-            return users.filter((u) => {
-              console.log('id', u._id);
-
-              return u._id !== id;
-            });
-          });
+          console.log('deleted');
+          this.getUsers(data);
+          // this.users.update((users) => {
+          //   return users.filter((u) => {
+          //     console.log('id', u._id);
+          //     return u._id !== id;
+          //   });
+          // });
+          this.openSnackBar('User succesfully deleted!', 'close');
         }
       },
       error: (error) => {
         console.error('Error deleting user', error); // Fehlerbehandlung
+        this.openSnackBar('User was not deleted properly', 'close');
       }
     });
   }
 
   async getUsers(data: IGetUsersParams) {
-    let httpParams = new HttpParams()
-      .set('pageSize', data.pageSize.toString())
-      .set('pageIndex', data.pageIndex.toString());
-    if (data.filterValue) {
-      httpParams = httpParams.set('filter', data.filterValue);
-    }
-    if (data.sortField) {
-      httpParams = httpParams.set('sortField', data.sortField);
-    }
-    if (data.sortDirection) {
-      httpParams = httpParams.set('sortDirection', data.sortDirection);
-    }
-
+    const httpParams = this.createHttpParams(data);
     try {
       const { totalLength, users } = await firstValueFrom(
         this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams })
@@ -91,49 +63,32 @@ export class UserService {
     return this.http.get<User>(UserEnum.getUser.replace(':id', id));
   }
 
-  editUserDepricated(newUser: User) {
-    this.users.update((users) => {
-      for (let i = 0; i < users.length; i++) {
-        const id = users[i]._id;
-        if (id == newUser._id) {
-          users[i] = newUser;
-        }
-      }
-      return users;
-    });
-  }
-
-  // lerning in map-fun functions: no {} = implizit return, with {} = no return
-  editUserDepricated2(newUser: User) {
-    this.users.update((users) => {
-      return users.map((user) => {
-        // user.id === newUser.id ? newUser : user;
-        if (user._id == newUser._id) {
-          user = newUser;
-        }
-        return user;
-      });
-    });
-  }
-
   editUser(newUser: User) {
     return this.http.put<IPutRes>(UserEnum.editUser, newUser);
   }
 
   editUserImg(newUser: User, file: File) {
-    // Erstellen Sie ein FormData-Objekt
     const formData = new FormData();
+    console.log(newUser._id);
 
-    // Fügen Sie die Benutzer-ID hinzu
-    formData.append('id', newUser._id);
-
-    // Fügen Sie die Datei hinzu
+    formData.append('id', newUser._id!);
     formData.append('file', file);
 
-    // const filename = file.name;
-    // const url = UserEnum.editUserImg.replace(':filename', filename);
+    // const url = UserEnum.editUserImg.replace(':id', newUser._id);
+    // return this.http.put<IPutImgRes>(url, formData);
 
     return this.http.put<IPutImgRes>(UserEnum.editUserImg, formData);
+  }
+
+  createHttpParams(data: IGetUsersParams): HttpParams {
+    let httpParams = new HttpParams()
+      .set('pageSize', data.pageSize.toString())
+      .set('pageIndex', data.pageIndex.toString());
+    if (data.filterValue) httpParams = httpParams.set('filter', data.filterValue);
+    if (data.sortField) httpParams = httpParams.set('sortField', data.sortField);
+    if (data.sortDirection) httpParams = httpParams.set('sortDirection', data.sortDirection);
+
+    return httpParams;
   }
 }
 

@@ -14,8 +14,8 @@ import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user.model';
 import { IGetUsersParams, UserService } from '../services/user.service';
-import { DialogDeleteUserComponent } from '../user-detail/components/dialog-delete-user/dialog-delete-user.component';
 import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-user.component';
+import { DialogDeleteUserComponent } from './components/dialog-delete-user/dialog-delete-user.component';
 
 @Component({
   selector: 'app-user',
@@ -121,13 +121,19 @@ export class UserComponent implements OnInit {
   }
 
   openDeleteDialog(_id: string, name: string) {
-    const dialog = this.dialog.open(DialogDeleteUserComponent, {
+    const dialogRef = this.dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
-      maxWidth: '100%'
+      maxWidth: '100%',
+      data: {
+        name: name
+      }
     });
-    dialog.componentInstance.id = _id;
-    dialog.componentInstance.name = name;
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this._userService.deleteUser(_id, this.filterVariables);
+      }
+    });
   }
 
   announceSortChange(sortState: Sort) {
