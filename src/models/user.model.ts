@@ -1,5 +1,5 @@
 export class User {
-  _id: string;
+  _id?: string;
   firstName: string;
   lastName: string;
   birthDate?: Date;
@@ -8,10 +8,10 @@ export class User {
   city: string;
   postalCode: string;
   email: string;
-  profilPicSrc: string;
+  profilPicSrc?: string;
 
   constructor(obj?: User) {
-    this._id = obj?._id || '';
+    if (obj?._id) this._id = obj._id;
     this.firstName = obj ? obj.firstName : '';
     this.lastName = obj ? obj.lastName : '';
     this.birthDate = obj?.birthDate;
@@ -20,6 +20,6 @@ export class User {
     this.postalCode = obj ? obj.postalCode : '';
     this.email = obj ? obj.email : '';
     this.houseNumber = obj ? obj.houseNumber : '';
-    this.profilPicSrc = obj ? obj.profilPicSrc : '';
+    if (obj?.profilPicSrc) this.profilPicSrc = obj.profilPicSrc;
   }
 }
