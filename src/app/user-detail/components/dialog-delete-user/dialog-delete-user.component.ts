@@ -23,9 +23,7 @@ export class DialogDeleteUserComponent {
   }
 
   deleteUser() {
-    this.loading = true;
     this._userService.deleteUser(this.id);
-    this.loading = false;
     this.dialogRef.close();
   }
 }
