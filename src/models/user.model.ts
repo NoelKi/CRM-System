@@ -1,5 +1,5 @@
 export class User {
-  id: string;
+  _id: string;
   firstName: string;
   lastName: string;
   birthDate?: Date;
@@ -11,7 +11,7 @@ export class User {
   profilPicSrc: string;
 
   constructor(obj?: User) {
-    this.id = obj?.id || '';
+    this._id = obj?._id || '';
     this.firstName = obj ? obj.firstName : '';
     this.lastName = obj ? obj.lastName : '';
     this.birthDate = obj?.birthDate;
