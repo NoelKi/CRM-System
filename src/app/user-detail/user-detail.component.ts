@@ -71,9 +71,37 @@ export class UserDetailComponent implements OnInit {
         }
       });
       dialogRef.afterClosed().subscribe((editedUser) => {
-        this.saveUser(editedUser);
+        !this.isUserEqual(editedUser, user)
+          ? this.saveUser(editedUser)
+          : this.openSnackBar('No changes detected', 'close');
       });
     }
+  }
+
+  isUserEqual(object1: object, object2: object): boolean {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+
+    for (let key of keys1) {
+      const val1 = (object1 as any)[key];
+      const val2 = (object2 as any)[key];
+
+      // Check if values are objects themselves and need recursive comparison
+      const areObjects =
+        typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null;
+
+      if (
+        (areObjects && !this.isUserEqual(val1, val2)) || // Recursive comparison for nested objects
+        (!areObjects && val1 !== val2) // Direct comparison for primitive values
+      ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   saveUser(editedUser: User) {
