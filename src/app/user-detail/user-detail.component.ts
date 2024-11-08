@@ -1,5 +1,5 @@
 import { AsyncPipe, DatePipe, JsonPipe } from '@angular/common';
-import { Component, computed, inject, OnInit, OutputRefSubscription, signal } from '@angular/core';
+import { Component, inject, OnInit, OutputRefSubscription } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, EMPTY, Observable, of, tap } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { User } from '../../models/user.model';
 import { IPutImgRes, IPutRes, UserService } from '../services/user.service';
 import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
@@ -40,22 +40,15 @@ export class UserDetailComponent implements OnInit {
   user$!: Observable<any>; // <User>
   editedUser$!: Observable<IPutRes>;
   editedUserImg$!: Observable<IPutImgRes>;
-  x = signal(10);
-  y = computed(() => this.x() * 10);
-  z = this.x() * 10;
 
-  constructor() {
-    console.log(this.y());
-    this.x.set(29);
-    console.log(this.y());
-  }
+  constructor() {}
 
   ngOnInit(): void {
     const paramId = this._route.snapshot.paramMap.get('id');
     if (paramId === null) {
       return;
     }
-    this.user$ = this._userService.getUser(paramId);
+    this.user$ = this._userService.getUser(paramId).pipe(map((user) => new User(user)));
   }
 
   openSnackBar(message: string, action: string) {
@@ -125,12 +118,14 @@ export class UserDetailComponent implements OnInit {
   }
 
   saveFile(user: User, $event: File) {
-    // console.log('Selected file:', $event);
+    console.log('Selected file:', $event);
     this.editedUserImg$ = this._userService.editUserImg(user, $event).pipe(
       tap((res) => {
         if (res.status === 'OK') {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
           user.profilPicSrc = res.profilPicSrc;
+          console.log(res.profilPicSrc);
+
           this.user$ = of(user);
         }
       }),
