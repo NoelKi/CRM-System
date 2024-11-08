@@ -7,7 +7,7 @@
     <div class="form-upper-container">
       <mat-form-field>
         <mat-label>First Name</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.firstName" matInput />
+        <input [disabled]="loading" [(ngModel)]="user.firstName" matInput required />
       </mat-form-field>
 
       <mat-form-field>
@@ -48,10 +48,14 @@
           [disabled]="loading"
           matInput
           [(ngModel)]="user.postalCode"
-          #postalCode
+          #postalCode="ngModel"
           maxlength="5"
           placeholder="Ex. 94105"
+          pattern="^[0-9]{5}$"
         />
+        @if (postalCode.invalid && postalCode.touched) {
+          <mat-error> Postal Code is required and must be 5 digits. </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
@@ -68,5 +72,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button [disabled]="loading" mat-button (click)="onNoClick()">Cancel</button>
-  <button [disabled]="loading" mat-button (click)="saveUser()">Add</button>
+  <button [disabled]="loading" [mat-dialog-close]="user" mat-button>Add</button>
 </mat-dialog-actions>
