@@ -40,15 +40,17 @@ export class UserComponent implements OnInit {
   private _userService = inject(UserService);
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
-  dataSource = new MatTableDataSource<User>([]);
   private _snackBar = inject(MatSnackBar);
+  private _router = inject(Router);
+
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
+
+  dataSource = new MatTableDataSource<User>([]);
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   isLoadingResults = true;
-  isRateLimitReached = true;
   filterVariables: IGetUsersParams = {
     pageSize: 5,
     pageIndex: 0,
@@ -57,7 +59,7 @@ export class UserComponent implements OnInit {
     sortDirection: ''
   };
 
-  constructor(private _router: Router) {
+  constructor() {
     effect(() => {
       if (this._userService.users()) {
         this.dataSource = new MatTableDataSource(this._userService.users());
@@ -71,10 +73,6 @@ export class UserComponent implements OnInit {
     this._userService.getUsers(this.filterVariables);
     this.paginator().length = this._userService.usersLength;
   }
-
-  // addMongoUser() {
-  //   this._userService.fillDatabase();
-  // }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 3000 });
@@ -110,11 +108,11 @@ export class UserComponent implements OnInit {
               user.firstName + ' ' + user.lastName + ' was added to Users',
               'close'
             );
-            this._router.navigate(['./user/' + user._id]);
+            this._router.navigate(['./user/' + res._id]);
           }
         },
         error: (error) => {
-          console.error('Error posting user', error); // Fehlerbehandlung
+          console.error('Error posting user', error);
         }
       });
     });
