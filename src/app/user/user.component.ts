@@ -7,10 +7,11 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user.model';
 import { IGetUsersParams, UserService } from '../services/user.service';
 import { DialogDeleteUserComponent } from '../user-detail/components/dialog-delete-user/dialog-delete-user.component';
@@ -40,7 +41,7 @@ export class UserComponent implements OnInit {
   dialog = inject(MatDialog);
   deleteDialog = inject(MatDialog);
   dataSource = new MatTableDataSource<User>([]);
-
+  private _snackBar = inject(MatSnackBar);
   paginator = viewChild.required(MatPaginator);
   sort = viewChild.required(MatSort);
   input = viewChild.required(MatInput);
@@ -56,7 +57,7 @@ export class UserComponent implements OnInit {
     sortDirection: ''
   };
 
-  constructor() {
+  constructor(private _router: Router) {
     effect(() => {
       if (this._userService.users()) {
         this.dataSource = new MatTableDataSource(this._userService.users());
@@ -66,13 +67,17 @@ export class UserComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void {
+    this._userService.getUsers(this.filterVariables);
+    this.paginator().length = this._userService.usersLength;
+  }
+
   // addMongoUser() {
   //   this._userService.fillDatabase();
   // }
 
-  ngOnInit(): void {
-    this._userService.getUsers(this.filterVariables);
-    this.paginator().length = this._userService.usersLength;
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 3000 });
   }
 
   applyFilter(event: Event) {
@@ -90,20 +95,38 @@ export class UserComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(DialogAddUserComponent, {
+    const dialogRef = this.dialog.open(DialogAddUserComponent, {
       height: '660px',
       width: '620px',
       maxWidth: '100%'
     });
+    dialogRef.afterClosed().subscribe((user) => {
+      this._userService.addUser(user).subscribe({
+        next: (res) => {
+          if (res.status === 'OK') {
+            user.profilPicSrc = res.profilePicSrc;
+            user._id = res._id;
+            this.openSnackBar(
+              user.firstName + ' ' + user.lastName + ' was added to Users',
+              'close'
+            );
+            this._router.navigate(['./user/' + user._id]);
+          }
+        },
+        error: (error) => {
+          console.error('Error posting user', error); // Fehlerbehandlung
+        }
+      });
+    });
   }
 
-  openDeleteDialog(id: string, name: string) {
+  openDeleteDialog(_id: string, name: string) {
     const dialog = this.dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
       maxWidth: '100%'
     });
-    dialog.componentInstance.id = id;
+    dialog.componentInstance.id = _id;
     dialog.componentInstance.name = name;
   }
 
