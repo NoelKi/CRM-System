@@ -15,19 +15,19 @@ export class UserService {
   constructor() {}
 
   addUser(user: User) {
-    this.http.post<IPostRes>(UserEnum.addUser, user).subscribe({
-      next: (res) => {
-        if (res.status === 'OK') {
-          user.profilPicSrc = res.profilePicSrc;
-          // this.users.update((users) => {
-          //   return [...users, user];
-          // });
-        }
-      },
-      error: (error) => {
-        console.error('Error posting user', error); // Fehlerbehandlung
-      }
-    });
+    // this.http.post<IPostRes>(UserEnum.addUser, user).subscribe({
+    //   next: (res) => {
+    //     if (res.status === 'OK') {
+    //       user.profilPicSrc = res.profilePicSrc;
+    //       user._id = res._id;
+    //       console.log(user._id);
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error('Error posting user', error); // Fehlerbehandlung
+    //   }
+    // });
+    return this.http.post<IPostRes>(UserEnum.addUser, user);
   }
 
   // Helpfunc to insert User initial in mongoDbd
@@ -150,6 +150,7 @@ interface IDeleteRes extends IPutRes {
 
 interface IPostRes extends IDeleteRes {
   profilePicSrc: string;
+  _id: string;
 }
 
 interface IGetRes {
