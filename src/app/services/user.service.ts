@@ -28,14 +28,7 @@ export class UserService {
     this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
       next: (res) => {
         if (res.status === 'OK') {
-          console.log('deleted');
           this.getUsers(data);
-          // this.users.update((users) => {
-          //   return users.filter((u) => {
-          //     console.log('id', u._id);
-          //     return u._id !== id;
-          //   });
-          // });
           this.openSnackBar('User succesfully deleted!', 'close');
         }
       },
