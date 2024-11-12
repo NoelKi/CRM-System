@@ -78,7 +78,7 @@ export class UserDetailComponent implements OnInit {
       return false;
     }
 
-    for (let key of keys1) {
+    for (const key of keys1) {
       const val1 = (object1 as any)[key];
       const val2 = (object2 as any)[key];
 

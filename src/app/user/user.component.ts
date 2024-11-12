@@ -1,4 +1,10 @@
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDropList,
+  DragDropModule,
+  moveItemInArray
+} from '@angular/cdk/drag-drop';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -37,7 +43,8 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     DatePipe,
     CdkDropList,
     CdkDrag,
-    MatTableModule
+    MatTableModule,
+    DragDropModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -50,7 +57,8 @@ export class UserComponent {
 
   // private _paginator = viewChild.required(MatPaginator);
 
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
+  // displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
+  displayedColumns: string[] = ['firstName', 'lastName'];
 
   usersData$!: Observable<User[]>;
 
@@ -91,7 +99,7 @@ export class UserComponent {
     { initialValue: [] }
   );
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
