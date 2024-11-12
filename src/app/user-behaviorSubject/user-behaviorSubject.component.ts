@@ -37,8 +37,8 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     DragDropModule,
     MatTableModule
   ],
-  templateUrl: './user-signal.component.html',
-  styleUrl: './user-signal.component.scss'
+  templateUrl: './user-behaviorSubject.component.html',
+  styleUrl: './user-behaviorSubject.component.scss'
 })
 export class UserSignalComponent implements OnInit {
   private _userService = inject(UserService);
