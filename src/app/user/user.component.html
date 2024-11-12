@@ -1,7 +1,7 @@
 <section>
   <mat-form-field>
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
+    <input matInput (keyup)="onFilterChange(input.value)" placeholder="Ex. ium" #input />
   </mat-form-field>
 
   <div class="mat-elevation-z8 table-responsive">
@@ -11,7 +11,7 @@
       </div>
     }
 
-    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+    <table mat-table [dataSource]="usersData$" matSort (matSortChange)="onSortChange($event)">
       <!-- Edit Column -->
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef>Edit User</th>

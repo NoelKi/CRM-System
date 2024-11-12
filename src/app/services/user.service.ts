@@ -39,6 +39,10 @@ export class UserService {
     });
   }
 
+  deleteUserTest(id: string) {
+    return this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id));
+  }
+
   async getUsers(data: IGetUsersParams) {
     const httpParams = this.createHttpParams(data);
     try {
@@ -50,6 +54,11 @@ export class UserService {
     } catch (error) {
       console.error('Error fetching user', error);
     }
+  }
+
+  getUsersTest(data: IGetUsersParams) {
+    const httpParams = this.createHttpParams(data);
+    return this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams });
   }
 
   getUser(id: string): Observable<User> {
