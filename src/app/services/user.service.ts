@@ -24,26 +24,11 @@ export class UserService {
     return this.http.post<IPostRes>(UserEnum.addUser, user);
   }
 
-  deleteUser(id: string, data: IGetUsersParams) {
-    this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id)).subscribe({
-      next: (res) => {
-        if (res.status === 'OK') {
-          this.getUsers(data);
-          this.openSnackBar('User succesfully deleted!', 'close');
-        }
-      },
-      error: (error) => {
-        console.error('Error deleting user', error); // Fehlerbehandlung
-        this.openSnackBar('User was not deleted properly', 'close');
-      }
-    });
-  }
-
-  deleteUserTest(id: string) {
+  deleteUser(id: string) {
     return this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id));
   }
 
-  async getUsers(data: IGetUsersParams) {
+  async getUsersFirstValueFrom(data: IGetUsersParams) {
     const httpParams = this.createHttpParams(data);
     try {
       const { totalLength, users } = await firstValueFrom(
@@ -56,7 +41,7 @@ export class UserService {
     }
   }
 
-  getUsersTest(data: IGetUsersParams) {
+  getUsers(data: IGetUsersParams) {
     const httpParams = this.createHttpParams(data);
     return this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams });
   }

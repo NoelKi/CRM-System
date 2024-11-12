@@ -107,7 +107,7 @@ export class UserSignalComponent implements OnInit {
     switchMap(([filterValue, sortDirection, sortField, pageIndex, pageSize]) => {
       this.isLoadingResults = true;
       return this._userService
-        .getUsersTest({
+        .getUsers({
           filterValue,
           sortDirection,
           sortField,
@@ -164,7 +164,7 @@ export class UserSignalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.isLoadingResults = true;
-        this._userService.deleteUserTest(_id).subscribe({
+        this._userService.deleteUser(_id).subscribe({
           next: (res) => {
             if (res.status === 'OK') {
               this._refreshUsers$.next();

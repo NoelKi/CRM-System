@@ -79,7 +79,7 @@ export class UserComponent {
       switchMap(({ refreshPage, ...params }) => {
         this.isLoadingResults = true;
 
-        return this._userService.getUsersTest(params).pipe(
+        return this._userService.getUsers(params).pipe(
           map((res) => {
             this.isLoadingResults = false;
             this.totalLength = res.totalLength;
@@ -153,7 +153,7 @@ export class UserComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this._userService.deleteUserTest(_id).subscribe({
+        this._userService.deleteUser(_id).subscribe({
           next: (res) => {
             if (res.status === 'OK') {
               this._refreshPage.set(this._refreshPage() + 1);
