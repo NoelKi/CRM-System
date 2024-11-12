@@ -17,6 +17,11 @@ export const menuItems: MenuItem[] = [
     route: '/user'
   },
   {
+    icon: 'extension',
+    label: 'Playground',
+    route: '/playground'
+  },
+  {
     icon: 'settings',
     label: 'Settings',
     route: 'settings/',
