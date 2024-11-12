@@ -1,0 +1,61 @@
+{{ sort$.value }}
+
+<section>
+  <div>
+    <h2>BehaviorSubject Test</h2>
+    <p>Aktueller Wert: {{ counter$ | async }}</p>
+
+    <button (click)="increment()">Erhöhen</button>
+    <button (click)="decrement()">Verringern</button>
+    <button (click)="double()">Verdoppeln</button>
+    <button (click)="reset()">Zurücksetzen</button>
+  </div>
+
+  <div>
+    <h2>Namen filtern</h2>
+    <form (submit)="addName($event, nameInput)">
+      <input type="text" #nameInput placeholder="Neuen Namen eingeben" />
+      <button type="submit">Name hinzufügen</button>
+    </form>
+
+    <br />
+
+    <input type="text" placeholder="Filter eingeben" (input)="updateFilterFromEvent($event)" />
+
+    <ul>
+      <li *ngFor="let name of filteredNames$ | async">{{ name }}</li>
+    </ul>
+  </div>
+
+  <div>
+    <h2>Namen filtern, sortieren und paginieren</h2>
+    <input type="text" placeholder="Filter eingeben" (input)="updateFilterFromEvent($event)" />
+
+    <button (click)="updateSort('asc')">Sortieren: Aufsteigend</button>
+    <button (click)="updateSort('desc')">Sortieren: Absteigend</button>
+
+    <ul>
+      @for (name of filteredAndPagedNames$ | async; track $index) {
+        {{ name }} <br />
+      }
+    </ul>
+
+    <button (click)="updatePage(page$.value - 1)" [disabled]="page$.value <= 0">
+      Vorherige Seite
+    </button>
+    <button
+      (click)="updatePage(page$.value + 1)"
+      [disabled]="page$.value >= names.length / pageSize$.value - 1"
+    >
+      Nächste Seite
+    </button>
+  </div>
+</section>
+
+@if (filteredAndPagedNames$ | async; as peter) {
+  {{ peter }}
+}
+
+@if (page$ | async; as peter) {
+  Hallos{{ peter }}
+}
