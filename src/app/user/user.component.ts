@@ -1,22 +1,24 @@
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit, viewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { User } from '../../models/user.model';
-import { IGetUsersParams, UserService } from '../services/user.service';
-import { DialogAddUserComponent } from './components/dialog-add-user/dialog-add-user.component';
-import { DialogDeleteUserComponent } from './components/dialog-delete-user/dialog-delete-user.component';
+import { UserService } from '../services/user.service';
+import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
+import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
 
 @Component({
   selector: 'app-user',
@@ -32,48 +34,65 @@ import { DialogDeleteUserComponent } from './components/dialog-delete-user/dialo
     MatInputModule,
     MatProgressSpinnerModule,
     MatSortModule,
-    DatePipe
+    DatePipe,
+    CdkDropList,
+    CdkDrag,
+    MatTableModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit {
+export class UserComponent {
   private _userService = inject(UserService);
-  dialog = inject(MatDialog);
+  private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
 
-  paginator = viewChild.required(MatPaginator);
-  sort = viewChild.required(MatSort);
-  input = viewChild.required(MatInput);
+  // private _paginator = viewChild.required(MatPaginator);
 
-  dataSource = new MatTableDataSource<User>([]);
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
-  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
-  isLoadingResults = true;
-  filterVariables: IGetUsersParams = {
-    pageSize: 5,
-    pageIndex: 0,
-    filterValue: '',
-    sortField: '',
-    sortDirection: ''
-  };
 
-  // BehaviorSubjects
+  usersData$!: Observable<User[]>;
 
-  private refreshUsers$ = new BehaviorSubject<void>(undefined);
-  sortDirection$ = new BehaviorSubject<string>('asc');
-  sortActive$ = new BehaviorSubject<string>('');
-  pageIndex$ = new BehaviorSubject<number>(0);
-  pageSize$ = new BehaviorSubject<number>(5);
-  filter$ = new BehaviorSubject<string>('');
-  users$ = new BehaviorSubject<User[]>([]);
+  isLoadingResults = false;
+  private _sortDirection = signal('asc');
+  private _sortActive = signal('');
+  private _filter = signal('');
+  private _refreshPage = signal(0);
+  pageIndex = signal(0);
+  pageSize = signal(5);
+  totalLength = 0;
 
-  constructor() {}
+  queryParams = computed(() => {
+    return {
+      pageSize: this.pageSize(),
+      pageIndex: this.pageIndex(),
+      filterValue: this._filter(),
+      sortField: this._sortActive(),
+      sortDirection: this._sortDirection(),
+      refreshPage: this._refreshPage()
+    };
+  });
 
-  ngOnInit(): void {
-    this.paginator().pageSize = this.pageSize$.value;
-    console.log(this.paginator().page);
+  usersData = toSignal(
+    toObservable(this.queryParams).pipe(
+      switchMap(({ refreshPage, ...params }) => {
+        this.isLoadingResults = true;
+
+        return this._userService.getUsersTest(params).pipe(
+          map((res) => {
+            this.isLoadingResults = false;
+            this.totalLength = res.totalLength;
+            return res.users;
+          })
+        );
+      })
+    ),
+    { initialValue: [] }
+  );
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
   openSnackBar(message: string, action: string) {
@@ -81,53 +100,23 @@ export class UserComponent implements OnInit {
   }
 
   onFilterChange(value: string) {
-    this.pageIndex$.next(0);
-    this.filter$.next(value);
+    this.pageIndex.set(0);
+    this._filter.set(value);
   }
 
   onPageChange(event: PageEvent) {
-    this.pageSize$.next(event.pageSize);
-    this.pageIndex$.next(event.pageIndex);
+    this.pageSize.set(event.pageSize);
+    this.pageIndex.set(event.pageIndex);
   }
 
   onSortChange(sortState: Sort) {
-    this.pageIndex$.next(0);
-    this.sortDirection$.next(sortState.direction);
-    this.sortActive$.next(sortState.active);
-    console.log(this.pageIndex$.value);
+    this.pageIndex.set(0);
+    this._sortDirection.set(sortState.direction);
+    this._sortActive.set(sortState.active);
   }
 
-  usersData$ = combineLatest([
-    this.filter$,
-    this.sortDirection$,
-    this.sortActive$,
-    this.pageIndex$,
-    this.pageSize$,
-    this.refreshUsers$
-  ]).pipe(
-    switchMap(([filterValue, sortDirection, sortField, pageIndex, pageSize]) => {
-      this.isLoadingResults = true;
-      return this._userService
-        .getUsersTest({
-          filterValue,
-          sortDirection,
-          sortField,
-          pageIndex,
-          pageSize
-        })
-        .pipe(
-          map((res) => {
-            this.isLoadingResults = false;
-            this.paginator().pageIndex = this.pageIndex$.value;
-            this.paginator().length = res.totalLength;
-            return res.users;
-          })
-        );
-    })
-  );
-
   openDialog() {
-    const dialogRef = this.dialog.open(DialogAddUserComponent, {
+    const dialogRef = this._dialog.open(DialogAddUserComponent, {
       height: '660px',
       width: '620px',
       maxWidth: '100%'
@@ -154,7 +143,7 @@ export class UserComponent implements OnInit {
   }
 
   openDeleteDialog(_id: string, name: string) {
-    const dialogRef = this.dialog.open(DialogDeleteUserComponent, {
+    const dialogRef = this._dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
       maxWidth: '100%',
@@ -164,11 +153,10 @@ export class UserComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.isLoadingResults = true;
         this._userService.deleteUserTest(_id).subscribe({
           next: (res) => {
             if (res.status === 'OK') {
-              this.refreshUsers$.next();
+              this._refreshPage.set(this._refreshPage() + 1);
               this.openSnackBar('User succesfully deleted!', 'close');
             }
           },
