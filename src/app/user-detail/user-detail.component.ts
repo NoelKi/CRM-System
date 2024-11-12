@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, JsonPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Component, inject, OnInit, OutputRefSubscription } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,7 +23,6 @@ import { ProfilPictureComponent } from './components/profil-picture/profil-pictu
     MatMenuModule,
     ProfilPictureComponent,
     AsyncPipe,
-    JsonPipe,
     DatePipe
   ],
   templateUrl: './user-detail.component.html',
