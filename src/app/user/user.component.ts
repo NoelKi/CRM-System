@@ -5,7 +5,7 @@ import {
   DragDropModule,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
 import { User } from '../../models/user.model';
@@ -30,6 +31,7 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
   selector: 'app-user',
   standalone: true,
   imports: [
+    CommonModule,
     MatIcon,
     MatButtonModule,
     MatTooltipModule,
@@ -43,7 +45,6 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     DatePipe,
     CdkDropList,
     CdkDrag,
-    MatTableModule,
     DragDropModule
   ],
   templateUrl: './user.component.html',
@@ -54,11 +55,31 @@ export class UserComponent {
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
+  private _sanitizer = inject(DomSanitizer);
 
   // private _paginator = viewChild.required(MatPaginator);
 
-  // displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
-  displayedColumns: string[] = ['firstName', 'lastName'];
+  // displayedColumns: string[] = [];
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'street', 'edit'];
+
+  columns: any[] = [
+    { tableHeader: 'First Name', key: 'firstName', sortable: true },
+    { tableHeader: 'Last Name', key: 'lastName', sortable: true },
+    { tableHeader: 'Email', key: 'email', sortable: true },
+    {
+      tableHeader: 'Birthdate',
+      key: 'birthDate',
+      sortable: true
+      // render: 'element[column.key] | date'
+    },
+    { tableHeader: 'Street', key: 'street', sortable: true },
+    {
+      tableHeader: 'Edit',
+      key: 'edit',
+      sortable: false,
+      render: `<a href='#'>edit</a>`
+    }
+  ];
 
   usersData$!: Observable<User[]>;
 
@@ -70,6 +91,7 @@ export class UserComponent {
   pageIndex = signal(0);
   pageSize = signal(5);
   totalLength = 0;
+  previousIndex: number = 0;
 
   queryParams = computed(() => {
     return {
@@ -99,8 +121,18 @@ export class UserComponent {
     { initialValue: [] }
   );
 
-  drop(event: CdkDragDrop<string[]>): void {
+  drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
+  getSanitizedHtml(html: string): SafeHtml {
+    console.log(html);
+
+    return this._sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  isDate(value: any): boolean {
+    return value === Date;
   }
 
   openSnackBar(message: string, action: string) {

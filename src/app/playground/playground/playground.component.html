@@ -1,3 +1,31 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropListGroup>
+  @for (column of columns; track column; let i = $index) {
+    <ng-container [matColumnDef]="column.field">
+      <mat-header-cell
+        *matHeaderCellDef
+        cdkDropList
+        cdkDropListLockAxis="x"
+        cdkDragLockAxis="x"
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="dropListDropped($event, i)"
+      >
+        <div
+          class="example-box"
+          cdkDrag
+          (cdkDragStarted)="dragStarted($event, i)"
+          [cdkDragData]="{ name: column.field, columIndex: i }"
+        >
+          {{ column.field }}
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row[column.field] }} </mat-cell>
+    </ng-container>
+  }
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<!--
 {{ sort$.value }}
 
 <section>
@@ -58,4 +86,4 @@
 
 @if (page$ | async; as peter) {
   Hallos{{ peter }}
-}
+} -->

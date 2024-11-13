@@ -11,67 +11,43 @@
       </div>
     }
 
-    <table mat-table [dataSource]="usersData()" matSort (matSortChange)="onSortChange($event)">
-      <!-- Edit Column -->
-      <!-- <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef cdkDrag cdkDragRootElement>Edit User</th>
+    <table
+      mat-table
+      [dataSource]="usersData()"
+      matSort
+      (matSortChange)="onSortChange($event)"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+      class="example-list"
+    >
+      <!-- olumn.type === 'birthDate') -->
+      @for (column of columns; track column; let i = $index) {
+        <ng-container [matColumnDef]="column.key">
+          @if (column.sortable) {
+            <th mat-header-cell *matHeaderCellDef cdkDrag class="example-box" mat-sort-header>
+              {{ column.tableHeader }}
+            </th>
+          } @else {
+            <th mat-header-cell *matHeaderCellDef cdkDrag class="example-box">
+              {{ column.tableHeader }}
+            </th>
+          }
+          @if (column.render) {
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [innerHTML]="getSanitizedHtml(column.render)"
+            ></td>
+          } @else {
+            <td mat-cell *matCellDef="let element">
+              {{ element[column.key] }}
+            </td>
+          }
+        </ng-container>
+      }
 
-        <td mat-cell *matCellDef="let element">
-          <div>
-            <a [routerLink]="'./' + element._id"
-              ><button mat-icon-button>
-                <mat-icon>edit</mat-icon>
-              </button></a
-            >
-            <button mat-icon-button (click)="openDeleteDialog(element._id, element.firstName)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container> -->
-
-      <!-- Last name Column -->
-      <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header cdkDrag cdkDragRootElement>
-          Last Name
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
-      </ng-container>
-
-      <!-- First name Column -->
-      <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header cdkDrag cdkDragRootElement>
-          First Name
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
-      </ng-container>
-
-      <!-- First name Column -->
-      <!-- <ng-container matColumnDef="adress">
-        <th mat-header-cell *matHeaderCellDef cdkDrag cdkDragRootElement>Street + No</th>
-        <td mat-cell *matCellDef="let element">{{ element.street }} {{ element.houseNumber }}</td>
-      </ng-container> -->
-
-      <!-- email Column -->
-      <!-- <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header cdkDrag cdkDragRootElement>Email</th>
-        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-      </ng-container> -->
-
-      <!-- birthdate Column -->
-      <!-- <ng-container matColumnDef="birthDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header cdkDrag cdkDragRootElement>Birthdate</th>
-        <td mat-cell *matCellDef="let element">{{ element.birthDate | date: 'mediumDate' }}</td>
-      </ng-container> -->
-
-      <tr
-        mat-header-row
-        *matHeaderRowDef="displayedColumns"
-        cdkDropList
-        cdkDropListOrientation="horizontal"
-        (cdkDropListDropped)="drop($event)"
-        class="header-row"
-      ></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
       <tr class="mat-row" *matNoDataRow>
