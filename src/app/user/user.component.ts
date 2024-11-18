@@ -86,7 +86,7 @@ export class UserComponent implements AfterViewInit {
         component: DynamicDatesComponent,
         callback: (componentRef: ComponentRef<DynamicDatesComponent>, data: any) => {
           componentRef.setInput('date', data.birthDate);
-          componentRef.setInput('type', 'short');
+          componentRef.setInput('type', 'dd/MM/yyyy');
         }
       }
     },
