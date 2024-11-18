@@ -41,7 +41,4 @@ export class AppComponent {
       return 'side';
     } else return 'over';
   });
-  constructor() {
-    console.log(this.navToggle);
-  }
 }

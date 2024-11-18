@@ -6,7 +6,16 @@ import {
   moveItemInArray
 } from '@angular/cdk/drag-drop';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentRef,
+  computed,
+  inject,
+  signal,
+  viewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,11 +31,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
+import { CustomMatIconBtnComponent } from '../../core/custom-mat-icon-btn/custom-mat-icon-btn.component';
+import { DynamicDatesComponent } from '../../core/dynamic-dates/dynamic-dates.component';
+import { TableRenderComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
 import { User } from '../../models/user.model';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
 import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
 
+// todo Component dynamic rename#, refactor, hilfscomponente für date#, hilfscomponenten ordner anlegen(in core)#, komplette Zeileninhalt an dynamik übergeben#,
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -45,18 +58,21 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     DatePipe,
     CdkDropList,
     CdkDrag,
-    DragDropModule
+    DragDropModule,
+    DynamicRenderComponent
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent {
+export class UserComponent implements AfterViewInit {
+  protected componentInputs = {};
   private _userService = inject(UserService);
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
   private _sanitizer = inject(DomSanitizer);
 
+  private _vcr = viewChild('container', { read: ViewContainerRef });
   // private _paginator = viewChild.required(MatPaginator);
 
   // displayedColumns: string[] = [];
@@ -69,15 +85,43 @@ export class UserComponent {
     {
       tableHeader: 'Birthdate',
       key: 'birthDate',
-      sortable: true
-      // render: 'element[column.key] | date'
+      sortable: true,
+      render: [
+        {
+          component: DynamicDatesComponent,
+          callback: (componentRef: ComponentRef<DynamicDatesComponent>, data: any) => {
+            componentRef.setInput('date', data.birthDate);
+            componentRef.setInput('type', 'short');
+          }
+        }
+      ]
     },
     { tableHeader: 'Street', key: 'street', sortable: true },
     {
       tableHeader: 'Edit',
       key: 'edit',
       sortable: false,
-      render: `<a href='#'>edit</a>`
+      render: [
+        {
+          component: CustomMatIconBtnComponent,
+          callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
+            componentRef.setInput('icon', 'delete');
+            componentRef.location.nativeElement.addEventListener('click', () =>
+              this.openDeleteDialog(data._id, data.firstName)
+            );
+          }
+        },
+        {
+          routerLink: '/users/',
+          component: CustomMatIconBtnComponent,
+          callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
+            componentRef.setInput('icon', 'edit');
+            componentRef.location.nativeElement.addEventListener('click', () =>
+              this._router.navigate([`/user/${data._id}`])
+            );
+          }
+        }
+      ]
     }
   ];
 
@@ -121,14 +165,30 @@ export class UserComponent {
     { initialValue: [] }
   );
 
+  componentRef?: ComponentRef<DynamicRenderComponent>;
+
+  constructor() {}
+  ngAfterViewInit(): void {
+    this.createComponent();
+  }
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
   getSanitizedHtml(html: string): SafeHtml {
-    console.log(html);
-
     return this._sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  createComponent() {
+    this.destroyComponent();
+    this.componentRef = this._vcr()?.createComponent(DynamicRenderComponent);
+  }
+
+  destroyComponent() {
+    // this.#componentRef?.destroy();
+    this._vcr()?.clear();
+    // this._vcr()?.remove(1);
   }
 
   isDate(value: any): boolean {
