@@ -7,33 +7,30 @@ import { User } from '../../models/user.model';
   selector: 'app-dynamic',
   standalone: true,
   imports: [MatIconModule, MatButtonModule],
-  template: ` <div #container></div> `,
-  styleUrl: './dynamic.component.scss'
+  template: ` <div #container></div> `
 })
-export class TableRenderComponent implements OnInit {
-  //inputs
-  elements = input.required<IDynamicObj[] | IDynamicObj>();
+export class DynamicComponent implements OnInit {
+  // toDo input type generic, replace any with T
+  elements = input.required<IDynamicObj<any>[] | IDynamicObj<any>>();
   data = input.required<User>();
 
   private _vcr = viewChild('container', { read: ViewContainerRef });
 
   componentRef?: ComponentRef<any>;
 
-  constructor() {}
-
   ngOnInit(): void {
     // check for array of object or single objects
     if (Object.prototype.toString.call(this.elements()) === '[object Array]') {
-      for (const element of this.elements() as IDynamicObj[]) {
+      for (const element of this.elements() as IDynamicObj<any>[]) {
         this.createComponent(element);
       }
     } else {
-      this.createComponent(this.elements() as IDynamicObj);
+      this.createComponent(this.elements() as IDynamicObj<any>);
     }
   }
 
   // creation of generic Component
-  createComponent(obj: IDynamicObj): void {
+  createComponent(obj: IDynamicObj<any>): void {
     this.componentRef = this._vcr()?.createComponent(obj.component);
     obj.callback(this.componentRef!, this.data());
   }
@@ -43,9 +40,7 @@ export class TableRenderComponent implements OnInit {
   }
 }
 
-export interface IDynamicObj {
-  component: any;
-  callback: (componentRef: ComponentRef<any>, data: any) => void;
-  onclick: (id: string, name: string) => void;
-  btnCallback: (btn: any) => void;
+export interface IDynamicObj<T> {
+  component: T;
+  callback: (componentRef: ComponentRef<T>, data: any) => void;
 }

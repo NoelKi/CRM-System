@@ -50,11 +50,11 @@ export class UserDetailComponent implements OnInit {
     this.user$ = this._userService.getUser(paramId).pipe(map((user) => new User(user)));
   }
 
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, { duration: 3000 });
   }
 
-  editUserDetail(kind: 'address' | 'details', user: User) {
+  editUserDetail(kind: 'address' | 'details', user: User): void {
     if (user) {
       const dialogRef = this.dialog.open(DialogEditUserComponent, {
         data: {
@@ -96,7 +96,7 @@ export class UserDetailComponent implements OnInit {
     return true;
   }
 
-  saveUser(editedUser: User) {
+  saveUser(editedUser: User): void | Observable<never> {
     this.editedUser$ = this._userService.editUser(editedUser).pipe(
       tap((res) => {
         if (res.status === 'OK') {
@@ -116,7 +116,7 @@ export class UserDetailComponent implements OnInit {
     );
   }
 
-  saveFile(user: User, $event: File) {
+  saveFile(user: User, $event: File): void | Observable<never> {
     console.log('Selected file:', $event);
     this.editedUserImg$ = this._userService.editUserImg(user, $event).pipe(
       tap((res) => {

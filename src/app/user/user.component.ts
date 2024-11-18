@@ -5,7 +5,7 @@ import {
   DragDropModule,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -19,7 +19,6 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -31,9 +30,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
-import { CustomMatIconBtnComponent } from '../../core/custom-mat-icon-btn/custom-mat-icon-btn.component';
-import { DynamicDatesComponent } from '../../core/dynamic-dates/dynamic-dates.component';
-import { TableRenderComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
+import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
+import { DynamicAdressComponent } from '../../core/dynamic/components/dynamic-adress.component';
+import { DynamicDatesComponent } from '../../core/dynamic/components/dynamic-dates.component';
+import { DynamicComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
 import { User } from '../../models/user.model';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
@@ -51,11 +51,9 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     MatTableModule,
     RouterModule,
     MatPaginatorModule,
-    MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
     MatSortModule,
-    DatePipe,
     CdkDropList,
     CdkDrag,
     DragDropModule,
@@ -73,9 +71,7 @@ export class UserComponent implements AfterViewInit {
   private _sanitizer = inject(DomSanitizer);
 
   private _vcr = viewChild('container', { read: ViewContainerRef });
-  // private _paginator = viewChild.required(MatPaginator);
 
-  // displayedColumns: string[] = [];
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'street', 'edit'];
 
   columns: any[] = [
@@ -86,17 +82,26 @@ export class UserComponent implements AfterViewInit {
       tableHeader: 'Birthdate',
       key: 'birthDate',
       sortable: true,
-      render: [
-        {
-          component: DynamicDatesComponent,
-          callback: (componentRef: ComponentRef<DynamicDatesComponent>, data: any) => {
-            componentRef.setInput('date', data.birthDate);
-            componentRef.setInput('type', 'short');
-          }
+      render: {
+        component: DynamicDatesComponent,
+        callback: (componentRef: ComponentRef<DynamicDatesComponent>, data: any) => {
+          componentRef.setInput('date', data.birthDate);
+          componentRef.setInput('type', 'short');
         }
-      ]
+      }
     },
-    { tableHeader: 'Street', key: 'street', sortable: true },
+    {
+      tableHeader: 'Street',
+      key: 'street',
+      sortable: true,
+      render: {
+        component: DynamicAdressComponent,
+        callback: (componentRef: ComponentRef<DynamicAdressComponent>, data: any) => {
+          componentRef.setInput('street', data.street);
+          componentRef.setInput('houseNumber', data.houseNumber);
+        }
+      }
+    },
     {
       tableHeader: 'Edit',
       key: 'edit',
@@ -112,7 +117,6 @@ export class UserComponent implements AfterViewInit {
           }
         },
         {
-          routerLink: '/users/',
           component: CustomMatIconBtnComponent,
           callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
             componentRef.setInput('icon', 'edit');
@@ -172,7 +176,7 @@ export class UserComponent implements AfterViewInit {
     this.createComponent();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
@@ -180,42 +184,40 @@ export class UserComponent implements AfterViewInit {
     return this._sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  createComponent() {
+  createComponent(): void {
     this.destroyComponent();
     this.componentRef = this._vcr()?.createComponent(DynamicRenderComponent);
   }
 
-  destroyComponent() {
-    // this.#componentRef?.destroy();
+  destroyComponent(): void {
     this._vcr()?.clear();
-    // this._vcr()?.remove(1);
   }
 
   isDate(value: any): boolean {
     return value === Date;
   }
 
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, { duration: 3000 });
   }
 
-  onFilterChange(value: string) {
+  onFilterChange(value: string): void {
     this.pageIndex.set(0);
     this._filter.set(value);
   }
 
-  onPageChange(event: PageEvent) {
+  onPageChange(event: PageEvent): void {
     this.pageSize.set(event.pageSize);
     this.pageIndex.set(event.pageIndex);
   }
 
-  onSortChange(sortState: Sort) {
+  onSortChange(sortState: Sort): void {
     this.pageIndex.set(0);
     this._sortDirection.set(sortState.direction);
     this._sortActive.set(sortState.active);
   }
 
-  openDialog() {
+  openDialog(): void {
     const dialogRef = this._dialog.open(DialogAddUserComponent, {
       height: '660px',
       width: '620px',
@@ -242,7 +244,7 @@ export class UserComponent implements AfterViewInit {
     });
   }
 
-  openDeleteDialog(_id: string, name: string) {
+  openDeleteDialog(_id: string, name: string): void {
     const dialogRef = this._dialog.open(DialogDeleteUserComponent, {
       height: '200px',
       width: '200px',
