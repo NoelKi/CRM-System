@@ -27,14 +27,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
 import { DynamicAdressComponent } from '../../core/dynamic/components/dynamic-adress.component';
 import { DynamicDatesComponent } from '../../core/dynamic/components/dynamic-dates.component';
 import { DynamicComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
-import { User } from '../../models/user.model';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
 import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
@@ -63,15 +61,51 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements AfterViewInit {
-  protected componentInputs = {};
   private _userService = inject(UserService);
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
-  private _sanitizer = inject(DomSanitizer);
-
   private _vcr = viewChild('container', { read: ViewContainerRef });
 
+  private _sortDirection = signal('asc');
+  private _sortActive = signal('');
+  private _filter = signal('');
+  private _refreshPage = signal(0);
+  pageIndex = signal(0);
+  pageSize = signal(5);
+
+  queryParams = computed(() => {
+    return {
+      pageSize: this.pageSize(),
+      pageIndex: this.pageIndex(),
+      filterValue: this._filter(),
+      sortField: this._sortActive(),
+      sortDirection: this._sortDirection(),
+      refreshPage: this._refreshPage()
+    };
+  });
+
+  usersData = toSignal(
+    toObservable(this.queryParams).pipe(
+      switchMap(({ refreshPage, ...params }) => {
+        this.isLoadingResults = true;
+
+        return this._userService.getUsers(params).pipe(
+          map((res) => {
+            this.isLoadingResults = false;
+            this.totalLength = res.totalLength;
+            return res.users;
+          })
+        );
+      })
+    ),
+    { initialValue: [] }
+  );
+
+  componentRef?: ComponentRef<DynamicRenderComponent<any>>;
+  isLoadingResults = false;
+  totalLength = 0;
+  previousIndex: number = 0;
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'street', 'edit'];
 
   columns: any[] = [
@@ -129,59 +163,14 @@ export class UserComponent implements AfterViewInit {
     }
   ];
 
-  usersData$!: Observable<User[]>;
-
-  isLoadingResults = false;
-  private _sortDirection = signal('asc');
-  private _sortActive = signal('');
-  private _filter = signal('');
-  private _refreshPage = signal(0);
-  pageIndex = signal(0);
-  pageSize = signal(5);
-  totalLength = 0;
-  previousIndex: number = 0;
-
-  queryParams = computed(() => {
-    return {
-      pageSize: this.pageSize(),
-      pageIndex: this.pageIndex(),
-      filterValue: this._filter(),
-      sortField: this._sortActive(),
-      sortDirection: this._sortDirection(),
-      refreshPage: this._refreshPage()
-    };
-  });
-
-  usersData = toSignal(
-    toObservable(this.queryParams).pipe(
-      switchMap(({ refreshPage, ...params }) => {
-        this.isLoadingResults = true;
-
-        return this._userService.getUsers(params).pipe(
-          map((res) => {
-            this.isLoadingResults = false;
-            this.totalLength = res.totalLength;
-            return res.users;
-          })
-        );
-      })
-    ),
-    { initialValue: [] }
-  );
-
-  componentRef?: ComponentRef<DynamicRenderComponent>;
-
   constructor() {}
+
   ngAfterViewInit(): void {
     this.createComponent();
   }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
-  }
-
-  getSanitizedHtml(html: string): SafeHtml {
-    return this._sanitizer.bypassSecurityTrustHtml(html);
   }
 
   createComponent(): void {
@@ -193,12 +182,8 @@ export class UserComponent implements AfterViewInit {
     this._vcr()?.clear();
   }
 
-  isDate(value: any): boolean {
-    return value === Date;
-  }
-
-  openSnackBar(message: string, action: string): void {
-    this._snackBar.open(message, action, { duration: 3000 });
+  openSnackBar(message: string, action: string, duration = 3000): void {
+    this._snackBar.open(message, action, { duration });
   }
 
   onFilterChange(value: string): void {
