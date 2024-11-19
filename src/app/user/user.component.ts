@@ -7,7 +7,6 @@ import {
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ComponentRef,
   computed,
@@ -30,7 +29,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
-import { DynamicComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
+import { DynamicComponent } from '../../core/dynamic/dynamic.component';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
 import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
@@ -52,12 +51,12 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
     CdkDropList,
     CdkDrag,
     DragDropModule,
-    DynamicRenderComponent
+    DynamicComponent
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements AfterViewInit {
+export class UserComponent {
   private _userService = inject(UserService);
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
@@ -99,7 +98,7 @@ export class UserComponent implements AfterViewInit {
     { initialValue: [] }
   );
 
-  componentRef?: ComponentRef<DynamicRenderComponent<any>>;
+  componentRef?: ComponentRef<DynamicComponent<any>>;
   isLoadingResults = false;
   totalLength = 0;
   previousIndex: number = 0;
@@ -115,7 +114,7 @@ export class UserComponent implements AfterViewInit {
       key: 'birthDate',
       sortable: true,
       renderFn: (data: any) => {
-        const date = new Date(data.birthDate).toLocaleDateString('uk-UK');
+        const date = new Date(data.birthDate).toLocaleDateString('de-DE');
         return `${date}`;
       }
     },
@@ -152,23 +151,8 @@ export class UserComponent implements AfterViewInit {
     }
   ];
 
-  constructor() {}
-
-  ngAfterViewInit(): void {
-    this.createComponent();
-  }
-
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
-  }
-
-  createComponent(): void {
-    this.destroyComponent();
-    this.componentRef = this._vcr()?.createComponent(DynamicRenderComponent);
-  }
-
-  destroyComponent(): void {
-    this._vcr()?.clear();
   }
 
   openSnackBar(message: string, action: string, duration = 3000): void {
