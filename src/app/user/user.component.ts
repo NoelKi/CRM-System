@@ -209,23 +209,29 @@ export class UserComponent implements AfterViewInit {
       maxWidth: '100%'
     });
     dialogRef.afterClosed().subscribe((user) => {
-      this.isLoadingResults = true;
-      this._userService.addUser(user).subscribe({
-        next: (res) => {
-          if (res.status === 'OK') {
-            user.profilPicSrc = res.profilePicSrc;
-            user._id = res._id;
-            this.openSnackBar(
-              user.firstName + ' ' + user.lastName + ' was added to Users',
-              'close'
-            );
-            this._router.navigate(['./user/' + res._id]);
+      if (user) {
+        this.isLoadingResults = true;
+        this._userService.addUser(user).subscribe({
+          next: (res) => {
+            if (res.status === 'OK') {
+              user.profilPicSrc = res.profilePicSrc;
+              user._id = res._id;
+              this.openSnackBar(
+                user.firstName + ' ' + user.lastName + ' was added to Users',
+                'close'
+              );
+              this._router.navigate(['./user/' + res._id]);
+              this.isLoadingResults = false;
+            }
+          },
+          error: (error) => {
+            console.error('Error posting user', error);
+            this.isLoadingResults = false;
           }
-        },
-        error: (error) => {
-          console.error('Error posting user', error);
-        }
-      });
+        });
+      } else {
+        this.isLoadingResults = false;
+      }
     });
   }
 
