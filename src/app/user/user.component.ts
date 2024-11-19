@@ -30,7 +30,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
-import { DynamicDatesComponent } from '../../core/dynamic/components/dynamic-dates.component';
 import { DynamicComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
@@ -115,26 +114,16 @@ export class UserComponent implements AfterViewInit {
       tableHeader: 'Birthdate',
       key: 'birthDate',
       sortable: true,
-      render: {
-        component: DynamicDatesComponent,
-        callback: (componentRef: ComponentRef<DynamicDatesComponent>, data: any) => {
-          componentRef.setInput('date', data.birthDate);
-          componentRef.setInput('type', 'dd/MM/yyyy');
-        }
+      renderFn: (data: any) => {
+        const date = new Date(data.birthDate).toLocaleDateString('uk-UK');
+        return `${date}`;
       }
     },
     {
       tableHeader: 'Adress',
       key: 'adress',
       sortable: true,
-      // render: {
-      //   component: DynamicAdressComponent,
-      //   callback: (componentRef: ComponentRef<DynamicAdressComponent>, data: any) => {
-      //     componentRef.setInput('street', data.street);
-      //     componentRef.setInput('houseNumber', data.houseNumber);
-      //   }
-      // }
-      renderAdress: (data: any) => `${data.street} ${data.houseNumber}`
+      renderFn: (data: any) => `${data.street} ${data.houseNumber}`
     },
     {
       tableHeader: 'Edit',
@@ -204,7 +193,7 @@ export class UserComponent implements AfterViewInit {
 
   openDialog(): void {
     const dialogRef = this._dialog.open(DialogAddUserComponent, {
-      height: '660px',
+      height: '580px',
       width: '620px',
       maxWidth: '100%'
     });

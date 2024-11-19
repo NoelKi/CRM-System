@@ -37,9 +37,9 @@
               <app-dynamic [elements]="column.render" [data]="row"></app-dynamic>
             </td>
           }
-          @if (column.renderAdress) {
+          @if (column.renderFn) {
             <td mat-cell *matCellDef="let row">
-              {{ column.renderAdress(row) }}
+              {{ column.renderFn(row) }}
             </td>
           } @else {
             <td mat-cell *matCellDef="let row">

@@ -2,72 +2,62 @@
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 <h2 mat-dialog-title>Add User</h2>
+
 <mat-dialog-content>
   <div class="form-container">
-    <div class="form-upper-container">
-      <mat-form-field>
-        <mat-label>First Name</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.firstName" matInput required />
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input [disabled]="loading" [(ngModel)]="user.firstName" matInput required />
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Last Name</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.lastName" matInput />
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input [disabled]="loading" [(ngModel)]="user.lastName" matInput />
+    </mat-form-field>
 
-    <div class="form-middle-container">
-      <mat-form-field>
-        <mat-label>Birthdate</mat-label>
-        <input
-          [disabled]="loading"
-          matInput
-          [(ngModel)]="user.birthDate"
-          [matDatepicker]="picker"
-        />
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
+    </mat-form-field>
 
-    <div class="form-bottom-container">
-      <mat-form-field>
-        <mat-label>Street</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.street" matInput />
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>Birthdate</mat-label>
+      <input [disabled]="loading" matInput [(ngModel)]="user.birthDate" [matDatepicker]="picker" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>House No</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.houseNumber" matInput />
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>Street</mat-label>
+      <input [disabled]="loading" [(ngModel)]="user.street" matInput />
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Postal Code</mat-label>
-        <input
-          [disabled]="loading"
-          matInput
-          [(ngModel)]="user.postalCode"
-          #postalCode="ngModel"
-          maxlength="5"
-          placeholder="Ex. 94105"
-          pattern="^[0-9]{5}$"
-        />
-        @if (postalCode.invalid && postalCode.touched) {
-          <mat-error> Postal Code is required and must be 5 digits. </mat-error>
-        }
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>House No</mat-label>
+      <input [disabled]="loading" [(ngModel)]="user.houseNumber" matInput />
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>City</mat-label>
-        <input [disabled]="loading" matInput [(ngModel)]="user.city" />
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>Postal Code</mat-label>
+      <input
+        [disabled]="loading"
+        matInput
+        [(ngModel)]="user.postalCode"
+        #postalCode="ngModel"
+        maxlength="5"
+        placeholder="Ex. 94105"
+        pattern="^[0-9]{5}$"
+      />
+      @if (postalCode.invalid && postalCode.touched) {
+        <mat-error> Postal Code is required and must be 5 digits. </mat-error>
+      }
+    </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.email" matInput type="email" matInput />
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <input [disabled]="loading" matInput [(ngModel)]="user.city" />
+    </mat-form-field>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

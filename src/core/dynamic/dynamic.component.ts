@@ -15,7 +15,7 @@ import { User } from '../../models/user.model';
   selector: 'app-dynamic',
   standalone: true,
   imports: [MatIconModule, MatButtonModule],
-  template: ` <div #container></div> `
+  template: `<ng-container #container></ng-container>`
 })
 export class DynamicComponent<T> implements OnInit {
   elements = input.required<IDynamicObj<T>[] | IDynamicObj<T>>();

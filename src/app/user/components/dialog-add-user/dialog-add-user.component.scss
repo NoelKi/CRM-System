@@ -3,30 +3,6 @@ h2 {
   padding-top: 30px;
 }
 
-.form-upper-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
-}
-
-.form-bottom-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 10px;
-  width: 100%;
-}
-
-.form-middle-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
 mat-form-field {
   width: 256px;
 }
@@ -37,17 +13,27 @@ mat-form-field {
   align-items: flex-start;
 }
 
-.form-container {
-  width: max-content;
-  max-width: 522px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 0 20px;
-}
+// .form-container {
+//   width: max-content;
+//   max-width: 522px;
+//   display: flex;
+//   flex-wrap: wrap;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 20px;
+//   padding: 0 20px;
+// }
 
 mat-dialog-actions {
   margin-bottom: 20px;
+}
+
+.form-container {
+  width: max-content;
+  max-width: 522px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+  column-gap: 10px;
+  row-gap: 20px;
+  padding: 0 20px;
 }
