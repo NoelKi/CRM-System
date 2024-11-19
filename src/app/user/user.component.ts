@@ -6,15 +6,7 @@ import {
   moveItemInArray
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ComponentRef,
-  computed,
-  inject,
-  signal,
-  viewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { Component, ComponentRef, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -61,7 +53,6 @@ export class UserComponent {
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
-  private _vcr = viewChild('container', { read: ViewContainerRef });
 
   private _sortDirection = signal('asc');
   private _sortActive = signal('');
