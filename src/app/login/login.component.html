@@ -1,0 +1,19 @@
+<form class="login-form" [formGroup]="form">
+  <h3>Login</h3>
+
+  <div class="form-control">
+    <label for="email">Email</label>
+    <input type="email" placeholder="Enter your email" formControlName="email" />
+  </div>
+
+  <div class="formcontrol" formControlName="password">
+    <label for="password">password</label>
+    <input type="password" placeholder="Enter your password" />
+  </div>
+</form>
+
+<div class="form-action">
+  <button class="btn" routerlink="/home"></button>
+
+  <button class="btn" (click)="onLogin()">Login</button>
+</div>
