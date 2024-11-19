@@ -15,20 +15,20 @@ export class UserService {
   private _snackBar = inject(MatSnackBar);
   constructor() {}
 
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, { duration: 3000 });
   }
 
-  addUser(user: User) {
+  addUser(user: User): Observable<IPostRes> {
     console.log('user service');
     return this.http.post<IPostRes>(UserEnum.addUser, user);
   }
 
-  deleteUser(id: string) {
+  deleteUser(id: string): Observable<IDeleteRes> {
     return this.http.delete<IDeleteRes>(UserEnum.deleteUser.replace(':id', id));
   }
 
-  async getUsersFirstValueFrom(data: IGetUsersParams) {
+  async getUsersFirstValueFrom(data: IGetUsersParams): Promise<void> {
     const httpParams = this.createHttpParams(data);
     try {
       const { totalLength, users } = await firstValueFrom(
@@ -41,7 +41,7 @@ export class UserService {
     }
   }
 
-  getUsers(data: IGetUsersParams) {
+  getUsers(data: IGetUsersParams): Observable<IGetRes> {
     const httpParams = this.createHttpParams(data);
     return this.http.get<IGetRes>(UserEnum.getUsers, { params: httpParams });
   }
@@ -50,11 +50,11 @@ export class UserService {
     return this.http.get<User>(UserEnum.getUser.replace(':id', id));
   }
 
-  editUser(newUser: User) {
+  editUser(newUser: User): Observable<IPutRes> {
     return this.http.put<IPutRes>(UserEnum.editUser, newUser);
   }
 
-  editUserImg(newUser: User, file: File) {
+  editUserImg(newUser: User, file: File): Observable<IPutImgRes> {
     const formData = new FormData();
     console.log(newUser._id);
 
