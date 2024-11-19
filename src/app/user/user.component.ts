@@ -20,11 +20,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
-import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
 import { DynamicComponent } from '../../core/dynamic/dynamic.component';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
 import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
+import { getUserColumns } from './user-columns';
 
 @Component({
   selector: 'app-user',
@@ -95,52 +95,10 @@ export class UserComponent {
   previousIndex: number = 0;
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
 
-  // todo adress without dyn comp
-  columns: any[] = [
-    { tableHeader: 'First Name', key: 'firstName', sortable: true },
-    { tableHeader: 'Last Name', key: 'lastName', sortable: true },
-    { tableHeader: 'Email', key: 'email', sortable: true },
-    {
-      tableHeader: 'Birthdate',
-      key: 'birthDate',
-      sortable: true,
-      renderFn: (data: any) => {
-        const date = new Date(data.birthDate).toLocaleDateString('de-DE');
-        return `${date}`;
-      }
-    },
-    {
-      tableHeader: 'Adress',
-      key: 'adress',
-      sortable: true,
-      renderFn: (data: any) => `${data.street} ${data.houseNumber}`
-    },
-    {
-      tableHeader: 'Edit',
-      key: 'edit',
-      sortable: false,
-      render: [
-        {
-          component: CustomMatIconBtnComponent,
-          callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
-            componentRef.setInput('icon', 'delete');
-            componentRef.location.nativeElement.addEventListener('click', () =>
-              this.openDeleteDialog(data._id, data.firstName)
-            );
-          }
-        },
-        {
-          component: CustomMatIconBtnComponent,
-          callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
-            componentRef.setInput('icon', 'edit');
-            componentRef.location.nativeElement.addEventListener('click', () =>
-              this._router.navigate([`/user/${data._id}`])
-            );
-          }
-        }
-      ]
-    }
-  ];
+  columns = getUserColumns(
+    this.openDeleteDialog.bind(this), // Methode als Callback binden
+    (id: string) => this._router.navigate([`/user/${id}`]) // Direkt einen Callback übergeben
+  );
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
