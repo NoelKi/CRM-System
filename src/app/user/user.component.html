@@ -36,6 +36,11 @@
             <td mat-cell *matCellDef="let row">
               <app-dynamic [elements]="column.render" [data]="row"></app-dynamic>
             </td>
+          }
+          @if (column.renderAdress) {
+            <td mat-cell *matCellDef="let row">
+              {{ column.renderAdress(row) }}
+            </td>
           } @else {
             <td mat-cell *matCellDef="let row">
               {{ row[column.key] }}
@@ -69,5 +74,3 @@
     <mat-icon>add</mat-icon>
   </button>
 </section>
-
-<!-- <app-table-render (x)="column.callback($event)></app-table-render> -->

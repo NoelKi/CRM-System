@@ -30,14 +30,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
-import { DynamicAdressComponent } from '../../core/dynamic/components/dynamic-adress.component';
 import { DynamicDatesComponent } from '../../core/dynamic/components/dynamic-dates.component';
 import { DynamicComponent as DynamicRenderComponent } from '../../core/dynamic/dynamic.component';
 import { UserService } from '../services/user.service';
 import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
 import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
 
-// todo Component dynamic rename#, refactor, hilfscomponente für date#, hilfscomponenten ordner anlegen(in core)#, komplette Zeileninhalt an dynamik übergeben#,
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -106,8 +104,9 @@ export class UserComponent implements AfterViewInit {
   isLoadingResults = false;
   totalLength = 0;
   previousIndex: number = 0;
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'street', 'edit'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
 
+  // todo adress without dyn comp
   columns: any[] = [
     { tableHeader: 'First Name', key: 'firstName', sortable: true },
     { tableHeader: 'Last Name', key: 'lastName', sortable: true },
@@ -125,16 +124,17 @@ export class UserComponent implements AfterViewInit {
       }
     },
     {
-      tableHeader: 'Street',
-      key: 'street',
+      tableHeader: 'Adress',
+      key: 'adress',
       sortable: true,
-      render: {
-        component: DynamicAdressComponent,
-        callback: (componentRef: ComponentRef<DynamicAdressComponent>, data: any) => {
-          componentRef.setInput('street', data.street);
-          componentRef.setInput('houseNumber', data.houseNumber);
-        }
-      }
+      // render: {
+      //   component: DynamicAdressComponent,
+      //   callback: (componentRef: ComponentRef<DynamicAdressComponent>, data: any) => {
+      //     componentRef.setInput('street', data.street);
+      //     componentRef.setInput('houseNumber', data.houseNumber);
+      //   }
+      // }
+      renderAdress: (data: any) => `${data.street} ${data.houseNumber}`
     },
     {
       tableHeader: 'Edit',
@@ -209,29 +209,26 @@ export class UserComponent implements AfterViewInit {
       maxWidth: '100%'
     });
     dialogRef.afterClosed().subscribe((user) => {
-      if (user) {
-        this.isLoadingResults = true;
-        this._userService.addUser(user).subscribe({
-          next: (res) => {
-            if (res.status === 'OK') {
-              user.profilPicSrc = res.profilePicSrc;
-              user._id = res._id;
-              this.openSnackBar(
-                user.firstName + ' ' + user.lastName + ' was added to Users',
-                'close'
-              );
-              this._router.navigate(['./user/' + res._id]);
-              this.isLoadingResults = false;
-            }
-          },
-          error: (error) => {
-            console.error('Error posting user', error);
+      if (!user) return;
+      this.isLoadingResults = true;
+      this._userService.addUser(user).subscribe({
+        next: (res) => {
+          if (res.status === 'OK') {
+            user.profilPicSrc = res.profilePicSrc;
+            user._id = res._id;
+            this.openSnackBar(
+              user.firstName + ' ' + user.lastName + ' was added to Users',
+              'close'
+            );
+            this._router.navigate(['./user/' + res._id]);
             this.isLoadingResults = false;
           }
-        });
-      } else {
-        this.isLoadingResults = false;
-      }
+        },
+        error: (error) => {
+          console.error('Error posting user', error);
+          this.isLoadingResults = false;
+        }
+      });
     });
   }
 

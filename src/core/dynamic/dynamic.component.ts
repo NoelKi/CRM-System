@@ -18,7 +18,6 @@ import { User } from '../../models/user.model';
   template: ` <div #container></div> `
 })
 export class DynamicComponent<T> implements OnInit {
-  // toDo input type generic, replace any with T
   elements = input.required<IDynamicObj<T>[] | IDynamicObj<T>>();
   data = input.required<User>();
 
@@ -27,8 +26,7 @@ export class DynamicComponent<T> implements OnInit {
   componentRef?: ComponentRef<any>;
 
   ngOnInit(): void {
-    // check for array of object or single objects
-    if (Object.prototype.toString.call(this.elements()) === '[object Array]') {
+    if (Array.isArray(this.elements())) {
       for (const element of this.elements() as IDynamicObj<T>[]) {
         this.createComponent(element);
       }
