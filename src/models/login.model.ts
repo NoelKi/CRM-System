@@ -4,7 +4,7 @@ export class User {
   profilPicSrc: string;
 
   constructor(obj?: User) {
-    this.password = obj ? obj.email : '';
+    this.password = obj ? obj.password : '';
     this.email = obj ? obj.email : '';
     this.profilPicSrc = obj ? obj.profilPicSrc : '';
   }

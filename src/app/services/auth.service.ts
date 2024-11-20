@@ -56,7 +56,7 @@ export class AuthService {
   // }
 
   async login(email: string, password: string): Promise<User> {
-    const user = users.find((user) => user.email === email);
+    const user = users.find((user) => user.email === email && user.password === password);
 
     if (!user) {
       throw new Error('Invalid email or password');
