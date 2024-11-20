@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 section {
   display: flex;
   align-items: center;
@@ -15,17 +17,16 @@ form {
   flex-direction: column;
 }
 
-.form-action {
-  width: 180px;
+mat-card-actions {
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-// :root {
-//   @include mat.card-overrides(
-//     (
-//       subtitle-text-color: orange,
-//       elevated-container-color: red
-//     )
-//   );
-// }
+.mat-card-title {
+  color: red;
+}
+
+.login-card {
+  max-width: 400px;
+}
