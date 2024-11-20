@@ -1,0 +1,10 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.card-overrides(
+    (
+      subtitle-text-color: orange,
+      elevated-container-color: red
+    )
+  );
+}

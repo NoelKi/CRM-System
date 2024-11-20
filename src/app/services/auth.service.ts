@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
 
-import { CustomerEnum } from '../../core/enum/api.enum';
-import { Customer } from '../../models/customer.model';
+import { users } from '../../fake-db/user.data';
+import { User } from '../../models/login.model';
 
 const USER_STORAGE_KEY = 'user';
 
@@ -12,7 +11,7 @@ const USER_STORAGE_KEY = 'user';
   providedIn: 'root'
 })
 export class AuthService {
-  private _userSignal = signal<Customer | null>(null);
+  private _userSignal = signal<User | null>(null);
 
   private _router = inject(Router);
 
@@ -43,14 +42,27 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<Customer> {
-    const login$ = this.http.post<Customer>(CustomerEnum.login, {
-      email,
-      password
-    });
+  // async login(email: string, password: string): Promise<Customer> {
+  //   const login$ = this.http.post<Customer>(CustomerEnum.login, {
+  //     email,
+  //     password
+  //   });
 
-    const user = await firstValueFrom(login$);
+  //   const user = await firstValueFrom(login$);
 
+  //   this._userSignal.set(user);
+
+  //   return user;
+  // }
+
+  async login(email: string, password: string): Promise<User> {
+    const user = users.find((user) => user.email === email);
+
+    if (!user) {
+      throw new Error('Invalid email or password');
+    }
+
+    // Setze das Signal mit dem gefundenen Benutzer
     this._userSignal.set(user);
 
     return user;
@@ -60,6 +72,10 @@ export class AuthService {
     localStorage.removeItem(USER_STORAGE_KEY);
     this._userSignal.set(null);
     await this._router.navigateByUrl('/login');
+  }
+
+  showMessage(message: string): void {
+    console.log(message);
   }
 }
 

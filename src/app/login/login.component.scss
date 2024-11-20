@@ -2,6 +2,11 @@ section {
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 form {
@@ -15,3 +20,12 @@ form {
   display: flex;
   justify-content: space-between;
 }
+
+// :root {
+//   @include mat.card-overrides(
+//     (
+//       subtitle-text-color: orange,
+//       elevated-container-color: red
+//     )
+//   );
+// }

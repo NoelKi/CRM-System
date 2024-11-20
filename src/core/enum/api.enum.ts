@@ -8,6 +8,6 @@ export enum CustomerEnum {
   login = 'api/login'
 }
 
-// export enum UserEnum {
-//   login = 'api/login'
-// }
+export enum UserEnum {
+  login = 'api/login'
+}

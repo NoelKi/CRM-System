@@ -1,28 +1,14 @@
-import { Customer } from '../models/customer.model';
+import { User } from '../models/login.model';
 
-export const customers: Customer[] = [
-  new Customer({
-    _id: '0',
-    firstName: 'Kieran',
-    lastName: 'Mai',
-    birthDate: new Date('2024-10-16T22:00:00.000Z'),
-    street: '',
-    houseNumber: '',
-    city: 'Berlin',
-    postalCode: '12161',
+export const users: User[] = [
+  new User({
     email: 'kieran.noel@icloud.com',
-    profilPicSrc: ' '
+    password: 'test123',
+    profilPicSrc: ''
   }),
-  new Customer({
-    _id: '1',
-    firstName: 'Amadeus',
-    lastName: 'Scherkenbach',
-    birthDate: new Date('2024-10-16T22:00:00.000Z'),
-    street: 'Ostpreusendamm',
-    houseNumber: '43',
-    city: 'Berlin',
-    postalCode: '12207',
-    email: 'amadeus@sorglosinterent.de',
+  new User({
+    email: 'paul@panther.de',
+    password: '123',
     profilPicSrc: ''
   })
 ];
