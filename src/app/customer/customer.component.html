@@ -13,7 +13,7 @@
 
     <table
       mat-table
-      [dataSource]="usersData()"
+      [dataSource]="customersData()"
       matSort
       (matSortChange)="onSortChange($event)"
       cdkDropList
@@ -66,11 +66,11 @@
       [pageSize]="pageSize()"
       [length]="totalLength"
       (page)="onPageChange($event)"
-      aria-label="Select user of users"
+      aria-label="Select cutomer of customers"
     >
     </mat-paginator>
   </div>
-  <button mat-fab class="add-user-btn" matTooltip="Add User" (click)="openDialog()">
+  <button mat-fab class="add-customer-btn" matTooltip="Add Customer" (click)="openDialog()">
     <mat-icon>add</mat-icon>
   </button>
 </section>

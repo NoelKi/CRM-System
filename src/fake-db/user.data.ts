@@ -1,8 +1,8 @@
-import { User } from '../models/user.model';
+import { Customer } from '../models/customer.model';
 
-export const users: User[] = [
-  new User({
-    id: '0',
+export const customers: Customer[] = [
+  new Customer({
+    _id: '0',
     firstName: 'Kieran',
     lastName: 'Mai',
     birthDate: new Date('2024-10-16T22:00:00.000Z'),
@@ -13,8 +13,8 @@ export const users: User[] = [
     email: 'kieran.noel@icloud.com',
     profilPicSrc: ' '
   }),
-  new User({
-    id: '1',
+  new Customer({
+    _id: '1',
     firstName: 'Amadeus',
     lastName: 'Scherkenbach',
     birthDate: new Date('2024-10-16T22:00:00.000Z'),

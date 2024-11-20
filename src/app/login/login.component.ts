@@ -1,5 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LoginService } from '../services/login.service';
@@ -7,7 +11,13 @@ import { LoginService } from '../services/login.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -29,8 +39,12 @@ export class LoginComponent {
         this._loginService.showMessage('Enter an email and password');
         return;
       }
-      await this._authService.login(email, password);
-      await this._router.navigate(['/user']);
+      const log = await this._authService.login(email, password);
+      if (log) {
+        await this._router.navigate(['/user']);
+      }
+
+      return;
     } catch (err) {
       console.error(err);
       this._loginService.showMessage('Login failed, please try again');

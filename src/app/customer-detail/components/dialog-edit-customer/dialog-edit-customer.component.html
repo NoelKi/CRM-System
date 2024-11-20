@@ -1,38 +1,38 @@
 @if (data.kind === 'details') {
-  <h2 mat-dialog-title>Edit User</h2>
+  <h2 mat-dialog-title>Edit Customer</h2>
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>First Name</mat-label>
-      <input [(ngModel)]="data.user.firstName" matInput />
+      <input [(ngModel)]="data.customer.firstName" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Last Name</mat-label>
-      <input [(ngModel)]="data.user.lastName" matInput />
+      <input [(ngModel)]="data.customer.lastName" matInput />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input [(ngModel)]="data.user.email" matInput type="email" matInput />
+      <input [(ngModel)]="data.customer.email" matInput type="email" matInput />
     </mat-form-field>
   </mat-dialog-content>
 } @else if (data.kind === 'address') {
-  <h2 mat-dialog-title>Add User</h2>
+  <h2 mat-dialog-title>Add customer</h2>
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Street</mat-label>
-      <input [(ngModel)]="data.user.street" matInput />
+      <input [(ngModel)]="data.customer.street" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>House No.</mat-label>
-      <input [(ngModel)]="data.user.houseNumber" matInput />
+      <input [(ngModel)]="data.customer.houseNumber" matInput />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Postal Code</mat-label>
       <input
         matInput
-        [(ngModel)]="data.user.postalCode"
+        [(ngModel)]="data.customer.postalCode"
         #postalCode
         maxlength="5"
         placeholder="Ex. 94105"
@@ -41,11 +41,11 @@
 
     <mat-form-field>
       <mat-label>City</mat-label>
-      <input matInput [(ngModel)]="data.user.city" />
+      <input matInput [(ngModel)]="data.customer.city" />
     </mat-form-field>
   </mat-dialog-content>
 }
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="data.user">Edit</button>
+  <button mat-button [mat-dialog-close]="data.customer">Edit</button>
 </mat-dialog-actions>

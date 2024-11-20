@@ -13,10 +13,10 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { User } from '../../../../models/user.model';
+import { Customer } from '../../../../models/customer.model';
 
 @Component({
-  selector: 'app-dialog-add-user',
+  selector: 'app-dialog-add-customer',
   standalone: true,
   providers: [provideNativeDateAdapter()],
   imports: [
@@ -34,13 +34,13 @@ import { User } from '../../../../models/user.model';
     MatNativeDateModule,
     MatProgressBarModule
   ],
-  templateUrl: './dialog-add-user.component.html',
-  styleUrl: './dialog-add-user.component.scss'
+  templateUrl: './dialog-add-customer.component.html',
+  styleUrl: './dialog-add-customer.component.scss'
 })
-export class DialogAddUserComponent {
-  readonly dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
+export class DialogAddCustomerComponent {
+  readonly dialogRef = inject(MatDialogRef<DialogAddCustomerComponent>);
   readonly userModel = model({});
-  user = new User();
+  customer = new Customer();
   adressString = '';
   firstString = '';
   secoundString = '';

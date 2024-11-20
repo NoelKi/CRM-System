@@ -21,13 +21,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { DynamicComponent } from '../../core/dynamic/dynamic.component';
-import { UserService } from '../services/user.service';
-import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
-import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
-import { getUserColumns } from './user-columns';
+import { CustomerService } from '../services/customer.service';
+import { DialogAddCustomerComponent } from './components/dialog-add-customer/dialog-add-customer.component';
+import { DialogDeleteCustomerComponent } from './components/dialog-delete-customer/dialog-delete-customer.component';
+import { getCustomerColumns } from './customer-columns';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-customer',
   standalone: true,
   imports: [
     CommonModule,
@@ -45,11 +45,11 @@ import { getUserColumns } from './user-columns';
     DragDropModule,
     DynamicComponent
   ],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.scss'
+  templateUrl: './customer.component.html',
+  styleUrl: './customer.component.scss'
 })
-export class UserComponent {
-  private _userService = inject(UserService);
+export class CustomerComponent {
+  private _customerService = inject(CustomerService);
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
@@ -72,18 +72,18 @@ export class UserComponent {
     };
   });
 
-  usersData = toSignal(
+  customersData = toSignal(
     toObservable(this.queryParams).pipe(
       switchMap(({ refreshPage, ...params }) => {
         this.isLoadingResults = true;
 
-        return this._userService.getUsers(params).pipe(
+        return this._customerService.getCustomers(params).pipe(
           map((res) => {
             this.isLoadingResults = false;
             this.totalLength = res.totalLength;
-            console.log(res.users);
+            console.log(res.customers);
 
-            return res.users;
+            return res.customers;
           })
         );
       })
@@ -97,9 +97,9 @@ export class UserComponent {
   previousIndex: number = 0;
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'birthDate', 'adress', 'edit'];
 
-  columns = getUserColumns(
+  columns = getCustomerColumns(
     this.openDeleteDialog.bind(this), // Methode als Callback binden
-    (id: string) => this._router.navigate([`/user/${id}`]) // Direkt einen Callback übergeben
+    (id: string) => this._router.navigate([`/customer/${id}`]) // Direkt einen Callback übergeben
   );
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -127,29 +127,29 @@ export class UserComponent {
   }
 
   openDialog(): void {
-    const dialogRef = this._dialog.open(DialogAddUserComponent, {
+    const dialogRef = this._dialog.open(DialogAddCustomerComponent, {
       height: '580px',
       width: '620px',
       maxWidth: '100%'
     });
-    dialogRef.afterClosed().subscribe((user) => {
-      if (!user) return;
+    dialogRef.afterClosed().subscribe((customer) => {
+      if (!customer) return;
       this.isLoadingResults = true;
-      this._userService.addUser(user).subscribe({
+      this._customerService.addCustomer(customer).subscribe({
         next: (res) => {
           if (res.status === 'OK') {
-            user.profilPicSrc = res.profilePicSrc;
-            user._id = res._id;
+            customer.profilPicSrc = res.profilePicSrc;
+            customer._id = res._id;
             this.openSnackBar(
-              user.firstName + ' ' + user.lastName + ' was added to Users',
+              customer.firstName + ' ' + customer.lastName + ' was added to Customers',
               'close'
             );
-            this._router.navigate(['./user/' + res._id]);
+            this._router.navigate(['./customer/' + res._id]);
             this.isLoadingResults = false;
           }
         },
         error: (error) => {
-          console.error('Error posting user', error);
+          console.error('Error posting customer', error);
           this.isLoadingResults = false;
         }
       });
@@ -157,7 +157,7 @@ export class UserComponent {
   }
 
   openDeleteDialog(_id: string, name: string): void {
-    const dialogRef = this._dialog.open(DialogDeleteUserComponent, {
+    const dialogRef = this._dialog.open(DialogDeleteCustomerComponent, {
       height: '200px',
       width: '200px',
       maxWidth: '100%',
@@ -167,16 +167,16 @@ export class UserComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this._userService.deleteUser(_id).subscribe({
+        this._customerService.deleteCustomer(_id).subscribe({
           next: (res) => {
             if (res.status === 'OK') {
               this._refreshPage.set(this._refreshPage() + 1);
-              this.openSnackBar('User succesfully deleted!', 'close');
+              this.openSnackBar('Customer succesfully deleted!', 'close');
             }
           },
           error: (error) => {
-            console.error('Error deleting user', error);
-            this.openSnackBar('User was not deleted properly', 'close');
+            console.error('Error deleting customer', error);
+            this.openSnackBar('Customer was not deleted properly', 'close');
           }
         });
       }

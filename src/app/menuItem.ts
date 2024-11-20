@@ -13,8 +13,8 @@ export const menuItems: MenuItem[] = [
   },
   {
     icon: 'perm_identity',
-    label: 'User',
-    route: '/user'
+    label: 'Customers',
+    route: '/customer'
   },
   {
     icon: 'extension',

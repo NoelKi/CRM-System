@@ -8,13 +8,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
-import { User } from '../../models/user.model';
-import { IPutImgRes, IPutRes, UserService } from '../services/user.service';
-import { DialogEditUserComponent } from './components/dialog-edit-user/dialog-edit-user.component';
+import { Customer } from '../../models/customer.model';
+import { CustomerService, IPutImgRes, IPutRes } from '../services/customer.service';
+import { DialogEditCustomerComponent } from './components/dialog-edit-customer/dialog-edit-customer.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
 @Component({
-  selector: 'app-user-detail',
+  selector: 'app-customer-detail',
   standalone: true,
   imports: [
     MatCardModule,
@@ -25,20 +25,20 @@ import { ProfilPictureComponent } from './components/profil-picture/profil-pictu
     AsyncPipe,
     DatePipe
   ],
-  templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  templateUrl: './customer-detail.component.html',
+  styleUrl: './customer-detail.component.scss'
 })
-export class UserDetailComponent implements OnInit {
-  userId: string | null = '';
-  user!: User | undefined;
+export class CustomerDetailComponent implements OnInit {
+  customerId: string | null = '';
+  customer!: Customer | undefined;
   private _route = inject(ActivatedRoute);
-  private _userService = inject(UserService);
+  private _customerService = inject(CustomerService);
   private _snackBar = inject(MatSnackBar);
   dialog = inject(MatDialog);
   subs = [] as OutputRefSubscription[];
-  user$!: Observable<any>; // <User>
-  editedUser$!: Observable<IPutRes>;
-  editedUserImg$!: Observable<IPutImgRes>;
+  customer$!: Observable<any>;
+  editedCustomer$!: Observable<IPutRes>;
+  editedCustomerImg$!: Observable<IPutImgRes>;
 
   constructor() {}
 
@@ -47,30 +47,32 @@ export class UserDetailComponent implements OnInit {
     if (paramId === null) {
       return;
     }
-    this.user$ = this._userService.getUser(paramId).pipe(map((user) => new User(user)));
+    this.customer$ = this._customerService
+      .getCustomer(paramId)
+      .pipe(map((customer) => new Customer(customer)));
   }
 
   openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, { duration: 3000 });
   }
 
-  editUserDetail(kind: 'address' | 'details', user: User): void {
-    if (user) {
-      const dialogRef = this.dialog.open(DialogEditUserComponent, {
+  editCustomerDetail(kind: 'address' | 'details', customer: Customer): void {
+    if (customer) {
+      const dialogRef = this.dialog.open(DialogEditCustomerComponent, {
         data: {
-          user: { ...user },
+          customer: { ...customer },
           kind: kind
         }
       });
-      dialogRef.afterClosed().subscribe((editedUser) => {
-        !this.isUserEqual(editedUser, user)
-          ? this.saveUser(editedUser)
+      dialogRef.afterClosed().subscribe((editedCustomer) => {
+        !this.isCustomerEqual(editedCustomer, customer)
+          ? this.saveCustomer(editedCustomer)
           : this.openSnackBar('No changes detected', 'close');
       });
     }
   }
 
-  isUserEqual(object1: object, object2: object): boolean {
+  isCustomerEqual(object1: object, object2: object): boolean {
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
 
@@ -87,7 +89,7 @@ export class UserDetailComponent implements OnInit {
         typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null;
 
       if (
-        (areObjects && !this.isUserEqual(val1, val2)) || // Recursive comparison for nested objects
+        (areObjects && !this.isCustomerEqual(val1, val2)) || // Recursive comparison for nested objects
         (!areObjects && val1 !== val2) // Direct comparison for primitive values
       ) {
         return false;
@@ -96,41 +98,41 @@ export class UserDetailComponent implements OnInit {
     return true;
   }
 
-  saveUser(editedUser: User): void | Observable<never> {
-    this.editedUser$ = this._userService.editUser(editedUser).pipe(
+  saveCustomer(editedCustomer: Customer): void | Observable<never> {
+    this.editedCustomer$ = this._customerService.editCustomer(editedCustomer).pipe(
       tap((res) => {
         if (res.status === 'OK') {
-          this.user$ = of(editedUser);
+          this.customer$ = of(editedCustomer);
           this.openSnackBar(
-            editedUser.firstName + ' ' + editedUser.lastName + ' updated successfully!',
+            editedCustomer.firstName + ' ' + editedCustomer.lastName + ' updated successfully!',
             'close'
           );
         }
       }),
       catchError((error) => {
         console.error('Fehler beim Aktualisieren des Benutzers:', error);
-        this.openSnackBar('User update failed, please retry!', 'close');
+        this.openSnackBar('Customer update failed, please retry!', 'close');
         // Optional: Rückgabe eines leeren Observables, um den Fehler zu behandeln
         return EMPTY;
       })
     );
   }
 
-  saveFile(user: User, $event: File): void | Observable<never> {
+  saveFile(customer: Customer, $event: File): void | Observable<never> {
     console.log('Selected file:', $event);
-    this.editedUserImg$ = this._userService.editUserImg(user, $event).pipe(
+    this.editedCustomerImg$ = this._customerService.editCustomerImg(customer, $event).pipe(
       tap((res) => {
         if (res.status === 'OK') {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
-          user.profilPicSrc = res.profilPicSrc;
+          customer.profilPicSrc = res.profilPicSrc;
           console.log(res.profilPicSrc);
 
-          this.user$ = of(user);
+          this.customer$ = of(customer);
         }
       }),
       catchError((error) => {
         console.error('Fehler beim Aktualisieren des Benutzers:', error);
-        this.openSnackBar('User update failed, please retry!', 'close');
+        this.openSnackBar('Customer update failed, please retry!', 'close');
         return EMPTY;
       })
     );

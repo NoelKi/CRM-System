@@ -1,4 +1,4 @@
-export class User {
+export class Customer {
   _id?: string;
   firstName: string;
   lastName: string;
@@ -10,7 +10,7 @@ export class User {
   email: string;
   profilPicSrc?: string;
 
-  constructor(obj?: User) {
+  constructor(obj?: Customer) {
     if (obj?._id) this._id = obj._id;
     this.firstName = obj ? obj.firstName : '';
     this.lastName = obj ? obj.lastName : '';

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { User } from '../../models/user.model';
+import { Customer } from '../../models/customer.model';
 
 @Component({
   selector: 'app-dynamic',
@@ -19,7 +19,7 @@ import { User } from '../../models/user.model';
 })
 export class DynamicComponent<T> implements OnInit {
   elements = input.required<IDynamicObj<T>[] | IDynamicObj<T>>();
-  data = input.required<User>();
+  data = input.required<Customer>();
 
   private _vcr = viewChild('container', { read: ViewContainerRef });
 

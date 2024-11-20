@@ -1,0 +1,38 @@
+@if (customer$ | async; as customer) {
+  <mat-card class="customer-detail-header layout--padding-20">
+    <button [matMenuTriggerFor]="customerMenu" mat-icon-button class="edit-btn">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #customerMenu="matMenu">
+      <button mat-menu-item (click)="editCustomerDetail('details', customer)">Edit</button>
+    </mat-menu>
+    <app-profil-picture
+      [source]="customer.profilPicSrc"
+      (imgFile)="saveFile(customer, $event)"
+    ></app-profil-picture>
+    <div class="customer-details">
+      <h2>{{ customer.firstName }} {{ customer.lastName }}</h2>
+      <p>{{ customer.email }}</p>
+    </div>
+  </mat-card>
+
+  <mat-card class="customer-infos layout--margin-top-32 layout--padding-20">
+    <button [matMenuTriggerFor]="adressMenu" mat-icon-button class="edit-btn">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #adressMenu="matMenu">
+      <button mat-menu-item (click)="editCustomerDetail('address', customer)">Edit</button>
+    </mat-menu>
+    <mat-card-title>Address</mat-card-title>
+    <mat-card-content>
+      <p>{{ customer.street }} {{ customer.houseNumber }}</p>
+      <p>{{ customer.postalCode }} {{ customer.city }}</p>
+    </mat-card-content>
+  </mat-card>
+  {{ customer.extraProperty | date: 'short' }}
+} @else {
+  <p>No Customer found</p>
+}
+
+@if (editedCustomer$ | async) {}
+@if (editedCustomerImg$ | async) {}

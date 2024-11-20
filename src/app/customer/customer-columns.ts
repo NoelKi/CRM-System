@@ -1,9 +1,9 @@
 import { ComponentRef } from '@angular/core';
 import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
 
-export function getUserColumns(
+export function getCustomerColumns(
   openDeleteDialog: (id: string, name: string) => void,
-  navigateToUser: (id: string) => void
+  navigateToCustomer: (id: string) => void
 ): any[] {
   return [
     { tableHeader: 'First Name', key: 'firstName', sortable: true },
@@ -43,7 +43,7 @@ export function getUserColumns(
           callback: (componentRef: ComponentRef<CustomMatIconBtnComponent>, data: any) => {
             componentRef.setInput('icon', 'edit');
             componentRef.location.nativeElement.addEventListener('click', () =>
-              navigateToUser(data._id)
+              navigateToCustomer(data._id)
             );
           }
         }

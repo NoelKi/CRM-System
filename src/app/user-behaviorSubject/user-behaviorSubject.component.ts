@@ -14,12 +14,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
-import { UserService } from '../services/user.service';
-import { DialogAddUserComponent } from '../user/components/dialog-add-user/dialog-add-user.component';
-import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user/dialog-delete-user.component';
+import { DialogAddCustomerComponent } from '../customer/components/dialog-add-customer/dialog-add-customer.component';
+import { DialogDeleteCustomerComponent } from '../customer/components/dialog-delete-customer/dialog-delete-customer.component';
+import { CustomerService } from '../services/customer.service';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-customer',
   standalone: true,
   imports: [
     MatIcon,
@@ -41,7 +41,7 @@ import { DialogDeleteUserComponent } from '../user/components/dialog-delete-user
   styleUrl: './user-behaviorSubject.component.scss'
 })
 export class UserSignalComponent implements OnInit {
-  private _userService = inject(UserService);
+  private _customerService = inject(CustomerService);
   private _dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
   private _router = inject(Router);
@@ -52,14 +52,14 @@ export class UserSignalComponent implements OnInit {
   isLoadingResults = true;
 
   // BehaviorSubjects
-  private _refreshUsers$ = new BehaviorSubject<void>(undefined);
+  private _refreshCutomers$ = new BehaviorSubject<void>(undefined);
   private _sortDirection$ = new BehaviorSubject<string>('asc');
   private _sortActive$ = new BehaviorSubject<string>('');
   private _pageIndex$ = new BehaviorSubject<number>(0);
   private _pageSize$ = new BehaviorSubject<number>(5);
   private _filter$ = new BehaviorSubject<string>('');
 
-  filterVariables: IGetUsersBehaviorSParams = {
+  filterVariables: IGetCustomersBehaviorParams = {
     pageSize: this._pageSize$,
     pageIndex: this._pageIndex$,
     filterValue: this._filter$,
@@ -96,18 +96,18 @@ export class UserSignalComponent implements OnInit {
     this._sortActive$.next(sortState.active);
   }
 
-  usersData$ = combineLatest([
+  customersData$ = combineLatest([
     this.filterVariables.filterValue,
     this.filterVariables.sortDirection,
     this.filterVariables.sortField,
     this.filterVariables.pageIndex,
     this.filterVariables.pageSize,
-    this._refreshUsers$
+    this._refreshCutomers$
   ]).pipe(
     switchMap(([filterValue, sortDirection, sortField, pageIndex, pageSize]) => {
       this.isLoadingResults = true;
-      return this._userService
-        .getUsers({
+      return this._customerService
+        .getCustomers({
           filterValue,
           sortDirection,
           sortField,
@@ -119,21 +119,21 @@ export class UserSignalComponent implements OnInit {
             this.isLoadingResults = false;
             this._paginator().pageIndex = this._pageIndex$.value;
             this._paginator().length = res.totalLength;
-            return res.users;
+            return res.customers;
           })
         );
     })
   );
 
   openDialog() {
-    const dialogRef = this._dialog.open(DialogAddUserComponent, {
+    const dialogRef = this._dialog.open(DialogAddCustomerComponent, {
       height: '660px',
       width: '620px',
       maxWidth: '100%'
     });
     dialogRef.afterClosed().subscribe((user) => {
       this.isLoadingResults = true;
-      this._userService.addUser(user).subscribe({
+      this._customerService.addCustomer(user).subscribe({
         next: (res) => {
           if (res.status === 'OK') {
             user.profilPicSrc = res.profilePicSrc;
@@ -153,7 +153,7 @@ export class UserSignalComponent implements OnInit {
   }
 
   openDeleteDialog(_id: string, name: string) {
-    const dialogRef = this._dialog.open(DialogDeleteUserComponent, {
+    const dialogRef = this._dialog.open(DialogDeleteCustomerComponent, {
       height: '200px',
       width: '200px',
       maxWidth: '100%',
@@ -164,10 +164,10 @@ export class UserSignalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.isLoadingResults = true;
-        this._userService.deleteUser(_id).subscribe({
+        this._customerService.deleteCustomer(_id).subscribe({
           next: (res) => {
             if (res.status === 'OK') {
-              this._refreshUsers$.next();
+              this._refreshCutomers$.next();
               this.openSnackBar('User succesfully deleted!', 'close');
             }
           },
@@ -181,7 +181,7 @@ export class UserSignalComponent implements OnInit {
   }
 }
 
-interface IGetUsersBehaviorSParams {
+interface IGetCustomersBehaviorParams {
   pageSize: BehaviorSubject<number>;
   pageIndex: BehaviorSubject<number>;
   filterValue: BehaviorSubject<string>;
