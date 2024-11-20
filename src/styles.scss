@@ -31,6 +31,7 @@
 :root {
   @include mat.all-component-themes(m3.$light-theme);
   @include mat.system-level-colors(m3.$light-theme);
+  --card-title-color: rgba(0, 0, 0, 0.87); /* Standardfarbe für Light Theme */
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.
@@ -59,4 +60,5 @@ body {
   @include mat.all-component-colors(m3.$dark-theme);
   @include mat.all-component-densities(m3.$dark-theme);
   @include mat.system-level-colors(m3.$dark-theme);
+  --card-title-color: rgba(255, 255, 255, 0.87); /* Weiß für Dark Theme */
 }
