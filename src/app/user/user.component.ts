@@ -81,6 +81,8 @@ export class UserComponent {
           map((res) => {
             this.isLoadingResults = false;
             this.totalLength = res.totalLength;
+            console.log(res.users);
+
             return res.users;
           })
         );

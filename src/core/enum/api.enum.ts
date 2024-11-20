@@ -4,5 +4,6 @@ export enum UserEnum {
   addUser = './api/users',
   editUser = './api/users',
   deleteUser = './api/users/:id',
-  editUserImg = '/api/assets/img/logos'
+  editUserImg = '/api/assets/img/logos',
+  login = 'api/login'
 }

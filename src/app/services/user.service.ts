@@ -20,7 +20,6 @@ export class UserService {
   }
 
   addUser(user: User): Observable<IPostRes> {
-    console.log('user service');
     return this.http.post<IPostRes>(UserEnum.addUser, user);
   }
 

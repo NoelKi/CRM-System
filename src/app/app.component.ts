@@ -6,6 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { menuItems } from './menuItem';
+import { AuthService } from './services/auth.service';
 import { ResponsiveService } from './services/responsive.service';
 import { ThemeService } from './services/theme.service';
 
@@ -27,6 +28,8 @@ import { ThemeService } from './services/theme.service';
 export class AppComponent {
   themeService = inject(ThemeService);
   responsiveService = inject(ResponsiveService);
+  private _authService = inject(AuthService);
+  isLoggedIn = this._authService.isLoggedIn;
   title = 'CRM-System';
   menuItems = signal(menuItems);
 
@@ -41,4 +44,8 @@ export class AppComponent {
       return 'side';
     } else return 'over';
   });
+
+  onLogout(): void {
+    this._authService.logout();
+  }
 }
