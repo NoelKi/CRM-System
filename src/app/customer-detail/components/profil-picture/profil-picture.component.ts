@@ -3,10 +3,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-profil-picture',
-  standalone: true,
-  imports: [MatIcon, MatTooltip],
-  template: `<img
+    selector: 'app-profil-picture',
+    imports: [MatIcon, MatTooltip],
+    template: `<img
       [src]="source()"
       alt="profil-image"
       (mouseenter)="isHovered = true"
@@ -29,7 +28,7 @@ import { MatTooltip } from '@angular/material/tooltip';
       accept="image/png, image/jpeg"
       (change)="onFileSelected($event)"
     /> `,
-  styleUrl: './profil-picture.component.scss'
+    styleUrl: './profil-picture.component.scss'
 })
 export class ProfilPictureComponent {
   source = input.required<string>();

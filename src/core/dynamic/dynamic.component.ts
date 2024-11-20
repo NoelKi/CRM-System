@@ -12,10 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Customer } from '../../models/customer.model';
 
 @Component({
-  selector: 'app-dynamic',
-  standalone: true,
-  imports: [MatIconModule, MatButtonModule],
-  template: `<ng-container #container></ng-container>`
+    selector: 'app-dynamic',
+    imports: [MatIconModule, MatButtonModule],
+    template: `<ng-container #container></ng-container>`
 })
 export class DynamicComponent<T> implements OnInit {
   elements = input.required<IDynamicObj<T>[] | IDynamicObj<T>>();

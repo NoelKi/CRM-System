@@ -14,19 +14,18 @@ import { DialogEditCustomerComponent } from './components/dialog-edit-customer/d
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 
 @Component({
-  selector: 'app-customer-detail',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatMenuModule,
-    ProfilPictureComponent,
-    AsyncPipe,
-    DatePipe
-  ],
-  templateUrl: './customer-detail.component.html',
-  styleUrl: './customer-detail.component.scss'
+    selector: 'app-customer-detail',
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        MatMenuModule,
+        ProfilPictureComponent,
+        AsyncPipe,
+        DatePipe
+    ],
+    templateUrl: './customer-detail.component.html',
+    styleUrl: './customer-detail.component.scss'
 })
 export class CustomerDetailComponent implements OnInit {
   customerId: string | null = '';

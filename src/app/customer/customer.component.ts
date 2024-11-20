@@ -27,26 +27,25 @@ import { DialogDeleteCustomerComponent } from './components/dialog-delete-custom
 import { getCustomerColumns } from './customer-columns';
 
 @Component({
-  selector: 'app-customer',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIcon,
-    MatButtonModule,
-    MatTooltipModule,
-    MatTableModule,
-    RouterModule,
-    MatPaginatorModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatSortModule,
-    CdkDropList,
-    CdkDrag,
-    DragDropModule,
-    DynamicComponent
-  ],
-  templateUrl: './customer.component.html',
-  styleUrl: './customer.component.scss'
+    selector: 'app-customer',
+    imports: [
+        CommonModule,
+        MatIcon,
+        MatButtonModule,
+        MatTooltipModule,
+        MatTableModule,
+        RouterModule,
+        MatPaginatorModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatSortModule,
+        CdkDropList,
+        CdkDrag,
+        DragDropModule,
+        DynamicComponent
+    ],
+    templateUrl: './customer.component.html',
+    styleUrl: './customer.component.scss'
 })
 export class CustomerComponent {
   private _customerService = inject(CustomerService);

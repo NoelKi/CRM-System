@@ -4,11 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
-  selector: 'app-dialog-delete-customer',
-  standalone: true,
-  imports: [MatDialogModule, MatProgressBar, MatButtonModule],
-  templateUrl: './dialog-delete-customer.component.html',
-  styleUrl: './dialog-delete-customer.component.scss'
+    selector: 'app-dialog-delete-customer',
+    imports: [MatDialogModule, MatProgressBar, MatButtonModule],
+    templateUrl: './dialog-delete-customer.component.html',
+    styleUrl: './dialog-delete-customer.component.scss'
 })
 export class DialogDeleteCustomerComponent {
   readonly dialogRef = inject(MatDialogRef<DialogDeleteCustomerComponent>);

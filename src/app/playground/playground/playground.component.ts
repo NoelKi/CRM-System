@@ -15,11 +15,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
 ];
 @Component({
-  selector: 'app-playground',
-  standalone: true,
-  imports: [MatTableModule, DragDropModule],
-  templateUrl: './playground.component.html',
-  styleUrl: './playground.component.scss'
+    selector: 'app-playground',
+    imports: [MatTableModule, DragDropModule],
+    templateUrl: './playground.component.html',
+    styleUrl: './playground.component.scss'
 })
 export class PlaygroundComponent implements OnInit {
   // ------ Behaviorsubject: ------
