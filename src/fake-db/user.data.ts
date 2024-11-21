@@ -4,11 +4,11 @@ export const users: User[] = [
   new User({
     email: 'kieran.noel@icloud.com',
     password: 'test123',
-    profilPicSrc: ''
+    pictureUrl: ''
   }),
   new User({
     email: 'paul@panther.de',
     password: '123',
-    profilPicSrc: ''
+    pictureUrl: ''
   })
 ];
