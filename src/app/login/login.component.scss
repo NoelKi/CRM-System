@@ -7,17 +7,25 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--sys-primary);
+  box-shadow:
+    inset 5em 5em 20em var(--mat-sys-inverse-on-surface),
+    inset -5em -5em 20em var(--mat-sys-inverse-on-surface);
 }
 
 form {
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
+}
+
+mat-card-header {
+  padding-bottom: 20px;
 }
 
 mat-card-actions {
   max-width: 100%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }

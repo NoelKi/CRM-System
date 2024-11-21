@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
 import { CustomerComponent } from './customer/customer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -8,11 +9,13 @@ import { PlaygroundComponent } from './playground/playground/playground.componen
 import { SettingsComponent } from './settings/settings.component';
 
 export const routes: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [isUserAuthenticated] },
-  { path: 'customer', component: CustomerComponent, canActivate: [isUserAuthenticated] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [isUserAuthenticated] },
   { path: 'login', component: LoginComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'customer', component: CustomerComponent, canActivate: [isUserAuthenticated] },
   { path: 'customer/:id', component: CustomerDetailComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'playground', component: PlaygroundComponent }
+  { path: 'playground', component: PlaygroundComponent },
+  { path: 'change-password', component: ChangePasswordComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  // { path: '**', component: NoComponentFoundComponent},
 ];

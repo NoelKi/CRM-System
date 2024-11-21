@@ -29,23 +29,10 @@
             }
           }
         }
-        @if (!isLoggedIn()) {
-          <a
-            mat-list-item
-            [routerLink]="'/login'"
-            routerLinkActive
-            #rla="routerLinkActive"
-            [activated]="rla.isActive"
-          >
-            <mat-icon matListItemIcon>login</mat-icon>
-            <span matListItemTitle>Login</span>
-          </a>
-        } @else {
-          <a mat-list-item (click)="onLogout()">
-            <mat-icon matListItemIcon>logout</mat-icon>
-            <span matListItemTitle>Logout</span>
-          </a>
-        }
+        <a mat-list-item (click)="onLogout()">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>Logout</span>
+        </a>
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>

@@ -34,7 +34,7 @@ export const menuItems: MenuItem[] = [
       {
         icon: 'lock',
         label: 'Change Password',
-        route: '/change-password'
+        route: 'change-password/'
       }
     ]
   }
