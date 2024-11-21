@@ -67,7 +67,6 @@
         >
           <mat-icon>{{ themeService.themeModeIcon }}</mat-icon>
         </button>
-        <router-outlet />
       </mat-toolbar>
       <div class="router-container">
         <router-outlet></router-outlet>
@@ -75,5 +74,5 @@
     </mat-drawer-content>
   </mat-drawer-container>
 } @else {
-  <router-outlet></router-outlet>
+  <app-login></app-login>
 }

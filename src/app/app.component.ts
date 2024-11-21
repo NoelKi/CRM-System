@@ -5,24 +5,26 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { LoginComponent } from './login/login.component';
 import { menuItems } from './menuItem';
 import { AuthService } from './services/auth.service';
 import { ResponsiveService } from './services/responsive.service';
 import { ThemeService } from './services/theme.service';
 
 @Component({
-    selector: 'app-root',
-    imports: [
-        RouterOutlet,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatButtonModule,
-        MatListModule,
-        RouterModule
-    ],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    RouterModule,
+    LoginComponent
+  ],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   themeService = inject(ThemeService);

@@ -40,7 +40,7 @@ export class LoginComponent {
       }
       const log = await this._authService.login(email, password);
       if (log) {
-        await this._router.navigate(['/customer']);
+        await this._router.navigate([''], { replaceUrl: true });
       }
 
       return;
