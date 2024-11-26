@@ -7,10 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { Customer } from '../../../../models/customer.model';
 
 @Component({
-    selector: 'app-dialog-edit-customer',
-    imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatDialogModule],
-    templateUrl: './dialog-edit-customer.component.html',
-    styleUrl: './dialog-edit-customer.component.scss'
+  selector: 'app-dialog-edit-customer',
+  imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatDialogModule],
+  templateUrl: './dialog-edit-customer.component.html',
+  styleUrl: './dialog-edit-customer.component.scss'
 })
 export class DialogEditCustomerComponent {
   loading = false;

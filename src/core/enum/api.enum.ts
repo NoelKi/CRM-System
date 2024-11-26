@@ -1,6 +1,7 @@
 export enum CustomerEnum {
   getCustomers = './api/customers',
   getCustomer = './api/customers/:id',
+  getCustomerImg = '/api/assets/img/logos/:customerId/:filename',
   addCustomer = './api/customers',
   editCustomer = './api/customers',
   deleteCustomer = './api/customers/:id',

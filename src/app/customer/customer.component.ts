@@ -27,25 +27,25 @@ import { DialogDeleteCustomerComponent } from './components/dialog-delete-custom
 import { getCustomerColumns } from './customer-columns';
 
 @Component({
-    selector: 'app-customer',
-    imports: [
-        CommonModule,
-        MatIcon,
-        MatButtonModule,
-        MatTooltipModule,
-        MatTableModule,
-        RouterModule,
-        MatPaginatorModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        MatSortModule,
-        CdkDropList,
-        CdkDrag,
-        DragDropModule,
-        DynamicComponent
-    ],
-    templateUrl: './customer.component.html',
-    styleUrl: './customer.component.scss'
+  selector: 'app-customer',
+  imports: [
+    CommonModule,
+    MatIcon,
+    MatButtonModule,
+    MatTooltipModule,
+    MatTableModule,
+    RouterModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    CdkDropList,
+    CdkDrag,
+    DragDropModule,
+    DynamicComponent
+  ],
+  templateUrl: './customer.component.html',
+  styleUrl: './customer.component.scss'
 })
 export class CustomerComponent {
   private _customerService = inject(CustomerService);
@@ -75,6 +75,7 @@ export class CustomerComponent {
     toObservable(this.queryParams).pipe(
       switchMap(({ refreshPage, ...params }) => {
         this.isLoadingResults = true;
+        console.log('naseBlase');
 
         return this._customerService.getCustomers(params).pipe(
           map((res) => {

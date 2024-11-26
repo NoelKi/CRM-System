@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { users } from '../../fake-db/user.data';
+import { firstValueFrom } from 'rxjs';
+import { UserEnum } from '../../core/enum/api.enum';
 import { User } from '../../models/login.model';
 
 const USER_STORAGE_KEY = 'user';
@@ -42,36 +43,62 @@ export class AuthService {
     }
   }
 
-  // async login(email: string, password: string): Promise<Customer> {
-  //   const login$ = this.http.post<Customer>(CustomerEnum.login, {
-  //     email,
-  //     password
-  //   });
+  async login(email: string, password: string): Promise<User> {
+    const login$ = this.http.post<ILogRes>(UserEnum.login, {
+      email,
+      password
+    });
+    console.log(login$);
 
-  //   const user = await firstValueFrom(login$);
+    const authPayload = await firstValueFrom(login$);
 
+    const { user, authJwToken } = authPayload;
+
+    this._userSignal.set(user);
+    this.saveItemToStorage('jwt', authJwToken);
+
+    console.log(user);
+
+    return user;
+  }
+
+  // async login(email: string, password: string): Promise<User> {
+  //   const user = users.find((user) => user.email === email && user.password === password);
+
+  //   if (!user) {
+  //     throw new Error('Invalid email or password');
+  //   }
+
+  //   // Setze das Signal mit dem gefundenen Benutzer
   //   this._userSignal.set(user);
 
   //   return user;
   // }
 
-  async login(email: string, password: string): Promise<User> {
-    const user = users.find((user) => user.email === email && user.password === password);
-
-    if (!user) {
-      throw new Error('Invalid email or password');
-    }
-
-    // Setze das Signal mit dem gefundenen Benutzer
-    this._userSignal.set(user);
-
-    return user;
-  }
-
   async logout(): Promise<void> {
     localStorage.removeItem(USER_STORAGE_KEY);
     this._userSignal.set(null);
     await this._router.navigateByUrl('/login');
+    this.removeItemFromStorage('jwt');
+  }
+
+  saveJwtToStorage(jwt: string): void {
+    localStorage.setItem('jwt', jwt);
+  }
+
+  saveItemToStorage(itemKey: string, item: string): void {
+    localStorage.setItem(itemKey, item);
+  }
+
+  loadItemFromStorage(itemKey: string): any {
+    const json = localStorage.getItem(itemKey);
+    if (json) {
+      return json;
+    }
+  }
+
+  removeItemFromStorage(itemKey: string): void {
+    localStorage.removeItem(itemKey);
   }
 
   showMessage(message: string): void {
@@ -80,5 +107,10 @@ export class AuthService {
 }
 
 interface ILogRes {
-  status: string;
+  user: {
+    email: string;
+    isAdmin: boolean;
+    pictureUrl: string;
+  };
+  authJwToken: string;
 }
