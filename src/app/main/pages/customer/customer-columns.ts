@@ -1,5 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import { CustomMatIconBtnComponent } from '../../core/dynamic/components/custom-mat-icon-btn.component';
+import { CustomMatIconBtnComponent } from '../../../../core/dynamic/components/custom-mat-icon-btn.component';
 
 export function getCustomerColumns(
   openDeleteDialog: (id: string, name: string) => void,

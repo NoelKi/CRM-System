@@ -5,7 +5,7 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from './auth.service';
 
 export const isUserAuthenticated: CanActivateFn = (
   route: ActivatedRouteSnapshot,

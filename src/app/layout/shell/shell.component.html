@@ -8,7 +8,7 @@
           <!-- ['/home', 'dashboard'] -->
           <a
             mat-list-item
-            [routerLink]="['/main', item.route]"
+            [routerLink]="item.route"
             routerLinkActive
             #rla="routerLinkActive"
             [activated]="rla.isActive"

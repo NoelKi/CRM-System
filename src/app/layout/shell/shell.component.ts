@@ -5,13 +5,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { menuItems } from '../menuItem';
-import { AuthService } from '../services/auth.service';
-import { ResponsiveService } from '../services/responsive.service';
-import { ThemeService } from '../services/theme.service';
+import { ResponsiveService } from '../../../core/services/responsive.service';
+import { ThemeService } from '../../../core/services/theme.service';
+import { AuthService } from '../../auth/auth.service';
+import { menuItems } from '../../menuItem';
 
 @Component({
-  selector: 'app-main-component',
+  selector: 'app-shell',
   standalone: true,
   imports: [
     RouterOutlet,
@@ -23,10 +23,10 @@ import { ThemeService } from '../services/theme.service';
     MatListModule,
     RouterModule
   ],
-  templateUrl: './main-component.component.html',
-  styleUrl: './main-component.component.scss'
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.scss'
 })
-export class MainComponentComponent {
+export class ShellComponent {
   themeService = inject(ThemeService);
   responsiveService = inject(ResponsiveService);
   private _authService = inject(AuthService);

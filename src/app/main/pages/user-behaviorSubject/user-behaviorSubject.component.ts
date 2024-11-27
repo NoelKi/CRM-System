@@ -14,9 +14,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
+import { CustomerService } from '../../services/customer.service';
 import { DialogAddCustomerComponent } from '../customer/components/dialog-add-customer/dialog-add-customer.component';
 import { DialogDeleteCustomerComponent } from '../customer/components/dialog-delete-customer/dialog-delete-customer.component';
-import { CustomerService } from '../services/customer.service';
 
 @Component({
   selector: 'app-customer',

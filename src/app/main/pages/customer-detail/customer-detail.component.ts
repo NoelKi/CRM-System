@@ -8,8 +8,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
-import { Customer } from '../../models/customer.model';
-import { CustomerService, IPutImgRes, IPutRes } from '../services/customer.service';
+
+import { Customer } from '../../../../models/customer.model';
+
+import { CustomerService, IPutImgRes, IPutRes } from '../../services/customer.service';
 import { DialogEditCustomerComponent } from './components/dialog-edit-customer/dialog-edit-customer.component';
 import { ProfilPictureComponent } from './components/profil-picture/profil-picture.component';
 

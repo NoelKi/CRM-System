@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Customer } from '../../../../models/customer.model';
+import { Customer } from '../../../../../../models/customer.model';
 
 @Component({
   selector: 'app-dialog-edit-customer',

@@ -13,28 +13,28 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Customer } from '../../../../models/customer.model';
+import { Customer } from '../../../../../../models/customer.model';
 
 @Component({
-    selector: 'app-dialog-add-customer',
-    providers: [provideNativeDateAdapter()],
-    imports: [
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        MatButtonModule,
-        MatDialogTitle,
-        MatDialogContent,
-        MatDialogActions,
-        MatDialogClose,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatProgressBarModule
-    ],
-    templateUrl: './dialog-add-customer.component.html',
-    styleUrl: './dialog-add-customer.component.scss'
+  selector: 'app-dialog-add-customer',
+  providers: [provideNativeDateAdapter()],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatProgressBarModule
+  ],
+  templateUrl: './dialog-add-customer.component.html',
+  styleUrl: './dialog-add-customer.component.scss'
 })
 export class DialogAddCustomerComponent {
   readonly dialogRef = inject(MatDialogRef<DialogAddCustomerComponent>);

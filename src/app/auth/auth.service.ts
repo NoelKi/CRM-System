@@ -66,19 +66,6 @@ export class AuthService {
     return user;
   }
 
-  // async login(email: string, password: string): Promise<User> {
-  //   const user = users.find((user) => user.email === email && user.password === password);
-
-  //   if (!user) {
-  //     throw new Error('Invalid email or password');
-  //   }
-
-  //   // Setze das Signal mit dem gefundenen Benutzer
-  //   this._userSignal.set(user);
-
-  //   return user;
-  // }
-
   async logout(): Promise<void> {
     localStorage.removeItem(USER_STORAGE_KEY);
     this._userSignal.set(null);

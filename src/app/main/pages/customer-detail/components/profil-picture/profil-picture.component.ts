@@ -3,7 +3,7 @@ import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/co
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { catchError, map, Observable, of } from 'rxjs';
-import { CustomerService } from '../../../services/customer.service';
+import { CustomerService } from '../../../../services/customer.service';
 
 @Component({
   selector: 'app-profil-picture',

@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom, Observable } from 'rxjs';
-import { CustomerEnum } from '../../core/enum/api.enum';
-import { Customer } from '../../models/customer.model';
+import { CustomerEnum } from '../../../core/enum/api.enum';
+import { Customer } from '../../../models/customer.model';
 
 @Injectable({
   providedIn: 'root'
