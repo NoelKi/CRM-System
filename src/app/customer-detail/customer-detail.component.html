@@ -7,7 +7,7 @@
       <button mat-menu-item (click)="editCustomerDetail('details', customer)">Edit</button>
     </mat-menu>
     <app-profil-picture
-      [customer]="customer"
+      [source]="customer.profilPicSrc"
       (imgFile)="saveFile(customer, $event)"
     ></app-profil-picture>
     <div class="customer-details">

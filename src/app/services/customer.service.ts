@@ -13,23 +13,19 @@ export class CustomerService {
   customers = signal([] as Customer[]);
   customersLength: number = 0;
   private _snackBar = inject(MatSnackBar);
-  constructor() {}
   jwt = this.loadJwtFromStorage();
+  constructor() {}
 
   openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, { duration: 3000 });
   }
 
   addCustomer(customer: Customer): Observable<IPostRes> {
-    return this.http.post<IPostRes>(CustomerEnum.addCustomer, customer, {
-      headers: { authorization: this.jwt }
-    });
+    return this.http.post<IPostRes>(CustomerEnum.addCustomer, customer);
   }
 
   deleteCustomer(id: string): Observable<IDeleteRes> {
-    return this.http.delete<IDeleteRes>(CustomerEnum.deleteCustomer.replace(':id', id), {
-      headers: { authorization: this.jwt }
-    });
+    return this.http.delete<IDeleteRes>(CustomerEnum.deleteCustomer.replace(':id', id));
   }
 
   async getCustomersFirstValueFrom(data: IGetCustomersParams): Promise<void> {
@@ -37,8 +33,7 @@ export class CustomerService {
     try {
       const { totalLength, customers } = await firstValueFrom(
         this.http.get<IGetRes>(CustomerEnum.getCustomers, {
-          params: httpParams,
-          headers: { authorization: this.jwt }
+          params: httpParams
         })
       );
       this.customers.set(customers);
@@ -52,35 +47,22 @@ export class CustomerService {
     console.log('custom Service');
     const httpParams = this.createHttpParams(data);
     return this.http.get<IGetRes>(CustomerEnum.getCustomers, {
-      params: httpParams,
-      headers: { authorization: this.jwt }
+      params: httpParams
     });
   }
 
   getCustomer(id: string): Observable<Customer> {
-    return this.http.get<Customer>(CustomerEnum.getCustomer.replace(':id', id), {
-      headers: { authorization: this.jwt }
-    });
+    return this.http.get<Customer>(CustomerEnum.getCustomer.replace(':id', id));
   }
 
   editCustomer(newCustomer: Customer): Observable<IPutRes> {
-    return this.http.put<IPutRes>(CustomerEnum.editCustomer, newCustomer, {
-      headers: { authorization: this.jwt }
-    });
+    return this.http.put<IPutRes>(CustomerEnum.editCustomer, newCustomer);
   }
 
-  getCustomerImg(id: string, filename: string): Observable<Blob> {
-    const url = `/api/assets/img/logos/${id}/${filename}`;
-    console.log('Request URL:', url);
-    return this.http.get(
-      CustomerEnum.getCustomerImg
-        .replace(':customerId', encodeURIComponent(id))
-        .replace(':filename', encodeURIComponent(filename)),
-      {
-        headers: { authorization: this.jwt },
-        responseType: 'blob'
-      }
-    );
+  getCustomerImg(filename: string): Observable<any> {
+    return this.http.get(CustomerEnum.getCustomerImg, {
+      responseType: 'blob'
+    });
   }
 
   editCustomerImg(newCustomer: Customer, file: File): Observable<IPutImgRes> {
@@ -90,9 +72,7 @@ export class CustomerService {
     formData.append('id', newCustomer._id!);
     formData.append('file', file);
 
-    return this.http.put<IPutImgRes>(CustomerEnum.editCustomerImg, formData, {
-      headers: { authorization: this.jwt }
-    });
+    return this.http.put<IPutImgRes>(CustomerEnum.editCustomerImg, formData);
   }
 
   createHttpParams(data: IGetCustomersParams): HttpParams {

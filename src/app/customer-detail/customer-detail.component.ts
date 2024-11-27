@@ -46,9 +46,12 @@ export class CustomerDetailComponent implements OnInit {
     if (paramId === null) {
       return;
     }
-    this.customer$ = this._customerService
-      .getCustomer(paramId)
-      .pipe(map((customer) => new Customer(customer)));
+    this.customer$ = this._customerService.getCustomer(paramId).pipe(
+      map((customer) => {
+        console.log(customer);
+        return new Customer(customer);
+      })
+    );
   }
 
   openSnackBar(message: string, action: string): void {

@@ -9,22 +9,22 @@ export const menuItems: MenuItem[] = [
   {
     icon: 'dashboard',
     label: 'Dashboard',
-    route: '/dashboard'
+    route: 'dashboard'
   },
   {
     icon: 'perm_identity',
     label: 'Customers',
-    route: '/customer'
+    route: 'customer'
   },
   {
     icon: 'extension',
     label: 'Playground',
-    route: '/playground'
+    route: 'playground'
   },
   {
     icon: 'settings',
     label: 'Settings',
-    route: 'settings/',
+    route: 'settings',
     subItems: [
       {
         icon: 'person',

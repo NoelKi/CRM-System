@@ -34,6 +34,10 @@ export class AuthService {
     });
   }
 
+  destroyUser(): void {
+    this._userSignal.set(null);
+  }
+
   loadUserFromStorage(): void {
     const json = localStorage.getItem(USER_STORAGE_KEY);
     if (json) {
