@@ -115,6 +115,7 @@ interface ILogRes {
     email: string;
     isAdmin: boolean;
     pictureUrl: string;
+    exp: Date;
   };
   authJwToken: string;
 }
