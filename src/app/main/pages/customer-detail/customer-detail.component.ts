@@ -50,7 +50,6 @@ export class CustomerDetailComponent implements OnInit {
     }
     this.customer$ = this._customerService.getCustomer(paramId).pipe(
       map((customer) => {
-        console.log(customer);
         return new Customer(customer);
       })
     );
@@ -123,13 +122,11 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   saveFile(customer: Customer, $event: File): void | Observable<never> {
-    console.log('Selected file:', $event);
     this.editedCustomerImg$ = this._customerService.editCustomerImg(customer, $event).pipe(
       tap((res) => {
         if (res.status === 'OK') {
           this.openSnackBar('Profile Image Edited Successfully', 'close');
           customer.profilPicSrc = res.profilPicSrc;
-          console.log(res.profilPicSrc);
 
           this.customer$ = of(customer);
         }

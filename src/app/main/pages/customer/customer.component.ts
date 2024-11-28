@@ -75,13 +75,11 @@ export class CustomerComponent {
     toObservable(this.queryParams).pipe(
       switchMap(({ refreshPage, ...params }) => {
         this.isLoadingResults = true;
-        console.log('naseBlase');
 
         return this._customerService.getCustomers(params).pipe(
           map((res) => {
             this.isLoadingResults = false;
             this.totalLength = res.totalLength;
-            console.log(res.customers);
 
             return res.customers;
           })

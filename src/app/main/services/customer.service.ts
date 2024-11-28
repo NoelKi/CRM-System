@@ -44,7 +44,6 @@ export class CustomerService {
   }
 
   getCustomers(data: IGetCustomersParams): Observable<IGetRes> {
-    console.log('custom Service');
     const httpParams = this.createHttpParams(data);
     return this.http.get<IGetRes>(CustomerEnum.getCustomers, {
       params: httpParams
@@ -67,7 +66,6 @@ export class CustomerService {
 
   editCustomerImg(newCustomer: Customer, file: File): Observable<IPutImgRes> {
     const formData = new FormData();
-    console.log(newCustomer._id);
 
     formData.append('id', newCustomer._id!);
     formData.append('file', file);
@@ -89,7 +87,6 @@ export class CustomerService {
   loadJwtFromStorage(): any {
     const json = localStorage.getItem('jwt');
     if (json) {
-      console.log('json', json);
       return json;
     }
   }

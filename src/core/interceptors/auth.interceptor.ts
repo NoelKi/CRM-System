@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
       setHeaders: {
         'Content-Type': 'application/json; charset=utf-8',
         accept: 'application/json',
-        authorization: `${this._authService.loadItemFromStorage('jwt')}`
+        authorization: `${this._authService.loadItemFromStorage('accessToken')}`
       }
     });
 
@@ -27,7 +27,8 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           console.error('401 Error: user has no access authorization ', error.message);
-          this._authService.destroyUser();
+          this._authService.refreshAccessToken();
+          // this._authService.destroyUser();
         }
 
         return throwError(() => error);

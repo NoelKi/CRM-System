@@ -69,7 +69,6 @@ export class UserSignalComponent implements OnInit {
 
   ngOnInit(): void {
     this._paginator().pageSize = this._pageSize$.value;
-    console.log(this._filter$);
   }
 
   drop(event: CdkDragDrop<string[]>) {

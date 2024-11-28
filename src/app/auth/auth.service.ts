@@ -47,30 +47,78 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<User> {
-    const login$ = this.http.post<ILogRes>(UserEnum.login, {
-      email,
-      password
-    });
-    console.log(login$);
+  async checkAuthStatus(): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<{ isAuthenticated: boolean }>('/api/auth-status', {
+          withCredentials: true // Wichtig, um Cookies mitzuschicken
+        })
+      );
+      return response.isAuthenticated;
+    } catch (error) {
+      console.error('Benutzer ist nicht authentifiziert:', error);
+      return false;
+    }
+  }
 
+  async refreshAccessToken(): Promise<void> {
+    const token$ = this.http.post<IRefreshToken>(UserEnum.refresh, { withCredentials: true });
+
+    const { accessToken } = await firstValueFrom(token$);
+
+    console.log('newAccessToken', accessToken);
+
+    this.saveItemToStorage('accessToken', accessToken);
+  }
+
+  async login(email: string, password: string): Promise<User> {
+    // HTTP-Request an den Server senden, mit `credentials: 'include'`, um Cookies zu setzen
+    const login$ = this.http.post<ILogRes>(
+      UserEnum.login,
+      {
+        email,
+        password
+      },
+      { withCredentials: true }
+    ); // <-- Wichtig: `withCredentials` einschalten für cookie Sendungen
+
+    // Wandle den Observable-Stream in ein Promise um
     const authPayload = await firstValueFrom(login$);
 
-    const { user, authJwToken } = authPayload;
+    const { user, accessToken } = authPayload;
 
+    // Setze den Benutzerstatus in deinem Signal (z. B. Zustandsspeicher)
     this._userSignal.set(user);
-    this.saveItemToStorage('jwt', authJwToken);
+    this.saveItemToStorage('accessToken', accessToken);
 
-    console.log(user);
+    console.log('Eingeloggt:', user);
 
     return user;
   }
 
+  // async logout(): Promise<void> {
+  //   localStorage.removeItem(USER_STORAGE_KEY);
+  //   this._userSignal.set(null);
+  //   await this._router.navigateByUrl('/login');
+  //   this.removeItemFromStorage('accessToken');
+  // }
+
   async logout(): Promise<void> {
-    localStorage.removeItem(USER_STORAGE_KEY);
+    // Sende einen Logout-Request an den Server, damit das Cookie gelöscht wird
+    const logout$ = this.http.post<void>(UserEnum.logout, {}, { withCredentials: true });
+
+    await firstValueFrom(logout$);
+
+    // Aktualisiere den Benutzerstatus
     this._userSignal.set(null);
+
+    // Löschen des AccessTokens
+    this.removeItemFromStorage('accessToken');
+
+    // Navigiere den Benutzer zur Login-Seite
     await this._router.navigateByUrl('/login');
-    this.removeItemFromStorage('jwt');
+
+    console.log('Benutzer wurde ausgeloggt');
   }
 
   saveJwtToStorage(jwt: string): void {
@@ -104,5 +152,9 @@ interface ILogRes {
     pictureUrl: string;
     exp: Date;
   };
-  authJwToken: string;
+  accessToken: string;
+}
+
+interface IRefreshToken {
+  accessToken: string;
 }
