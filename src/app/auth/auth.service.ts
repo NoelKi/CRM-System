@@ -96,16 +96,9 @@ export class AuthService {
     return user;
   }
 
-  // async logout(): Promise<void> {
-  //   localStorage.removeItem(USER_STORAGE_KEY);
-  //   this._userSignal.set(null);
-  //   await this._router.navigateByUrl('/login');
-  //   this.removeItemFromStorage('accessToken');
-  // }
-
   async logout(): Promise<void> {
     // Sende einen Logout-Request an den Server, damit das Cookie gelöscht wird
-    const logout$ = this.http.post<void>(UserEnum.logout, {}, { withCredentials: true });
+    const logout$ = this.http.post<void>(UserEnum.logout, { withCredentials: true });
 
     await firstValueFrom(logout$);
 
