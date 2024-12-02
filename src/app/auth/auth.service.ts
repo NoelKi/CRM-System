@@ -62,14 +62,11 @@ export class AuthService {
   }
 
   async refreshAccessToken(): Promise<void> {
-    const token$ = this.http.post<IRefreshToken>(
-      UserEnum.refresh,
-      { user_id: this.user()!.user_id },
-      { withCredentials: true }
-    );
+    const token$ = this.http.post<IRefAccToken>(UserEnum.refresh, { withCredentials: true });
     const { accessToken } = await firstValueFrom(token$);
 
     this.saveItemToStorage('accessToken', accessToken);
+    return;
   }
 
   async login(email: string, password: string): Promise<User> {
@@ -144,11 +141,10 @@ interface ILogRes {
     email: string;
     isAdmin: boolean;
     pictureUrl: string;
-    exp: Date;
   };
   accessToken: string;
 }
 
-interface IRefreshToken {
+interface IRefAccToken {
   accessToken: string;
 }

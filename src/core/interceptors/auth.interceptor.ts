@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, from, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../../app/auth/auth.service';
 
 @Injectable()
@@ -26,13 +26,23 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          console.error('401 Error: user has no access authorization ', error.message);
-          // this._authService.refreshAccessToken();
-          this._authService.refreshAccessToken().then(() => {
-            window.location.reload();
-          });
+          // console.error('401 Error: user has no access authorization ', error.message);
+          return from(this._authService.refreshAccessToken()).pipe(
+            // Promise in Observable umwandeln
+            switchMap(() => {
+              const newRequest = req.clone({
+                setHeaders: {
+                  authorization: `${this._authService.loadItemFromStorage('accessToken')}`
+                }
+              });
+              return next.handle(newRequest);
+            }),
+            catchError((refreshError) => {
+              console.error('Fehler beim Token-Refresh:', refreshError.message);
+              return throwError(() => refreshError);
+            })
+          );
         }
-
         return throwError(() => error);
       })
     );
