@@ -27,8 +27,10 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           console.error('401 Error: user has no access authorization ', error.message);
-          this._authService.refreshAccessToken();
-          // this._authService.destroyUser();
+          // this._authService.refreshAccessToken();
+          this._authService.refreshAccessToken().then(() => {
+            window.location.reload();
+          });
         }
 
         return throwError(() => error);

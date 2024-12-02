@@ -26,7 +26,7 @@ export class AuthService {
     this.loadUserFromStorage();
     effect(() => {
       const user = this.user();
-      console.log(user);
+      console.log('kieran', user);
 
       if (user) {
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
@@ -62,11 +62,12 @@ export class AuthService {
   }
 
   async refreshAccessToken(): Promise<void> {
-    const token$ = this.http.post<IRefreshToken>(UserEnum.refresh, { withCredentials: true });
-
+    const token$ = this.http.post<IRefreshToken>(
+      UserEnum.refresh,
+      { user_id: this.user()!.user_id },
+      { withCredentials: true }
+    );
     const { accessToken } = await firstValueFrom(token$);
-
-    console.log('newAccessToken', accessToken);
 
     this.saveItemToStorage('accessToken', accessToken);
   }
