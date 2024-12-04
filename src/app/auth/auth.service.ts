@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, Observable, tap, throwError } from 'rxjs';
 import { UserEnum } from '../../core/enum/api.enum';
 import { User } from '../../models/login.model';
 
@@ -26,7 +26,6 @@ export class AuthService {
     this.loadUserFromStorage();
     effect(() => {
       const user = this.user();
-      console.log('kieran', user);
 
       if (user) {
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
@@ -61,12 +60,18 @@ export class AuthService {
     }
   }
 
-  async refreshAccessToken(): Promise<void> {
-    const token$ = this.http.post<IRefAccToken>(UserEnum.refresh, { withCredentials: true });
-    const { accessToken } = await firstValueFrom(token$);
+  refreshAccessToken(): Observable<IRefAccToken> {
+    return this.http.post<IRefAccToken>(UserEnum.refresh, { withCredentials: true }).pipe(
+      tap((res) => {
+        this.saveItemToStorage('accessToken', res.accessToken);
+      }),
+      catchError((err) => {
+        this.logout();
 
-    this.saveItemToStorage('accessToken', accessToken);
-    return;
+        console.error('Fehler beim Token-Refresh:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   async login(email: string, password: string): Promise<User> {
@@ -89,8 +94,6 @@ export class AuthService {
     this._userSignal.set(user);
     this.saveItemToStorage('accessToken', accessToken);
 
-    console.log('Eingeloggt:', user);
-
     return user;
   }
 
@@ -108,8 +111,6 @@ export class AuthService {
 
     // Navigiere den Benutzer zur Login-Seite
     await this._router.navigateByUrl('/login');
-
-    console.log('Benutzer wurde ausgeloggt');
   }
 
   saveJwtToStorage(jwt: string): void {
@@ -125,6 +126,7 @@ export class AuthService {
     if (json) {
       return json;
     }
+    return null;
   }
 
   removeItemFromStorage(itemKey: string): void {
@@ -146,5 +148,6 @@ interface ILogRes {
 }
 
 interface IRefAccToken {
+  // Refresh Access Token
   accessToken: string;
 }
