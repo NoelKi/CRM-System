@@ -12,5 +12,6 @@ export enum CustomerEnum {
 export enum UserEnum {
   login = 'api/login',
   logout = 'api/logout',
-  refresh = 'api/refresh'
+  refresh = 'api/refresh',
+  test = 'api/test'
 }
