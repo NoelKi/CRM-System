@@ -1,50 +1,53 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest
-} from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-
-import { catchError, from, Observable, switchMap, throwError } from 'rxjs';
+import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../../app/auth/auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  private _authService = inject(AuthService);
+export const authInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
+  const authService = inject(AuthService);
+  req = req.clone({
+    setHeaders: {
+      'Content-Type': 'application/json; charset=utf-8',
+      accept: 'application/json',
+      authorization: `${authService.loadItemFromStorage('accessToken')}`
+    }
+  });
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    req = req.clone({
-      setHeaders: {
-        'Content-Type': 'application/json; charset=utf-8',
-        accept: 'application/json',
-        authorization: `${this._authService.loadItemFromStorage('accessToken')}`
+  return next(req).pipe(
+    switchMap((res: any) => {
+      if (res.body && res.body.success === false) {
+        return refreshAccessToken(req, next, authService);
+      } else {
+        return next(req);
       }
-    });
+    }),
+    catchError((error) => {
+      return throwError(() => error);
+    })
+  );
+};
 
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          // console.error('401 Error: user has no access authorization ', error.message);
-          return from(this._authService.refreshAccessToken()).pipe(
-            // Promise in Observable umwandeln
-            switchMap(() => {
-              const newRequest = req.clone({
-                setHeaders: {
-                  authorization: `${this._authService.loadItemFromStorage('accessToken')}`
-                }
-              });
-              return next.handle(newRequest);
-            }),
-            catchError((refreshError) => {
-              console.error('Fehler beim Token-Refresh:', refreshError.message);
-              return throwError(() => refreshError);
-            })
-          );
+function refreshAccessToken(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+  authService: AuthService
+): Observable<HttpEvent<unknown>> {
+  return authService.refreshAccessToken().pipe(
+    switchMap((res) => {
+      const newRequest = req.clone({
+        setHeaders: {
+          authorization: `${res.accessToken}`
         }
-        return throwError(() => error);
-      })
-    );
-  }
+      });
+
+      return next(newRequest);
+    }),
+    catchError((refreshError) => {
+      console.error('Fehler beim Token-Refresh:', refreshError);
+      return throwError(() => refreshError);
+    })
+  );
 }
