@@ -15,8 +15,8 @@ export class ThemeService {
   }
 
   toggleMode(themeModeIcon: TthemeMode): void {
-    document.body.classList.toggle('dark-theme');
-    themeModeIcon === 'light_mode' ? 'dark_mode' : 'light_mode';
+    document.body.classList.toggle('darkMode');
+    this.themeModeIcon = themeModeIcon === 'dark_mode' ? 'light_mode' : 'dark_mode';
   }
 }
 
